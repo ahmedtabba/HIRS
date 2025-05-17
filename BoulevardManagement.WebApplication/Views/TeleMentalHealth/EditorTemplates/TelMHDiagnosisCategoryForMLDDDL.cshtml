@@ -1,0 +1,23 @@
+﻿
+
+@using BoulevardManagement.WebApplication.Resources;
+
+@model  int
+@(Html.Kendo().DropDownListFor(x=>x)@*.Name("TelMHDiagnosisCategoryName")*@
+                      .DataTextField("Name")
+                      .DataValueField("Id")
+                      .OptionLabel(CommonResource.Select)
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+
+                              read.Action("GetDiagnosisCategorysForMLD", "TeleMentalHealth").Data("GetClinicalStoryId");
+                          }).Events(e => e.Error("KendoDDL_ErrorHandler"))
+                              .ServerFiltering(true);
+                      }).Filter("contains")
+                      .Value(Model.ToString())
+                      .HtmlAttributes(new { required = true, validationmessage = "required field",@id= "TelMHDiagnosisCategoryMLDId" })
+ .Events(e => e/*.Select("onSelectedItem")*/.Change("DiagnosisCategoryFMLDDDLChange"))
+
+)

@@ -1,0 +1,1310 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Models;
+@model NPICUInvestigationDTO
+
+@*<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>*@
+<script src="~/Scripts/FileUpload.js"></script>
+<style>
+    h4{
+        text-align:center;
+        margin-top:30px;
+    }
+</style>
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.NPICU.EditNPICUInvestigation) || Model.CaseStatus == CaseStatus.Closed;
+    if (Model.Id > 0)
+    {
+        viewMode = true;
+    }
+    string radioMargin = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "margin-right:15px;" : "margin-left:15px;";
+
+}
+
+@if (Model.CaseStatus == CaseStatus.Closed)
+{
+    <style>
+
+        .k-grid-NPICUInvestigationDestroy {
+            display: none !important;
+        }
+    </style>
+}
+
+@if (Model.Id > 0 && Model.CaseStatus != CaseStatus.Closed && User.IsInRole(RoleConsistent.NPICU.EditNPICUInvestigation))
+{
+    <button type="button" id="AddFollowUpBtn" class="btn btn-primary">@NPICUInvestigationResource.AddInvestigation</button>
+}
+
+<!--begin::Form-->
+@using (Html.BeginForm("SaveNPICUInvestigation", "NPICU", FormMethod.Post, new { @id = "NPICUInvestigationFormId" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.NPICUId)
+
+    @Html.HiddenFor(model => model.BloodGasesAttachmentId)
+    @Html.HiddenFor(model => model.HasBloodGasesAttachment)
+    @Html.HiddenFor(model => model.BloodGasesFilename)
+    @Html.HiddenFor(model => model.BloodGasesFilePath)
+
+
+
+    @Html.HiddenFor(model => model.CBCWithDifferentialAttachmentId)
+    @Html.HiddenFor(model => model.HasCBCWithDifferentialAttachment)
+    @Html.HiddenFor(model => model.CBCWithDifferentialFilename)
+    @Html.HiddenFor(model => model.CBCWithDifferentialFilePath)
+
+
+
+    @Html.HiddenFor(model => model.ElectrolytesAttachmentId)
+    @Html.HiddenFor(model => model.HasElectrolytesAttachment)
+    @Html.HiddenFor(model => model.ElectrolytesFilename)
+    @Html.HiddenFor(model => model.ElectrolytesFilePath)
+
+
+    @Html.HiddenFor(model => model.BiochemistryAttachmentId)
+    @Html.HiddenFor(model => model.HasBiochemistryAttachment)
+    @Html.HiddenFor(model => model.BiochemistryFilename)
+    @Html.HiddenFor(model => model.BiochemistryFilePath)
+
+    @Html.HiddenFor(model => model.CSFStudyAttachmentId)
+    @Html.HiddenFor(model => model.HasCSFStudyAttachment)
+    @Html.HiddenFor(model => model.CSFStudyFilename)
+    @Html.HiddenFor(model => model.CSFStudyFilePath)
+
+
+    @Html.HiddenFor(model => model.ChestAndAbdomenXrayAttachmentId)
+    @Html.HiddenFor(model => model.HasChestAndAbdomenXrayAttachment)
+    @Html.HiddenFor(model => model.ChestAndAbdomenXrayFilename)
+    @Html.HiddenFor(model => model.ChestAndAbdomenXrayFilePath)
+
+    @Html.HiddenFor(model => model.OtherInvestigationsAttachmentId)
+    @Html.HiddenFor(model => model.HasOtherInvestigationsAttachment)
+    @Html.HiddenFor(model => model.OtherInvestigationsFilename)
+    @Html.HiddenFor(model => model.OtherInvestigationsFilePath)
+
+
+
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+
+                @NPICUInvestigationResource.Investigations
+
+
+            </h3>
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+        <div class="row form-group" style="margin-top:-20px;">
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="BloodGasesfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="BloodGasesfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("BloodGasesfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddBloodGasesFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadBloodGasesFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.BloodGasesAttachmentId.HasValue)
+                    {
+                        @Model.BloodGasesFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.BloodGasesAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <div class="form-group required" aria-required="true">
+                    @Html.Label(NPICUInvestigationResource.BloodGases + ":", new { @class = "control-label required" }) <span style="color:red">*</span>
+                    @if (viewMode)
+                    {
+                        <div class="form-group">
+                            @Model.BloodGases.GetDescription()
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            @Html.RadioButtonFor(c => c.BloodGases, BloodGases.ABG, new { @class = "", @style = "height:10px;" }) <span style="font-weight:400">@BloodGases.ABG.GetDescription()</span>
+                            @Html.RadioButtonFor(c => c.BloodGases, BloodGases.VBG, new { @class = "", @style = "height:10px;"+radioMargin }) <span style="font-weight:400">@BloodGases.VBG.GetDescription()</span>
+                            @Html.RadioButtonFor(c => c.BloodGases, BloodGases.CBG, new { @class = "", @style = "height:10px;"+radioMargin }) <span style="font-weight:400">@BloodGases.CBG.GetDescription()</span>
+                            @Html.ValidationMessageFor(model => model.BloodGases)
+                            <span class="form-text text-muted">@NPICUInvestigationResource.BloodGasesInfoSpan</span>
+
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px; ">
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.PH:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.PH, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.PH, @id = "PH", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.PH, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.PH, @id = "PH", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.PH)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.PHInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.PCO2:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.PCO2, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.PCO2, @id = "PCO2", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.PCO2, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.PCO2, @id = "PCO2", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.PCO2)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.PCO2InfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.PO2:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.PO2, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.PO2, @id = "PO2", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.PO2, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.PO2, @id = "PO2", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.PO2)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.PO2InfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.HCO3:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.HCO3, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.HCO3, @id = "HCO3", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.HCO3, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.HCO3, @id = "HCO3", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.HCO3)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.HCO3InfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.BE:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.BE, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.BE, @id = "BE", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.BE, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.BE, @id = "BE", @type = "number", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.BE)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.BEInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.AG:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.AG, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.AG, @id = "AG", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.AG, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.AG, @id = "AG", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.AG)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.AGInfoSpan</span>
+                }
+
+            </div>
+
+
+
+        </div>
+        <hr />
+        <h4>
+            @NPICUInvestigationResource.CBCWithDifferential
+        </h4>
+
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="CBCWithDifferentialfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="CBCWithDifferentialfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("CBCWithDifferentialfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddCBCWithDifferentialFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadCBCWithDifferentialFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.CBCWithDifferentialAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.CBCWithDifferentialFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.CBCWithDifferentialAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.RBCs:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.RBCs, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.RBCs, @id = "RBCs", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.RBCs, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.RBCs, @id = "RBCs", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.RBCs)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.RBCsInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Hemoglobin:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Hemoglobin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Hemoglobin, @id = "Hemoglobin", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Hemoglobin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Hemoglobin, @id = "Hemoglobin", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Hemoglobin)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.HemoglobinInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Hematocrit:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Hematocrit, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Hematocrit, @id = "Hematocrit", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Hematocrit, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Hematocrit, @id = "Hematocrit", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Hematocrit)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.HematocritInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.MCV:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.MCV, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.MCV, @id = "MCV", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.MCV, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.MCV, @id = "MCV", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.MCV)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.MCVInfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.RDW:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.RDW, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.RDW, @id = "RDW", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.RDW, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.RDW, @id = "RDW", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.RDW)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.RDWInfoSpan</span>
+                }
+
+            </div>
+
+
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Reticulocytes:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Reticulocytes, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Reticulocytes, @id = "Reticulocytes", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Reticulocytes, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Reticulocytes, @id = "Reticulocytes", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Reticulocytes)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.ReticulocytesInfoSpan</span>
+                }
+
+            </div>
+
+
+
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.WBCs:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.WBCs, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.WBCs, @id = "WBCs", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.WBCs, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.WBCs, @id = "WBCs", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.WBCs)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.WBCsInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Neutrophils:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Neutrophils, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Neutrophils, @id = "Neutrophils", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Neutrophils, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Neutrophils, @id = "Neutrophils", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Neutrophils)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.NeutrophilsInfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Lymphocytes:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Lymphocytes, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Lymphocytes, @id = "Lymphocytes", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Lymphocytes, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Lymphocytes, @id = "Lymphocytes", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Lymphocytes)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.LymphocytesInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Eosinophils:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Eosinophils, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Eosinophils, @id = "Eosinophils", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Eosinophils, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Eosinophils, @id = "Eosinophils", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Eosinophils)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.EosinophilsInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Basophils:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Basophils, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Basophils, @id = "Basophils", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Basophils, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Basophils, @id = "Basophils", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Basophils)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.BasophilsInfoSpan</span>
+                }
+
+            </div>
+
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Platelets:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Platelets, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Platelets, @id = "Platelets", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Platelets, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Platelets, @id = "Platelets", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Platelets)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.PlateletsInfoSpan</span>
+                }
+
+            </div>
+
+
+        </div>
+        <hr />
+        <h4>
+            @NPICUInvestigationResource.Electrolytes
+        </h4>
+
+
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="ElectrolytesfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="ElectrolytesfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("Electrolytesfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddElectrolytesFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadElectrolytesFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.ElectrolytesAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.ElectrolytesFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.ElectrolytesAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Sodium:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Sodium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Sodium, @id = "Sodium", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Sodium, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Sodium, @id = "Sodium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Sodium)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.SodiumInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Potassium:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Potassium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Potassium, @id = "Potassium", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Potassium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Potassium, @id = "Potassium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Potassium)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.PotassiumInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Chloride:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Chloride, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Chloride, @id = "Chloride", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Chloride, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Chloride, @id = "Chloride", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Chloride)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.ChlorideInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Calcium:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Calcium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Calcium, @id = "Calcium", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Calcium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Calcium, @id = "Calcium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Calcium)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CalciumInfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Magnesium:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Magnesium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Magnesium, @id = "Magnesium", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Magnesium, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Magnesium, @id = "Magnesium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Magnesium)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.MagnesiumInfoSpan</span>
+                }
+
+            </div>
+
+
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Phosphorous:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Phosphorous, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Phosphorous, @id = "Phosphorous", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Phosphorous, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Phosphorous, @id = "Phosphorous", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Phosphorous)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.PhosphorousInfoSpan</span>
+                }
+
+            </div>
+
+
+
+
+
+        </div>
+
+        <hr />
+        <h4>
+            @NPICUInvestigationResource.Biochemistry
+        </h4>
+
+
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="BiochemistryfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="BiochemistryfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("Biochemistryfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddBiochemistryFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadBiochemistryFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.BiochemistryAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.BiochemistryFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.BiochemistryAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.SerumGlucose:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.SerumGlucose, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.SerumGlucose, @id = "SerumGlucose", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.SerumGlucose, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.SerumGlucose, @id = "SerumGlucose", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.SerumGlucose)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.SerumGlucoseInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Urea:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Urea, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Urea, @id = "Urea", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Urea, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Urea, @id = "Urea", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Urea)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.UreaInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Creatinine:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Creatinine, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Creatinine, @id = "Creatinine", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Creatinine, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Creatinine, @id = "Creatinine", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Creatinine)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CreatinineInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.ALT:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.ALT, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.ALT, @id = "ALT", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.ALT, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.ALT, @id = "ALT", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.ALT)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.ALTInfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.AST:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.AST, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.AST, @id = "AST", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.AST, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.AST, @id = "AST", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.AST)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.ASTInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.AlkalinePhosphatase:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.AlkalinePhosphatase, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.AlkalinePhosphatase, @id = "AlkalinePhosphatase", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.AlkalinePhosphatase, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.AlkalinePhosphatase, @id = "AlkalinePhosphatase", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.AlkalinePhosphatase)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.AlkalinePhosphataseInfoSpan</span>
+                }
+
+            </div>
+
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.TotalBilirubin:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.TotalBilirubin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.TotalBilirubin, @id = "TotalBilirubin", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.TotalBilirubin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.TotalBilirubin, @id = "TotalBilirubin", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.TotalBilirubin)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.TotalBilirubinInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.DirectBilirubin:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.DirectBilirubin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.DirectBilirubin, @id = "DirectBilirubin", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.DirectBilirubin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.DirectBilirubin, @id = "DirectBilirubin", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.DirectBilirubin)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.DirectBilirubinInfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.TotalProtein:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.TotalProtein, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.TotalProtein, @id = "TotalProtein", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.TotalProtein, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.TotalProtein, @id = "TotalProtein", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.TotalProtein)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.TotalProteinInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Albumin:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Albumin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Albumin, @id = "Albumin", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Albumin, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Albumin, @id = "Albumin", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Albumin)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.AlbuminInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.Ammonia:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Ammonia, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Ammonia, @id = "Ammonia", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Ammonia, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.Ammonia, @id = "Ammonia", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Ammonia)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.AmmoniaInfoSpan</span>
+                }
+
+            </div>
+
+
+            <div class="col-md-3  col-sm-12">
+                <label>@NPICUInvestigationResource.Lactate:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Lactate, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Lactate, @id = "Lactate", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Lactate, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.Lactate, @id = "Lactate", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.Lactate)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.LactateInfoSpan</span>
+                }
+
+            </div>
+
+
+        </div>
+
+        <hr />
+        <h4>
+            @NPICUInvestigationResource.CSFStudy
+        </h4>
+
+
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="CSFStudyfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="CSFStudyfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("CSFStudyfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddCSFStudyFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadCSFStudyFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.CSFStudyAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.CSFStudyFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.CSFStudyAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.CSFGlucose:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.CSFGlucose, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFGlucose, @id = "CSFGlucose", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.CSFGlucose, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.CSFGlucose, @id = "CSFGlucose", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.CSFGlucose)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CSFGlucoseInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.CSFProtein:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.CSFProtein, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFProtein, @id = "CSFProtein", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.CSFProtein, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFProtein, @id = "CSFProtein", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.CSFProtein)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CSFProteinInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.CSFLatexAgglutination:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.CSFLatexAgglutination, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFLatexAgglutination, @id = "CSFLatexAgglutination", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.CSFLatexAgglutination, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFLatexAgglutination, @id = "CSFLatexAgglutination" } })
+                    @Html.ValidationMessageFor(x => x.CSFLatexAgglutination)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CSFLatexAgglutinationInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.CSFGramStain:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.CSFGramStain, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFGramStain, @id = "CSFGramStain", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.CSFGramStain, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFGramStain, @id = "CSFGramStain" } })
+                    @Html.ValidationMessageFor(x => x.CSFGramStain)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CSFGramStainInfoSpan</span>
+                }
+
+            </div>
+        </div>
+        <div class="form-group row" style="margin-top:20px; ">
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.CSFCulture:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.CSFCulture, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFCulture, @id = "CSFCulture", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.CSFCulture, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.CSFCulture, @id = "CSFCulture"} })
+                    @Html.ValidationMessageFor(x => x.CSFCulture)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CSFCultureInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <label>@NPICUInvestigationResource.RBSAtLumbarPuncture:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.RBSAtLumbarPuncture, new { htmlAttributes = new { @class = "form-control", @placeholder = NPICUInvestigationResource.RBSAtLumbarPuncture, @id = "RBSAtLumbarPuncture", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.RBSAtLumbarPuncture, new { htmlAttributes = new { @class = "form-control int", @placeholder = NPICUInvestigationResource.RBSAtLumbarPuncture, @id = "RBSAtLumbarPuncture", @type = "number", min = "0", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.RBSAtLumbarPuncture)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.RBSAtLumbarPunctureInfoSpan</span>
+                }
+
+            </div>
+
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUInvestigationResource.ChestAndAbdomenXray:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.ChestAndAbdomenXray, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.ChestAndAbdomenXray, @id = "ChestAndAbdomenXray", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.ChestAndAbdomenXray, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.ChestAndAbdomenXray, @id = "ChestAndAbdomenXray" })
+                    @Html.ValidationMessageFor(x => x.ChestAndAbdomenXray)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.ChestAndAbdomenXrayInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="ChestAndAbdomenXrayfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="ChestAndAbdomenXrayfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("ChestAndAbdomenXrayfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddChestAndAbdomenXrayFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadChestAndAbdomenXrayFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.ChestAndAbdomenXrayAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.ChestAndAbdomenXrayFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.ChestAndAbdomenXrayAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUInvestigationResource.UrineAnalysisAndCulture:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.UrineAnalysisAndCulture, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.UrineAnalysisAndCulture, @id = "UrineAnalysisAndCulture", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.UrineAnalysisAndCulture, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.UrineAnalysisAndCulture, @id = "UrineAnalysisAndCulture" })
+                    @Html.ValidationMessageFor(x => x.UrineAnalysisAndCulture)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.UrineAnalysisAndCultureInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUInvestigationResource.BloodCulture:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.BloodCulture, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.BloodCulture, @id = "BloodCulture", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.BloodCulture, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.BloodCulture, @id = "BloodCulture" })
+                    @Html.ValidationMessageFor(x => x.BloodCulture)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.BloodCultureInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUInvestigationResource.CRP:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.CRP, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.CRP, @id = "CRP", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.CRP, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.CRP, @id = "CRP" })
+                    @Html.ValidationMessageFor(x => x.CRP)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.CRPInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUInvestigationResource.Echocardiography:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Echocardiography, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.Echocardiography, @id = "Echocardiography", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Echocardiography, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.Echocardiography, @id = "Echocardiography" })
+                    @Html.ValidationMessageFor(x => x.Echocardiography)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.EchocardiographyInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUInvestigationResource.Others:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Others, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.Others, @id = "Others", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Others, new { @class = "form-control", @rows = "3", @placeholder = NPICUInvestigationResource.Others, @id = "Others" })
+                    @Html.ValidationMessageFor(x => x.Others)
+                    <span class="form-text text-muted">@NPICUInvestigationResource.OthersInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="OtherInvestigationsfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="OtherInvestigationsfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("OtherInvestigationsfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddOtherInvestigationsFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadOtherInvestigationsFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.OtherInvestigationsAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.OtherInvestigationsFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.OtherInvestigationsAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        @if (!viewMode)
+        {
+            <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+            <button type="button" id="cancel" class="btn btn-default">@CommonResource.Cancel</button>
+
+        }
+
+
+
+    </div>
+
+
+
+
+}
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
+<script>
+
+    $("#NPICUInvestigationFormId").on("submit", function (e) {
+
+            e.preventDefault();
+
+
+
+       // console.log(formdata11);
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetNPICUInvestigation", "NPICU", new { investigationId = "", telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "NPICU", new { telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {
+                            onmenueload();
+                            $("#NPICUInvestigationBtn").addClass("active");
+                        });
+                        refreshollowUPGrid();
+                    } else {
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+    $("#save").on("click", function (e) {
+
+        //  $('#voice').val(formData);
+        $('#NPICUInvestigationFormId').validate();
+        if ($("#NPICUInvestigationFormId").valid()) {
+
+
+            $("#save").attr("disabled", "disabled");
+
+
+
+            $("#NPICUInvestigationFormId").submit();
+        }
+    });
+
+    $("#cancel").on("click", function (e) {
+       $('#main-content').load('@Url.Action("GetNPICUInvestigation", "NPICU", new { investigationId = "", telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () { });
+    });
+
+    $("#AddFollowUpBtn").on("click", function () {
+         $('#main-content').load('@Url.Action("GetNPICUInvestigationForAdd", "NPICU", new { telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {});
+
+    });
+
+    $("input[type=number]").on("keypress", function (evt) {
+
+        //if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+        //    evt.preventDefault();
+        //}
+        debugger;
+        if (evt.which == 101) {
+            evt.preventDefault();
+        }
+    });
+
+    $(".int").on("keypress", function (evt) {
+
+        //if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+        //    evt.preventDefault();
+        //}
+        debugger;
+        if (evt.which == 46 || evt.which == 101) {
+            evt.preventDefault();
+        }
+    });
+
+</script>
+

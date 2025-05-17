@@ -1,0 +1,390 @@
+﻿
+@using BoulevardManagement.Utilities;
+@using BoulevardManagement.WebApplication.Resources;
+@using BoulevardManagement.DTO
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+    var Statuses = new[] {
+new { name = CaseStatus.Open.GetDescription(), value = 0 },
+new { name = CaseStatus.Closed.GetDescription(), value = 1 }
+
+
+};
+
+    var Types = new[] {
+new { name = NPICUType.NICU.GetDescription(), value = 0 },
+new { name = NPICUType.PICU.GetDescription(), value = 1 }
+
+
+};
+    }
+    <!--begin::Container-->
+    <div class="container">
+        <div class="card card-custom card-collapse" data-card="true" id="kt_card_4" style="margin-top:10px">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">@CommonResource.Filters</h3>
+                </div>
+                <div class="card-toolbar">
+                    <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                        <i class="ki ki-arrow-down icon-nm"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body @customeClass" kt-hidden-height="471" style="display: none; overflow: hidden; padding-top: 0px; padding-bottom: 0px;">
+                <div class="row" style="margin-bottom:20px">
+                    <div class="col-md-4">
+                        @Html.Label(FilterResource.Patient, new { @class = "control-label required", @style = "width:150px;display:block" })
+                        @(Html.Kendo().DropDownList()
+                                                                  .Name("Patient")
+                                                                  .DataValueField("Id")
+                                                                  .DataTextField("FullName")
+                                                                  .OptionLabel(CommonResource.Select)
+                                                                  .Filter("contains")
+                                                                  .SelectedIndex(0)
+                                                                  .DataSource(source =>
+                                                                  {
+                                                                      source.Read(read =>
+                                                                      {
+                                                                          read.Action("GetPatients", "Patient", new { DeptName = "NPICU" });
+                                                                      }).Events(e => e.Error("KendoDDL_ErrorHandler"))
+                                                                            .ServerFiltering(true);
+                                                                  })
+                                                                  .Events(e => e.Change("refresh"))
+                                                                  .AutoBind(true)
+                                                                  .HtmlAttributes(new { @style = "width:100%", @class = "custom-style" })
+                                    )
+                    </div>
+                    <div class="col-md-4">
+                        @Html.Label(PatientResource.Gender, new { @class = "control-label required", @style = "width:150px;display:block" })
+
+                        @(Html.Kendo().DropDownList().Name("Gender")
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetGenderEnumList", "Patient");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "Gender", @style = "width:100%"})
+        .Events(e => e.Change("refresh"))
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        )
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.Label(PatientResource.MaritalStatus, new { @class = "control-label required", @style = "width:150px;display:block" })
+
+                        @(Html.Kendo().DropDownList().Name("MaritalStatus")
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetMaritalStatusEnumList", "Patient");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "MaritalStatus", @style = "width:100%"})
+           .Events(e => e.Change("refresh"))
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        )
+
+
+
+
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:20px">
+                    <div class="col-lg-4">
+                        @Html.Label(PatientResource.BloodType, new { @class = "control-label required", @style = "width:150px;display:block" })
+
+                        @(Html.Kendo().DropDownList().Name("BloodType")
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetBloodTypeEnumList", "Patient");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "BloodType", @style = "width:100%"})
+        .AutoBind(true)
+         .Events(e => e.Change("refresh"))
+        .ValuePrimitive(true)
+       )
+                    </div>
+                    <div class="col-lg-4">
+                        @Html.Label(NPICUResource.Type, new { @class = "control-label required", @style = "width:150px;display:block" })
+                        @(Html.Kendo().DropDownList().Name("NPICUTypeEnum")
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetNPICUTypeEnumList", "NPICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "NPICUTypeEnum", @style = "width:100%"})
+        .AutoBind(true)
+         .Events(e => e.Change("refresh"))
+        .ValuePrimitive(true)
+       )
+                    </div>
+                </div>
+
+
+            </div>
+            <!--end::Body-->
+        </div>
+        <div class="card card-custom" data-card="true" id="kt_card_3">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="card-label">@CommonResource.NPICUCases</h3>
+                </div>
+                <div class="card-toolbar">
+
+                    <a href="javascript:void(0);" onclick=" $('.k-grid-excel').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportExcelTooltip" class="btn btn-icon btn-circle btn-sm btn-light-skype mr-1" data-card-tool="">
+                        <i class="fa fas fa-file-excel icon-nm"></i>
+                    </a>
+
+                    <a href="javascript:void(0);" onclick=" $('.k-grid-pdf').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportPdfTooltip" class="btn btn-icon btn-circle btn-sm btn-light-youtube mr-1" data-card-tool="">
+                        <i class="fa fas fa-file-pdf icon-nm"></i>
+                    </a>
+                    @*<a href="@Url.Action("Create", "Location", new { @Area = "" })" data-toggle="tooltip" title="@CommonResource.AddNewTooltip" class="btn btn-icon btn-circle btn-sm btn-light-facebook mr-1" data-card-tool="">
+                            <i class="ki ki-plus icon-nm"></i>
+                        </a>*@
+                    <a href="javascript:void(0);" onclick="$('.k-i-refresh').trigger('click');" data-toggle="tooltip" title="@CommonResource.RefreshTooltip" class="btn btn-icon btn-circle btn-sm btn-light-google mr-1" data-card-tool="reload">
+                        <i class="ki ki-reload icon-nm"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle" onclick="$('#asd').slideToggle();">
+                        <i class="ki ki-arrow-down icon-nm"></i>
+                    </a>
+
+                </div>
+            </div>
+            <div class="card-body @customeClass" kt-hidden-height="471" style="" id="asd">
+                @(Html.KendoGrid<BoulevardManagement.DTO.NPICUDTO>().Name("NPICUGrid")
+.Columns(columns =>
+{
+//Text Field Template
+columns.Bound(c => c.PatientCode).ClientTemplate("#=LinkTemplate(PatientEncreptedId,PatientCode)#").Title(PatientResource.PatientCode).Width(130);
+
+//Text Field Template
+columns.Bound(c => c.PatientName).ClientTemplate("#=LinkTemplate(PatientEncreptedId,PatientName)#").Title(TeleICUResource.PatientFullName).Width(200);
+columns.ForeignKey(c => c.Status, Statuses, "value", "name").Title(TeleICUResource.Status).Width(150);
+columns.ForeignKey(c => c.NPICUType, Types, "value", "name").Title(NPICUResource.CaseType).Width(150);
+
+//columns.Bound(c => c.NPICUType).Title(NPICUResource.CaseType).Width(120);
+
+//Bool Field Template
+//columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+//Date Field Template
+//columns.Bound(c => c.DateFieldName).Title("Title").Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy}");
+if (this.User.IsInRoles(RoleConsistent.NPICU.Edit)|| this.User.IsInRoles(RoleConsistent.NPICU.Delete))
+    columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=templateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+        if (this.User.IsInRoles(RoleConsistent.NPICU.Delete))
+            columns.Command(command => { command.Custom("NPICUDestroy").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowNPICUGrid"); }).Hidden();
+
+})
+            .HtmlAttributes(new { style = "height:1000px", @id = "NPICUGrid" })
+            .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+            .ColumnMenu(c => c.Columns(true))
+            .Pdf(exp => exp.FileName("NPICU.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+            .Excel(exp => exp.FileName("NPICU.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(c => c.Id))
+            .Create(action => action.Action("Create", "NPICU"))
+            .Destroy(action => action.Action("Delete", "NPICU"))
+            .Read(read => read.Action("Read", "NPICU").Data("GetFilterCriterias"))
+            .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'NPICUGrid');}").RequestEnd("myOnReqEnd"))
+            )
+            .ColumnMenu(c => c.Columns(false).Filterable(false))
+                                )
+            </div>
+            <!--end::Body-->
+        </div>
+        <!--end::Tables Widget 5-->
+        <!--end::Dashboard-->
+        @Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+    </div>
+    <!--end::Container-->
+
+
+    <script>
+    var NPICUUrl = '@Url.Action("Edit", "NPICU", new { NPICUId = "MyCode"})';
+
+    var deletedNPICU;
+    function myOnReqEnd(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = `NPICU ${deletedNPICU.FullName}) `;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowNPICUGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#NPICUGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedNPICU = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptions(id, ob) {
+
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.NPICU.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowNPICUGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-NPICUDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+
+           }
+           if ('@this.User.IsInRole(RoleConsistent.NPICU.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "NPICU", action = "Edit" })' + "?NPICUId=" + id;
+          }
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditUrl != "") {
+            result = result + "<li class='navi-item'><a href=" + EditUrl + " class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+
+    function  GetFilterCriterias() {
+
+        var patientId = $("[name='Patient']").data("kendoDropDownList").value();
+        var gender = $("[name='Gender']").data("kendoDropDownList").value();
+        var maritalStatus = $("[name='MaritalStatus']").data("kendoDropDownList").value();
+        var bloodType = $("[name='BloodType']").data("kendoDropDownList").value();
+        var npicuType = $("[name='NPICUTypeEnum']").data("kendoDropDownList").value();
+
+        return { patientId: patientId, gender: gender, maritalStatus: maritalStatus, bloodType: bloodType, npicuType: npicuType}
+
+    }
+
+
+
+    function refresh(e) {
+        var Patient = $("[name='Patient']").data("kendoDropDownList").value();
+        if (Patient != null && Patient != "") {
+            $("[name='Gender']").data("kendoDropDownList").enable(false);
+            $("[name='MaritalStatus']").data("kendoDropDownList").enable(false);
+            $("[name='BloodType']").data("kendoDropDownList").enable(false);
+            $("[name='NPICUTypeEnum']").data("kendoDropDownList").enable(false);
+
+
+            $("[name='Gender']").data("kendoDropDownList").select(0);
+            $("[name='MaritalStatus']").data("kendoDropDownList").select(0);
+            $("[name='BloodType']").data("kendoDropDownList").select(0);
+            $("[name='NPICUTypeEnum']").data("kendoDropDownList").select(0);
+
+        } else {
+            $("[name='Gender']").data("kendoDropDownList").enable(true);
+            $("[name='MaritalStatus']").data("kendoDropDownList").enable(true);
+            $("[name='BloodType']").data("kendoDropDownList").enable(true);
+            $("[name='NPICUTypeEnum']").data("kendoDropDownList").enable(true);
+
+        }
+        $('#NPICUGrid').data('kendoGrid').dataSource.read();
+        $('#NPICUGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+      var url = '@Url.Action("Edit", "Patient", new { patientId = "MyCode"})';
+    function LinkTemplate(id, text) {
+
+        if (text == null) {
+            text = '';
+            }
+                @if (User.IsInRoles(RoleConsistent.Patient.Edit))
+                    {
+                    <text>
+            var actionurl = url.replace("MyCode", id);
+        return '<a target="_blank"  href="' + actionurl + '"> ' + text + '</a>';
+                    </text>
+                }else
+                {
+                    <text>
+        return "<span>" + text + "</span>";
+                    </text>
+                }
+
+        }
+    </script>
+
+    <style>
+        .k-rtl .k-grid td {
+            position: inherit !important;
+        }
+
+        .k-grid-content .btn-group {
+            position: absolute !important;
+        }
+    </style>
+

@@ -1,0 +1,14 @@
+﻿@model  int
+    @using BoulevardManagement.WebApplication.Resources
+@(Html.Kendo().DropDownList().Name("MedicationId").DataTextField("Name")
+              .DataValueField("Id")
+              .OptionLabel(CommonResource.Select)
+              .DataSource(source =>
+              {
+                  source.Read(read =>
+                  {
+                      read.Action("GetMedications", "TeleMentalHealth").Data("GetPreviousMedicationId");
+                  }).Events(e => e.Error("KendoDDL_ErrorHandler"))
+                  .ServerFiltering(true);
+              }).Filter("contains")
+              .Value(Model + ""))

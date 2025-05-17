@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Allergy" xml:space="preserve">
+    <value>الأرجيَّة أو الحساسيَّة الدَّوائيَّة </value>
+  </data>
+  <data name="AllergyInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الأرجيَّة أو الحساسيَّة الدَّوائيَّة </value>
+  </data>
+  <data name="BP" xml:space="preserve">
+    <value>الضَّغط الدَّمويّ </value>
+  </data>
+  <data name="BPInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الضَّغط الدَّمويّ </value>
+  </data>
+  <data name="CardiovascularSystem" xml:space="preserve">
+    <value>الجهاز القلبيّ الوعائيّ </value>
+  </data>
+  <data name="CardiovascularSystemInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الجهاز القلبيّ الوعائيّ </value>
+  </data>
+  <data name="CentralNervousSystem" xml:space="preserve">
+    <value>الجهاز العصبيّ المركزيّ </value>
+  </data>
+  <data name="CentralNervousSystemInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الجهاز العصبيّ المركزيّ </value>
+  </data>
+  <data name="CommunicationWithFamily" xml:space="preserve">
+    <value>التَّواصل مع العائلة (سبب القبول، والتَّدبير الطِّبِّيّ أو الجراحيّ، والتَّثقيف، والدَّعم النَّفسيّ ... إلخ): </value>
+  </data>
+  <data name="CommunicationWithFamilyInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل التّواصل مع العائلة </value>
+  </data>
+  <data name="FamilyMedicalAndPsychosocialHistory" xml:space="preserve">
+    <value>القصَّة العائليَّة الطّبِّيَّة والنَّفسيَّة الاجتماعيَّة </value>
+  </data>
+  <data name="FamilyMedicalAndPsychosocialHistoryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل القصَّة العائليَّة الطّبِّيَّة والنَّفسيَّة الاجتماعيَّة </value>
+  </data>
+  <data name="GastrointestinalTractAndGenitourinarySystem" xml:space="preserve">
+    <value>الجهاز البوليّ التَّناسليّ  و الجهاز الهضميّ  </value>
+  </data>
+  <data name="GastrointestinalTractAndGenitourinarySystemInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الجهاز البوليّ التَّناسليّ  و الجهاز الهضميّ </value>
+  </data>
+  <data name="GeneralAppearance" xml:space="preserve">
+    <value>المظهر العام </value>
+  </data>
+  <data name="HaematologicalSystem" xml:space="preserve">
+    <value>جهاز الدم</value>
+  </data>
+  <data name="HaematologicalSystemInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل جهاز الدم</value>
+  </data>
+  <data name="HeadCircumference" xml:space="preserve">
+    <value>محيط الرَّأس  - سم</value>
+  </data>
+  <data name="HeadCircumferenceInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل محيط الرَّأس </value>
+  </data>
+  <data name="HistoryOfPresentIllness" xml:space="preserve">
+    <value>قصة المرض الحالي</value>
+  </data>
+  <data name="HistoryOfPresentIllnessInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل قصة المرض الحالي</value>
+  </data>
+  <data name="HR" xml:space="preserve">
+    <value>سرعة القلب (ضربة/دقيقة) </value>
+  </data>
+  <data name="HRInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل سرعة القلب </value>
+  </data>
+  <data name="Immunization" xml:space="preserve">
+    <value>التَّطعيمات </value>
+  </data>
+  <data name="ImmunizationInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل التَّطعيمات </value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>الطول - سم</value>
+  </data>
+  <data name="LengthInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الطول</value>
+  </data>
+  <data name="MainComplaint" xml:space="preserve">
+    <value>الشكاية الرئيسية</value>
+  </data>
+  <data name="MainComplaintInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الشكاية الرئيسية</value>
+  </data>
+  <data name="MedicalAndSurgicalHistory" xml:space="preserve">
+    <value>التَّاريخ الطِّبِّيّ والجراحيّ </value>
+  </data>
+  <data name="MedicalAndSurgicalHistoryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل التَّاريخ الطِّبِّيّ والجراحيّ </value>
+  </data>
+  <data name="NutritionalHistory" xml:space="preserve">
+    <value>التَّاريخ التَّغذويّ </value>
+  </data>
+  <data name="NutritionalHistoryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل التَّاريخ التَّغذويّ </value>
+  </data>
+  <data name="OnlinePICUConsultationForm" xml:space="preserve">
+    <value>نموذج المتابعة لإستشارة الأطفال</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>أخرى</value>
+  </data>
+  <data name="OthersInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل أخرى</value>
+  </data>
+  <data name="PastMedicalHistory" xml:space="preserve">
+    <value>القصَّة المرضيَّة السَّابقة </value>
+  </data>
+  <data name="PhysicalExamination" xml:space="preserve">
+    <value>الفحص السريري</value>
+  </data>
+  <data name="PlanOfCare" xml:space="preserve">
+    <value>خطَّة المعالجة (سوائل وريديَّة، ومضادَّات حيويَّة، وأدوية، وتحاليل مخبريَّة، واستقصاءات ... إلخ) </value>
+  </data>
+  <data name="PlanOfCareInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل خطَّة المعالجة </value>
+  </data>
+  <data name="PregnancyAndDeliveryHistory" xml:space="preserve">
+    <value>قصَّة الحمل والولادة </value>
+  </data>
+  <data name="PregnancyAndDeliveryHistoryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل قصَّة الحمل والولادة </value>
+  </data>
+  <data name="PrimaryDiagnosisOrDifferentialDiagnosis" xml:space="preserve">
+    <value>التَّشخيص الأوَّلي و التَّفريقيّ </value>
+  </data>
+  <data name="PrimaryDiagnosisOrDifferentialDiagnosisInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال التَّشخيص الأوَّلي و التَّفريقيّ </value>
+  </data>
+  <data name="Procedures" xml:space="preserve">
+    <value>الإجراءات العلاجيَّة (التَّنبيب، وقثطرة الوريد السُّرِّيّ، وأنبوب الصَّدر ... إلخ)</value>
+  </data>
+  <data name="ProceduresInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الإجراءات العلاجيَّة</value>
+  </data>
+  <data name="PsychomotorDevelopment" xml:space="preserve">
+    <value>النَّماء النَّفسيّ الحركيّ </value>
+  </data>
+  <data name="PsychomotorDevelopmentInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل النَّماء النَّفسيّ الحركيّ </value>
+  </data>
+  <data name="RBS" xml:space="preserve">
+    <value>سكَّر الدَّم العشوائي</value>
+  </data>
+  <data name="RBSInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل سكَّر الدَّم  العشوائي</value>
+  </data>
+  <data name="Respiratory System" xml:space="preserve">
+    <value>الجهاز التَّنفُّسيّ </value>
+  </data>
+  <data name="RespiratorySystem" xml:space="preserve">
+    <value>الجهاز التَّنفُّسيّ </value>
+  </data>
+  <data name="RespiratorySystemInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الجهاز التَّنفُّسيّ </value>
+  </data>
+  <data name="RR" xml:space="preserve">
+    <value>سرعة التَّنفُّس  </value>
+  </data>
+  <data name="RRInfoSpan" xml:space="preserve">
+    <value>يرجى  إدخال معلومات عن سرعة التَّنفُّس </value>
+  </data>
+  <data name="SpO2" xml:space="preserve">
+    <value>نسبة التَّأكسج الدَّمويّ </value>
+  </data>
+  <data name="SpO2InfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل نسبة التَّأكسج الدَّمويّ </value>
+  </data>
+  <data name="Temp" xml:space="preserve">
+    <value>درجة الحرارة (درجة مئوية)</value>
+  </data>
+  <data name="TempInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل درجة الحرارة</value>
+  </data>
+  <data name="VitalSigns" xml:space="preserve">
+    <value>العلامات الحيوية</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>الوزن بالغرام</value>
+  </data>
+  <data name="WeightInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الوزن </value>
+  </data>
+</root>

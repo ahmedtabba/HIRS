@@ -1,0 +1,64 @@
+﻿
+@model BoulevardManagement.WebApplication.Models.UserRoleViewModel
+
+@using (Html.BeginForm("ChangeUserRole", "Account", FormMethod.Post, new { @id = "ChangeUserRoleForm" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="modal" id="UserRoleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="Close">
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title"><i class="fa fa-user-circle"></i>&nbsp;Change User Role</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        @Html.Hidden("Id", "", new { @id = "Id" })
+
+
+                        @Html.Label("Role", new { @class = "form-label" })
+
+                        @(Html.Kendo().MultiSelectFor(c=>c.RolesIds)
+                              .Name("UserRoles")
+                              .DataTextField("Name")
+                              .DataValueField("Id")
+                              .Placeholder("Select roles...")
+                              .AutoBind(false)
+                              .Value(Model.RolesIds)
+                              .DataSource(source =>
+                              {
+                                  source.Read(read =>
+                                  {
+                                      read.Action("GetApplicationRoles", "Account", new { @Area = ""});
+                                  })
+                                  .ServerFiltering(true);
+                              })
+                                            )
+
+
+
+                       
+
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" id="SaveUserRole" class="btn btn btn-gold">Save</button>
+                <button type="button" id="CancleUserRole" class="btn btn btn-gold pull-right" data-dismiss="modal">Cancel </button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+}
+

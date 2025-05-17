@@ -1,0 +1,454 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+
+@model PatientDTO
+
+@{
+    bool canAddCase = false;
+
+    if (ViewBag.CanAddCase != null)
+    {
+        canAddCase = (bool)ViewBag.CanAddCase;
+    }
+
+}
+
+<!--begin::Container-->
+<div class="container">
+
+    <div class="card card-custom  card-sticky " @*id="kt_page_sticky_card"*@>
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">
+                    @if (Model.Id == 0)
+                    {
+                        @Html.Raw(PatientResource.NewPatient);
+                    }
+                    else
+                    {
+                        @Html.Raw(PatientResource.UpdatePatient);
+                    }
+                    <i class="mr-2"></i>
+                    @* <small class="">try to scroll the page</small>*@
+                </h3>
+            </div>
+            <div class="card-toolbar">
+                <a href="@(Url.Action("Index","Patient"))" onclick="BackBtnClicked()" class="btn btn-light-primary font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+                </a>
+                @if (Model.Id > 0 && ViewBag.MHDeptId != null && Model.DepartmentId == (int)ViewBag.MHDeptId && User.IsInRole(RoleConsistent.TeleMentalHealth.Browse))
+                {
+                    <a href="javascript:void(0);" onclick="openShowMentalHealthCasesModal()" class="btn btn-light-primary font-weight-bolder mr-2">
+                     @CommonResource.MentalHealthCases
+                    </a>
+                }
+                @if (Model.Id > 0 && ViewBag.NPICUDeptId != null && Model.DepartmentId == (int)ViewBag.NPICUDeptId && User.IsInRole(RoleConsistent.NPICU.Browse))
+                {
+                    <a href="javascript:void(0);" onclick="openShowNPICUCasesModal()" class="btn btn-light-primary font-weight-bolder mr-2">
+                      @CommonResource.NPICUCases
+                    </a>
+                }
+                @if (Model.Id > 0 && ViewBag.TELICUDeptId != null && Model.DepartmentId == (int)ViewBag.TELICUDeptId && User.IsInRole(RoleConsistent.TeleICU.Browse))
+                {
+                    <a href="javascript:void(0);" onclick="openShowICUCasesModal()" class="btn btn-light-primary font-weight-bolder mr-2">
+                       @CommonResource.ICUCases
+                    </a>
+                }
+                <div class="btn-group">
+                    <button type="button" id="saveBtn" class="btn btn-primary font-weight-bolder">
+                        <i class="ki ki-check icon-sm"></i>@CommonResource.Save
+                    </button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                        <ul class="nav nav-hover flex-column">
+                            @if (User.IsInRole(RoleConsistent.Patient.Edit))
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" id="saveAndContinueBtn">
+                                        <i class="nav-icon flaticon2-reload"></i>
+                                        <span class="nav-text">@CommonResource.Save &amp; @CommonResource.Continue</span>
+                                    </a>
+                                </li>
+                            }
+                            @if (User.IsInRole(RoleConsistent.Patient.Add))
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" id="saveAndAddNewBtn">
+                                        <i class="nav-icon flaticon2-add-1"></i>
+                                        <span class="nav-text">@CommonResource.Save &amp; @CommonResource.AddNew</span>
+                                    </a>
+                                </li>
+                            }
+                            
+                            @if (Model.Id > 0 && ViewBag.MHDeptId != null && Model.DepartmentId == (int)ViewBag.MHDeptId && User.IsInRole(RoleConsistent.TeleMentalHealth.Add))
+                            {
+                                <li class="nav-item">
+                                    <a href="javascript:void(0);" class="nav-link" onclick="openAddMentalHealthModal()">
+                                        <i class="nav-icon flaticon2-add-1"></i>
+                                        <span class="nav-text">@PatientResource.AddMentalHealthCase</span>
+                                    </a>
+                                    @*<a href="@Url.Action("Create","TeleMentalHealth",new {patientId=Model.EncrptedId })" class="nav-link">
+                                            <i class="nav-icon flaticon2-power"></i>
+                                            <span class="nav-text">@PatientResource.AddMentalHealthCase</span>
+                                        </a>*@
+                                </li>
+                            }
+                            @if (Model.Id > 0 && ViewBag.NPICUDeptId != null && Model.DepartmentId == (int)ViewBag.NPICUDeptId && User.IsInRole(RoleConsistent.NPICU.Add))
+                            {
+                                <li class="nav-item">
+                                    <a href="javascript:void(0);" class="nav-link" onclick="openAddNPICUModal()">
+                                        <i class="nav-icon flaticon2-add-1"></i>
+                                        <span class="nav-text">@PatientResource.AddNPICUCase</span>
+                                    </a>
+                                    
+                                </li>
+
+                            }
+                            @if (Model.Id > 0 && ViewBag.TELICUDeptId != null && Model.DepartmentId == (int)ViewBag.TELICUDeptId && User.IsInRole(RoleConsistent.TeleICU.Add))
+                            {
+                                <li class="nav-item">
+                                    <a href="javascript:void(0);" class="nav-link" onclick="openAddICUModal()">
+                                        <i class="nav-icon flaticon2-add-1"></i>
+                                        <span class="nav-text">@PatientResource.AddTeleICUCase</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--begin::Form-->
+        @using (Html.BeginForm("Edit", "Patient", FormMethod.Post, new { @id = "patientFormId" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.Id)
+            <input type="hidden" name="PatientCode" id="PatientCode" value="@Model.PatientCode" />
+            <input type="hidden" name="Number" id="Number" value="@Model.Number" />
+            <input type="hidden" name="NumberStr" id="NumberStr" value="@Model.NumberStr" />
+
+
+            @Html.Hidden("FormType", SubmitFormType.SaveAndExist, new { @id = "FormType" })<div class="card-body">
+                @if (User.Identity.IsIT() && Model.Id == 0)
+                {
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <label>@PatientResource.Department:</label>
+
+                            @(Html.Kendo().DropDownListFor(x=>x.DepartmentId)
+        .DataTextField("Name")
+        .DataValueField("Id")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+          source.Read(read =>
+          {
+              read.Action("GetDepartments", "Department", new { @Area = "" })/*.Data("DataFunction")*/;
+          }).ServerFiltering(true);
+        }).HtmlAttributes(new{@class = "form-control custom-style",@id="DepartmentId",@style = "width:100%"}))
+                            @Html.ValidationMessageFor(model => model.DepartmentId)
+
+                            <span class="form-text text-muted">@PatientResource.DepartmentInfoSpan</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(x => x.DepartmentId)
+                }
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>@PatientResource.FirstName:</label>
+                        @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = PatientResource.FirstName, @id = "FirstName" } })
+                        @Html.ValidationMessageFor(x => x.FirstName)
+                        <span class="form-text text-muted">@PatientResource.FirstNameInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.LastName:</label>
+                        @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control", @placeholder = PatientResource.LastName, @id = "LastName" } })
+                        @Html.ValidationMessageFor(x => x.LastName)
+                        <span class="form-text text-muted">@PatientResource.LastNameInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.FatherName:</label>
+                        @Html.EditorFor(m => m.FatherName, new { htmlAttributes = new { @class = "form-control", @placeholder = PatientResource.FatherName, @id = "FatherName" } })
+                        @Html.ValidationMessageFor(x => x.FatherName)
+                        <span class="form-text text-muted">@PatientResource.FatherNameInfoSpan</span>
+                    </div>
+
+
+
+
+
+                </div>
+
+                <div class="form-group row">
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.MotherName:</label>
+                        @Html.EditorFor(m => m.MotherName, new { htmlAttributes = new { @class = "form-control", @placeholder = PatientResource.MotherName, @id = "MotherName" } })
+                        @Html.ValidationMessageFor(x => x.MotherName)
+                        <span class="form-text text-muted">@PatientResource.MotherNameInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.Gender:</label>
+
+
+                        @(Html.Kendo().DropDownListFor(x=>x.Gender)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetGenderEnumList", "Patient");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "Gender", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.Gender.ToString():""))
+                        @Html.ValidationMessageFor(model => model.Gender)
+                        <span id="GenderRequiredErrorMessage" style="color: #ce0032 !important;display:none">
+                            @BoulevardManagement.DTO.Resources.PatientResource.GenderRequired
+                        </span>
+
+                        <span class="form-text text-muted">@PatientResource.GenderInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.BirthDate:</label>
+
+
+                        @(Html.Kendo().DatePickerFor(x => x.BirthDate)
+              .Value(Model.BirthDate)
+              .Max(DateTime.Now)
+              //.Min(DateTime.Now)
+              .Format("dd/MM/yyyy")
+              .Culture("en-US")
+              .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+              .DateInput(true)
+              //.Events(e => e.Change("onChange"))
+              .HtmlAttributes(new { style = "width:100%", @class = "form-control custom-style", @id = "BirthDate" })
+                        )
+                        @Html.ValidationMessageFor(x => x.BirthDate)
+                        <span class="form-text text-muted">@PatientResource.BirthDateInfoSpan</span>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>@PatientResource.PlaceOfBirth:</label>
+                        @Html.EditorFor(m => m.PlaceOfBirth, new { htmlAttributes = new { @class = "form-control", @placeholder = PatientResource.PlaceOfBirth, @id = "PlaceOfBirth" } })
+                        @Html.ValidationMessageFor(x => x.PlaceOfBirth)
+                        <span class="form-text text-muted">@PatientResource.PlaceOfBirthInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.PhoneNumber:</label>
+                        @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = PatientResource.PhoneNumber, @id = "PhoneNumber" } })
+                        @Html.ValidationMessageFor(x => x.PhoneNumber)
+                        <span class="form-text text-muted">@PatientResource.PhoneNumberInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@PatientResource.MaritalStatus:</label>
+                        @(Html.Kendo().DropDownListFor(x=>x.MaritalStatus)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetMaritalStatusEnumList", "Patient");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "MaritalStatus", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.MaritalStatus.ToString():""))
+
+
+                        @Html.ValidationMessageFor(x => x.MaritalStatus)
+                        <span class="form-text text-muted">@PatientResource.MaritalStatusInfoSpan</span>
+                    </div>
+
+
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>@PatientResource.BloodType:</label>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.BloodType)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetBloodTypeEnumList", "Patient");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "BloodType", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.BloodType.ToString():""))
+                        @Html.ValidationMessageFor(x => x.BloodType)
+                        <span class="form-text text-muted">@PatientResource.BloodTypeInfoSpan</span>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+
+        <!--end::Form-->
+    </div>
+</div>
+<!--end::Container-->
+@if (Model.Id > 0 && ViewBag.MHDeptId != null && Model.DepartmentId == (int)ViewBag.MHDeptId)
+{
+    @Html.Partial("_AddMentalHealthModal", new TeleMentalHealthDTO { PatientId = Model.Id, Remotely = false, PatientDepartmentId = (int)ViewBag.MHDeptId });
+}
+
+@if (Model.Id > 0 && ViewBag.NPICUDeptId != null && Model.DepartmentId == (int)ViewBag.NPICUDeptId)
+{
+    @Html.Partial("_AddNPICUModal", new NPICUDTO { PatientId = Model.Id, PatientDepartmentId = (int)ViewBag.NPICUDeptId });
+}
+@if (Model.Id > 0 && ViewBag.TELICUDeptId != null && Model.DepartmentId == (int)ViewBag.TELICUDeptId)
+{
+    @Html.Partial("_AddICUModal", new TeleICUDTO { PatientId = Model.Id, PatientDepartmentId = (int)ViewBag.TELICUDeptId });
+}
+@if (Model.Id > 0 && ViewBag.MHDeptId != null && Model.DepartmentId == (int)ViewBag.MHDeptId)
+{
+    @Html.Partial("_PatientMentalHealthCases", Model);
+}
+@if (Model.Id > 0 && ViewBag.NPICUDeptId != null && Model.DepartmentId == (int)ViewBag.NPICUDeptId)
+{
+    @Html.Partial("_PatientNPICUCases", Model);
+}
+@if (Model.Id > 0 && ViewBag.TELICUDeptId != null && Model.DepartmentId == (int)ViewBag.TELICUDeptId)
+{
+    @Html.Partial("_PatientICUCases", Model);
+}
+
+<script>
+    $(function () {
+
+        $("#saveBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndExist");
+            Submit();
+        });
+
+
+        $("#saveAndContinueBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndContinue");
+            Submit();
+        });
+
+        $("#saveAndAddNewBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndAddNew");
+            Submit();
+        });
+    });
+
+    function Submit() {
+        debugger;
+      var gender=  $("#Gender").data("kendoDropDownList").value();
+        if (gender == null || gender == "") {
+            $('#GenderRequiredErrorMessage').show();
+        } else {
+            $('#GenderRequiredErrorMessage').hide();
+        }
+        $(".k-widget").removeClass("input-validation-error");
+        if ($("#patientFormId").valid()) {
+            $("#saveBtn").attr("disabled", "disabled");
+            $("#patientFormId").submit();
+        } else {
+            $("#saveBtn").removeAttr("disabled");
+        }
+    }
+
+    function DataFunction() {
+        // drop down element
+        var $dd = $('#Gender');
+        // widget
+        var dd = dd.data('kendoDropDownList');
+
+        var filterText = dd.input.text();
+
+        return {
+            text: filterText
+        };
+    }
+
+    
+    
+    function openAddMentalHealthModal() {
+        if ('@(canAddCase)' == "True") {
+            $("#add-mentalhealth-modal").modal("show");
+        } else {
+            onJSError('@PatientResource.ErrorAddCase');
+        }
+    }
+
+
+
+    function openAddNPICUModal() {
+         if ('@(canAddCase)' == "True") {
+             $("#add-npicu-modal").modal("show");
+         } else {
+             onJSError("Can not open new case for this patient, ther is already an open case!!");
+        }
+    }
+    function openAddICUModal() {
+         if ('@(canAddCase)' == "True") {
+             $("#add-icu-modal").modal("show");
+
+        } else {
+             onJSError("Can not open new case for this patient, ther is already an open case!!");
+        }
+    }
+
+
+    function openShowMentalHealthCasesModal() {
+        $("#show-mentalhealth-cases").modal("show");
+        $('#TeleMentalHealthGrid').data('kendoGrid').dataSource.read();
+        $('#TeleMentalHealthGrid').data('kendoGrid').refresh();
+    }
+
+    function openShowNPICUCasesModal() {
+        $("#show-npicu-cases").modal("show");
+        $('#NPICUGrid').data('kendoGrid').dataSource.read();
+        $('#NPICUGrid').data('kendoGrid').refresh();
+    }
+
+
+    function openShowICUCasesModal() {
+        $("#show-ICU-cases").modal("show");
+        $('#TeleICUGrid').data('kendoGrid').dataSource.read();
+        $('#TeleICUGrid').data('kendoGrid').refresh();
+    }
+    function BackBtnClicked() {
+        debugger;
+        if (window.history != undefined) {
+            window.history.go(-1); return false;
+        } else {
+
+        }
+
+    }
+</script>

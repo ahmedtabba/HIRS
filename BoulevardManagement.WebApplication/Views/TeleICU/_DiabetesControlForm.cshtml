@@ -1,0 +1,164 @@
+﻿@using BoulevardManagement.DTO;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Resources;
+@model TelICUDiabetesControlDTO
+
+
+<style>
+    .custom-style.k-datetimepicker .k-picker-wrap .k-icon {
+        margin-top: 10px !important;
+    }
+</style>
+
+
+@using (Html.BeginForm("UpdateDiabetesControl", "TeleICU", FormMethod.Post, new { @id = "TelICUDiabetesControlFormId" }))
+{
+<div class="modal-body">
+
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="Id" name="Id" value="@Model.Id" class="DiabetesControlId" />
+    @Html.HiddenFor(x => x.TeleICUId)
+    <div class="row">
+        <div class="form-group col-lg-4">
+
+
+
+            <label>@DiabetesControlFormResource.Date:</label>
+            @(Html.Kendo().DateTimePicker().Format("dd/MM/yyyy hh:mm tt").TimeFormat("hh:mm tt")
+
+                                  .Name("datetime").Value(Model.Date).Max(DateTime.Now)
+                               .HtmlAttributes(new { @type = "text", @class = "form-control custom-style", title = "datepicker", @style = "width:100%" ,@id= "datetime", onkeydown = "javascript:return false;" })
+
+                            )
+            <input hidden name="Date" id="Date" value="@Model.Date" />
+            @Html.ValidationMessageFor(x => x.Date)
+            <span class="form-text text-muted">@DiabetesControlFormResource.DateInfoSpan</span>
+        </div>
+
+        <div class="form-group col-lg-4">
+            <label>@DiabetesControlFormResource.Diabetes:</label>
+            @Html.EditorFor(m => m.Diabetes, new { htmlAttributes = new { @class = "form-control", @placeholder = @DiabetesControlFormResource.Diabetes, @id = "Diabetes" } })
+            @Html.ValidationMessageFor(x => x.Diabetes)
+            <span class="form-text text-muted">@DiabetesControlFormResource.DiabetesInfoSpan</span>
+        </div>
+
+        <div class="form-group col-lg-4">
+            <label>
+                @DiabetesControlFormResource.DoseOfMedication:
+            </label>
+            @Html.EditorFor(m => m.DoseOfMedication, new { htmlAttributes = new { @class = "form-control", @placeholder = @DiabetesControlFormResource.DoseOfMedication, @id = "DoseOfMedication" } })
+            @Html.ValidationMessageFor(x => x.DoseOfMedication)
+            <span class="form-text text-muted">@DiabetesControlFormResource.DoseOfMedicationInfoSpan</span>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="form-group col-lg-4">
+            <label>@DiabetesControlFormResource.MedicationMethod:</label>
+            @Html.EditorFor(m => m.MedicationMethod, new { htmlAttributes = new { @class = "form-control", @placeholder = @DiabetesControlFormResource.MedicationMethod, @id = "MedicationMethod" } })
+            @Html.ValidationMessageFor(x => x.MedicationMethod)
+            <span class="form-text text-muted">@DiabetesControlFormResource.MedicationMethodInfoSpan</span>
+        </div>
+        <div class="form-group col-lg-4">
+            <label>@DiabetesControlFormResource.Notes:</label>
+            @Html.EditorFor(m => m.Notes, new { htmlAttributes = new { @class = "form-control", @placeholder = @DiabetesControlFormResource.Notes, @id = "Notes" } })
+            @Html.ValidationMessageFor(x => x.Notes)
+            <span class="form-text text-muted">@DiabetesControlFormResource.NotesInfoSpan</span>
+        </div>
+        <div class="form-group col-lg-4">
+            <label>@DiabetesControlFormResource.RecommendationByDoctor:</label>
+            @Html.EditorFor(m => m.RecommendationByDoctor, new { htmlAttributes = new { @class = "form-control", @placeholder = @DiabetesControlFormResource.RecommendationByDoctor, @id = "RecommendationByDoctor" } })
+            @Html.ValidationMessageFor(x => x.RecommendationByDoctor)
+            <span class="form-text text-muted">@DiabetesControlFormResource.RecommendationByDoctorInfoSpan</span>
+        </div>
+    </div>
+
+
+
+</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">@CommonResource.Cancel</button>
+        <button type="button" id="savediabetesform" class="btn btn-primary">@CommonResource.Save</button>
+    </div>
+}
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#TelICUDiabetesControlFormId").on("submit", function (e) {
+        
+        $("#Date").val($('#datetime').val());
+        e.preventDefault();
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            success: function (data) {
+                if (data.Success) {
+                    ShowSuccessfllyMsg(data.Message);
+                    $("#AddDiabetesControlModal").modal("hide");
+                    $("#TelICUDiabetesControlGrid").data("kendoGrid").dataSource.read();
+                    $("#TelICUDiabetesControlGrid").data("kendoGrid").refresh();
+                } else {
+                    onJSError(data.Message);
+                    $("#savediabetesform").removeAttr("disabled");
+                }
+            }
+        });
+
+
+
+
+        // $("#ManifestItemFormId").submit();
+    });
+
+    $("#savediabetesform").on("click", function (e) {
+        
+        $('#TelICUDiabetesControlFormId').validate();
+
+        if ($("#TelICUDiabetesControlFormId").valid()) {
+
+
+
+            $("#savediabetesform").attr("disabled", "disabled");
+
+
+
+            $("#TelICUDiabetesControlFormId").submit();
+        }
+    });
+    $('#AddDiabetesControlModal').on('hidden.bs.modal', function (e) {
+        $('.DiabetesControlId').val(0);
+        $('#Diabetes').val('');
+        $('#DoseOfMedication').val('');
+        $('#MedicationMethod').val('');
+        $('#Notes').val('');
+        $('#RecommendationByDoctor').val('');
+
+        //$(this)
+        //    .find("input,textarea,select")
+        //    .val('')
+        //    .end()
+        //    .find("input[type=checkbox], input[type=radio]")
+        //    .prop("checked", "")
+        //    .end();
+        $("#savediabetesform").removeAttr("disabled");
+
+    });
+    $("input[type=number]").on("keypress", function (evt) {
+        
+        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+        }
+    });
+</script>

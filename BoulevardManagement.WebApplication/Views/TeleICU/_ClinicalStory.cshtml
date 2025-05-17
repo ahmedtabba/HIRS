@@ -1,0 +1,597 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Models;
+@model TelICUClinicalStoryDTO
+
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.TelIcuClinicalStory.EditClinicalStory) || Model.CaseStatus == CaseStatus.Closed;
+    string radioMargin = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "margin-right:15px;" : "margin-left:15px;";
+
+}
+@if (viewMode)
+{
+    <style>
+        .viewMode {
+            display:none;
+        }
+    </style>
+  
+
+}
+<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>
+@if (!System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+{
+    <style>
+        .labeline {
+            margin-bottom: 25px;
+        }
+
+        @@media screen and (max-width: 1500px) {
+            .labeline {
+                margin-bottom: 7px;
+            }
+        }
+    </style>
+}
+
+<!--begin::Form-->
+@using (Html.BeginForm("UpdateClinicalStory", "TeleICU", FormMethod.Post, new { @id = "TelICUClinicalStoryFormId", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.TeleICUId)
+    @Html.HiddenFor(model => model.ECGAttachmentId)
+    @Html.HiddenFor(model => model.HasECGAttachment)
+    @Html.HiddenFor(model => model.ECGFilename)
+    @Html.HiddenFor(model => model.ECGFilePath)
+
+    @Html.HiddenFor(model => model.CxrAttachmentId)
+    @Html.HiddenFor(model => model.HasCxrAttachment)
+    @Html.HiddenFor(model => model.CxrFilename)
+    @Html.HiddenFor(model => model.CxrFilePath)
+    @*<input id="voice" name="voice" type="file" style="display:none" />*@
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                @ICUClinicalStoryResource.ClinicalStory
+            </h3>
+        </div>
+      
+    </div>
+
+
+    <div class="card-body">
+
+
+        <div class="form-group row required" style="margin-top:20px;">
+            <div class="col-lg-6">
+                <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.AcceptanceDate:</label>
+                @(Html.Kendo().DatePickerFor(c=>c.AcceptanceDate)
+            .Format("dd/MM/yyyy")
+              .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+              .Culture("en-US")
+              .DateInput(true)
+                                 .Value(Model.AcceptanceDate).Max(DateTime.Now).Enable(!viewMode).DateInput(true)
+                               .HtmlAttributes(new { @type = "text", @class = "form-control custom-style"/*, title = "datepicker"*/, @style = "width:100%" ,@id= "AcceptanceDate" })
+
+                            )                    @Html.ValidationMessageFor(x => x.AcceptanceDate)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.AcceptanceDateInfoSpan</span>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.Complaint:</label>
+
+                            @Html.EditorFor(m => m.Complaint, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.Complaint, @id = "Complaint" } })
+                            @Html.ValidationMessageFor(x => x.Complaint)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.ComplaintInfoSpan</span>
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row required">
+                        <div class="col-lg-12">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.ComplaintDetails:</label>
+
+                            @Html.TextAreaFor(m => m.ComplaintDetails, new { @class = "form-control", @rows = "3", @placeholder = ICUClinicalStoryResource.ComplaintDetails, @id = "ComplaintDetails" })
+                            @Html.ValidationMessageFor(x => x.ComplaintDetails)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.ComplaintDetailsInfoSpan</span>
+
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row required">
+                        <div class="col-lg-6 @customeClass">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.RiskFactors:</label>
+                            @(Html.Kendo().MultiSelectFor(x => x.RiskFactors)
+                                                                                                                                                      //.Name("BasicServices")
+                                                                                                                                                      .DataTextField("Text").Enable(!viewMode)
+                                                                                                                                                      .DataValueField("Value")
+                                                                                                                                                      //.Events(e=>e.Change("OnChangeHeating"))
+                                                                                                                                                      .Placeholder(CommonResource.Select)
+                                                                                                                                                      .AutoBind(false)
+                                                                                                                                                      .HtmlAttributes(new { style = "width:84%", @class = "form-control custom-style" })
+                                                                                                                                                      .BindTo(EnumExtensions.GetSelectItemList(typeof(BoulevardManagement.DTO.RiskFactorsEnum)).ToList())
+                                                                                                                                                      .Value(EnumExtensions.GetSelectItemList(typeof(BoulevardManagement.DTO.RiskFactorsEnum), Model.RiskFactors).ToList())
+                )
+
+
+
+
+                            <span class="field-validation-valid" data-valmsg-for="RiskFactors" data-valmsg-replace="true" id="RiskFactorValidation" style="color:#ce0032!important"></span>
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.RiskFactorsInfoSpan</span>
+
+
+                        </div>
+
+                    </div>
+                    <div class="form-group row required">
+                        <div class="col-lg-6">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.MedicalHistory:</label>
+
+                            @Html.TextAreaFor(m => m.MedicalHistory, new { @class = "form-control", @rows = "3", @placeholder = ICUClinicalStoryResource.MedicalHistory, @id = "MedicalHistory" })
+                            @Html.ValidationMessageFor(x => x.MedicalHistory)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.MedicalHistoryInfoSpan</span>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.PreviousCatheter:</label>
+
+                            @Html.TextAreaFor(m => m.PreviousCatheter, new { @class = "form-control", @rows = "3", @placeholder = ICUClinicalStoryResource.PreviousCatheter, @id = "PreviousCatheter" })
+                            @Html.ValidationMessageFor(x => x.PreviousCatheter)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.PreviousCatheterInfoSpan</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row required">
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.BP:</label>
+                            <div>
+                                @Html.EditorFor(m => m.BPFirstPart, new { htmlAttributes = new { @class = "form-control num-box", @id = "BPFirstPart", Style = "width:40%; display:inline-block;", @type = "number", @min = "0" } })
+                                /
+                                @Html.EditorFor(m => m.BPSecondPart, new { htmlAttributes = new { @class = "form-control num-box", @id = "BPSecondPart", Style = "width:40%; display:inline-block;", @type = "number", @min = "0" } })
+                            </div>
+                            @Html.ValidationMessageFor(x => x.BPFirstPart)
+                            @Html.ValidationMessageFor(x => x.BPSecondPart)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.BPInfoSpan</span>
+
+
+                        </div>
+                        
+
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.Pulse:</label>
+                            @Html.EditorFor(m => m.Pulse, new { htmlAttributes = new { @class = "form-control num-box", @placeholder = ICUClinicalStoryResource.Pulse, @id = "Pulse", @type = "number", @min = "0" } })
+                            @Html.ValidationMessageFor(x => x.Pulse)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.PulseInfoSpan</span>
+                        </div>
+
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.Cvs:</label>
+
+
+                            @Html.EditorFor(m => m.Cvs, new { htmlAttributes = new { @class = "form-control num-box", @placeholder = ICUClinicalStoryResource.Cvs, @id = "Cvs", @type = "number", @min = "0" } })
+                            @Html.ValidationMessageFor(x => x.Cvs)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.CvsInfoSpan</span>
+
+
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.Cxr:</label>
+
+
+                            @Html.EditorFor(m => m.Cxr, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.Cxr, @id = "Cxr" } })
+                            @Html.ValidationMessageFor(x => x.Cxr)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.CxrInfoSpan</span>
+                            <div>
+                                <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="CxrfileserrorMessage">
+                                    <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="CxrfileserrorMsgTxt"></label>
+                                </div>
+                                @if (!viewMode)
+                                {
+                                    @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("Cxrfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddCxrFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadCxrFile")))
+                                }
+
+
+
+                                <br />
+                                @if (Model.CxrAttachmentId.HasValue)
+                                {
+                                    @Model.CxrFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.CxrAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                                }
+
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12  col-12">
+                            <label class="form-label required" aria-required="true">@ICUClinicalStoryResource.ECG:</label>
+
+
+                            @Html.EditorFor(m => m.ECG, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.ECG, @id = "ECG" } })
+                            @Html.ValidationMessageFor(x => x.ECG)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.ECGInfoSpan</span>
+
+                            <div>
+                                <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="ECGfileserrorMessage">
+                                    <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="ECGfileserrorMsgTxt"></label>
+                                </div>
+                                @if (!viewMode)
+                                {
+                                    @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("ECGfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddECGFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadECGFile")))
+                                }
+
+
+
+                                <br />
+                                @if (Model.ECGAttachmentId.HasValue)
+                                {
+                                    @Model.ECGFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.ECGAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <div class="col-lg col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label style="margin-bottom:25px" class="">@ICUClinicalStoryResource.UltrasoundHeartScan</label>
+
+                            @Html.EditorFor(m => m.UltrasoundHeartScan, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.UltrasoundHeartScan, @id = "UltrasoundHeartScan" } })
+                            @Html.ValidationMessageFor(x => x.UltrasoundHeartScan)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.UltrasoundHeartScanInfoSpan</span>
+
+
+                        </div>
+
+                        <div class="col-lg col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label style="margin-bottom:25px">@ICUClinicalStoryResource.MitralValve:</label>
+                            @Html.EditorFor(m => m.MitralValve, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.MitralValve, @id = "MitralValve" } })
+                            @Html.ValidationMessageFor(x => x.MitralValve)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.MitralValveInfoSpan</span>
+                        </div>
+
+                        <div class="col-lg col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label style="margin-bottom:25px">@ICUClinicalStoryResource.AorticValve:</label>
+
+
+                            @Html.EditorFor(m => m.AorticValve, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.AorticValve, @id = "AorticValve" } })
+                            @Html.ValidationMessageFor(x => x.AorticValve)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.AorticValveInfoSpan</span>
+
+
+                        </div>
+                        <div class="col-lg col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label style="margin-bottom:25px">@ICUClinicalStoryResource.Others:</label>
+
+
+                            @Html.EditorFor(m => m.Others, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.Others, @id = "Others" } })
+                            @Html.ValidationMessageFor(x => x.Others)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.OthersInfoSpan</span>
+
+
+                        </div>
+                        <div class="col-lg col-md-12 col-sm-12 col-xs-12 col-12">
+                            <label style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft? "" : "font-size:0.91rem")" class="form-label required labeline" aria-required="true">@ICUClinicalStoryResource.PharmacologicalPrecedents:</label>
+
+
+                            @Html.EditorFor(m => m.PharmacologicalPrecedents, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.PharmacologicalPrecedents, @id = "PharmacologicalPrecedents", style = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "margin-top: 18px;" : "" } })
+                            @Html.ValidationMessageFor(x => x.PharmacologicalPrecedents)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.PharmacologicalPrecedentsInfoSpan</span>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-lg-6 col-12">
+                            <label>@ICUClinicalStoryResource.EF:</label>
+
+                            @Html.EditorFor(m => m.EF, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.EF, @id = "EF" } })
+                            @Html.ValidationMessageFor(x => x.EF)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.EFInfoSpan</span>
+
+
+                        </div>
+
+                        <div class="col-lg-6 col-12">
+                            <label>@ICUClinicalStoryResource.Diagnosis:</label>
+                            @Html.EditorFor(m => m.Diagnosis, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUClinicalStoryResource.Diagnosis, @id = "Diagnosis" } })
+                            @Html.ValidationMessageFor(x => x.Diagnosis)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.DiagnosisInfoSpan</span>
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-6">
+                            <label>@ICUClinicalStoryResource.DiagnosisStatus:</label>
+                            @(Html.Kendo().DropDownListFor(x=>x.DiagnosisStatus)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetDiagonisisStatusEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "DiagnosisStatus", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.DiagnosisStatus.ToString():""))
+                            @Html.ValidationMessageFor(model => model.DiagnosisStatus)
+                        </div>
+                        <div class="col-lg-6">
+                            <label>@ICUClinicalStoryResource.IsThereAnAllergyToDrugs:</label>
+                            <div>
+                                @Html.RadioButtonFor(model => model.IsThereAnAllergyToDrugs, true, new { }) @Html.Label("IsThereAnAllergyToDrugsTrue", TeleICUResource.True)
+                                @Html.RadioButtonFor(model => model.IsThereAnAllergyToDrugs, false, new { @style = radioMargin }) @Html.Label("IsThereAnAllergyToDrugsFalse", TeleICUResource.False)
+                            </div>
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.IsThereAnAllergyToDrugsInfoSpan</span>
+                        </div>
+                        <div class="col-lg-6">
+                            <label>@ICUClinicalStoryResource.DrugsDetails:</label>
+
+                            @Html.TextAreaFor(m => m.DrugsDetails, new { @class = "form-control", @rows = "3", @placeholder = ICUClinicalStoryResource.DrugsDetails, @id = "DrugsDetails" })
+                            @Html.ValidationMessageFor(x => x.DrugsDetails)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.DrugsDetailsInfoSpan</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <label>@ICUClinicalStoryResource.PreviousSurgicalHistory:</label>
+                            @Html.TextAreaFor(m => m.PreviousSurgicalHistory, new { @class = "form-control", @rows = "3", @placeholder = ICUClinicalStoryResource.PreviousSurgicalHistory, @id = "PreviousSurgicalHistory" })
+                            @Html.ValidationMessageFor(x => x.PreviousSurgicalHistory)
+                            <span class="form-text text-muted viewMode">@ICUClinicalStoryResource.PreviousSurgicalHistoryInfoSpan</span>
+                        </div>
+
+                    </div>
+                    <br />
+                    <br />
+                    @if (!viewMode)
+                    {
+                        <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+
+                    }
+
+
+
+                    <!--<a href="#" class="btn btn-icon btn-warning btn-circle btn-lg" style="position:fixed; bottom:60px; right:115px;">
+                    <span class="svg-icon">-->
+                    <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+                    <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24"></rect>
+                            <path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3"></path>
+                            <path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000"></path>
+                        </g>
+                    </svg>-->
+                    <!--end::Svg Icon-->
+                    <!--</span>
+                    </a>-->
+
+                </div>
+
+
+
+
+            }
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    var isRecordPressed = false;
+    var isStop = false;
+    var BufferVoiceMessage;
+    var BufferVoiceMessageForRemark;
+    var IsModalClosePressed = false;
+    var myFileRemarks;
+    var myFileCurrentComplaint;
+    var MyFileRiskAssessment;
+    var MyFileCaseSummary;
+
+    var PressedRecordButton="";
+    $(document).ready(function () {
+
+        if ('@viewMode'=='True') {
+            $('#TelICUClinicalStoryFormId input').attr('readonly', 'readonly');
+            $('#TelICUClinicalStoryFormId textarea').attr('readonly', 'readonly');
+            document.getElementById("IsThereAnAllergyToDrugs").disabled = true;
+        }
+    });
+    //var myblob;
+    $("#TelICUClinicalStoryFormId").on("submit", function (e) {
+
+            e.preventDefault();
+        var formData = new FormData();
+
+
+        var formdataSerialize = $(this).serializeArray();
+        for (var i = 0; i < formdataSerialize.length; i++) {
+
+            formData.append(formdataSerialize[i].name, formdataSerialize[i].value);
+        }
+
+
+       // console.log(formdata11);
+            $.ajax({
+                url: "@(Url.Action("UpdateClinicalStory", "TeleICU"))",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetClinicalStory", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+                            onmenueload();
+                            $("#ClinicalStoryBtn").addClass("active");
+                        });
+                    } else {
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+        $("#save").on("click", function (e) {
+            debugger;
+          //  $('#voice').val(formData);
+            $('#TelICUClinicalStoryFormId').validate();
+            var RiskFactors = $("#RiskFactors").data("kendoMultiSelect").value();
+            if (RiskFactors.length==0) {
+                $('#RiskFactorValidation').text('@CommonResource.RequiredFeild');
+                onJSError('@CommonResource.SomeFeildIsRequired');
+                return;
+            }
+            if ($("#TelICUClinicalStoryFormId").valid()) {
+                if (RiskFactors.length != 0) {
+                    $("#save").attr("disabled", "disabled");
+                    $("#TelICUClinicalStoryFormId").submit();
+                }
+
+            } else {
+                onJSError('@CommonResource.SomeFeildIsRequired');
+            }
+        });
+
+
+    $('#RecordModal').on('hidden.bs.modal', function () {
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        $(".recordButtonClass").removeClass("Rec");
+        $(".recordButtonClass").addClass("notRec");
+        $(".recordReplyButtonClass").removeClass("Rec");
+        $(".recordReplyButtonClass").addClass("notRec");
+      //  BufferVoiceMessage = null;
+        if (IsModalClosePressed) {
+            stopRecordingForClose();
+        }
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        seconds.text("00");
+        minutes.text("00");
+    });
+    $('#RecordModal').on('shown.bs.modal', function () {
+        IsModalClosePressed = false;
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        BufferVoiceMessage = null;
+        IsStop = false;
+        var minuts = $("#secondsrecord");
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        //   seconds.text("00");
+        // minutes.text("00");
+    });
+
+    $("#RemarksVoiceRecorder").on("click", function () {
+        PressedRecordButton = "Remarks";
+    });
+
+    $("#CurrentComplaintRecorder").on("click", function () {
+        PressedRecordButton = "CurrentComplaint";
+    });
+    $("#RiskAssessmentRecorder").on("click", function () {
+        PressedRecordButton = "RiskAssessment";
+    });
+    $("#CaseSummaryRecorder").on("click", function () {
+        PressedRecordButton = "CaseSummary";
+    });
+    $('#RemarkrecordTrash').on("click", function () {
+
+        $('#RemarksVoiceRecorder').show();
+        $('#Remarkrecord').html('');
+        $('#RemarkrecordTrash').hide();
+        myFileRemarks = null;
+        $('#IsRemarksVoiceDeleted').val(true);
+    });
+    $('#CurrentComplaintTrash').on("click", function () {
+
+        $('#CurrentComplaintRecorder').show();
+        $('#CurrentComplaintVoicerecord').html('');
+        $('#CurrentComplaintTrash').hide();
+        myFileCurrentComplaint = null;
+        $('#IsCurrentComplaintVoiceDeleted').val(true);
+    });
+    $('#RiskAssessmentTrash').on("click", function () {
+
+        $('#RiskAssessmentRecorder').show();
+        $('#RiskAssessmentVoicerecord').html('');
+        $('#RiskAssessmentTrash').hide();
+        MyFileRiskAssessment = null;
+        $('#IsRiskAssessmentVoiceDeleted').val(true);
+    });
+    $('#CaseSummaryTrash').on("click", function () {
+
+        $('#CaseSummaryRecorder').show();
+        $('#CaseSummaryVoicerecord').html('');
+        $('#CaseSummaryTrash').hide();
+        MyFileCaseSummary = null;
+        $('#IsCaseSummaryVoiceDeleted').val(true);
+    });
+    $("input[type=number]").on("keypress", function (evt) {
+
+        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+        }
+    });
+
+    jQuery.validator.methods["date"] = function (value, element) { return true; }
+
+
+
+   
+</script>
+<script src="~/assets/js/WebAudioRecorder.min.js" type="text/javascript"></script>
+<script src="~/assets/js/app.js" type="text/javascript"></script>

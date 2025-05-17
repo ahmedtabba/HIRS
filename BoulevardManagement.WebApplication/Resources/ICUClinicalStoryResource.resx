@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AcceptanceDate" xml:space="preserve">
+    <value>Acceptance Date</value>
+  </data>
+  <data name="AcceptanceDateInfoSpan" xml:space="preserve">
+    <value>Please enter acceptance date</value>
+  </data>
+  <data name="AorticValve" xml:space="preserve">
+    <value>Aortic Valve</value>
+  </data>
+  <data name="AorticValveInfoSpan" xml:space="preserve">
+    <value>Please enter aortic valve</value>
+  </data>
+  <data name="BP" xml:space="preserve">
+    <value>BP</value>
+  </data>
+  <data name="BPInfoSpan" xml:space="preserve">
+    <value>Please enter BP</value>
+  </data>
+  <data name="ClinicalStory" xml:space="preserve">
+    <value>Clinical Story</value>
+  </data>
+  <data name="Complaint" xml:space="preserve">
+    <value>Complaint</value>
+  </data>
+  <data name="ComplaintDetails" xml:space="preserve">
+    <value>Complaint Details</value>
+  </data>
+  <data name="ComplaintDetailsInfoSpan" xml:space="preserve">
+    <value>Please enter complaint details</value>
+  </data>
+  <data name="ComplaintInfoSpan" xml:space="preserve">
+    <value>Please enter complaint</value>
+  </data>
+  <data name="Cvs" xml:space="preserve">
+    <value>Cvs</value>
+  </data>
+  <data name="CvsInfoSpan" xml:space="preserve">
+    <value>Please enter Cvs</value>
+  </data>
+  <data name="Cxr" xml:space="preserve">
+    <value>Cxr</value>
+  </data>
+  <data name="CxrInfoSpan" xml:space="preserve">
+    <value>Please enter Cxr</value>
+  </data>
+  <data name="Diagnosis" xml:space="preserve">
+    <value>Diagnosis</value>
+  </data>
+  <data name="DiagnosisInfoSpan" xml:space="preserve">
+    <value>Please enter diagnosis</value>
+  </data>
+  <data name="DiagnosisStatus" xml:space="preserve">
+    <value>Diagnosis Status</value>
+  </data>
+  <data name="DrugsDetails" xml:space="preserve">
+    <value>Drugs details (if yes)</value>
+  </data>
+  <data name="DrugsDetailsInfoSpan" xml:space="preserve">
+    <value>Please enter drugs details</value>
+  </data>
+  <data name="ECG" xml:space="preserve">
+    <value>ECG</value>
+  </data>
+  <data name="ECGInfoSpan" xml:space="preserve">
+    <value>Please enter ECG</value>
+  </data>
+  <data name="EF" xml:space="preserve">
+    <value>EF</value>
+  </data>
+  <data name="EFInfoSpan" xml:space="preserve">
+    <value>Please enter EF</value>
+  </data>
+  <data name="IsThereAnAllergyToDrugs" xml:space="preserve">
+    <value>Is there an allergy to drugs?</value>
+  </data>
+  <data name="IsThereAnAllergyToDrugsInfoSpan" xml:space="preserve">
+    <value>Please Select</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="MedicalHistory" xml:space="preserve">
+    <value>Medical History</value>
+  </data>
+  <data name="MedicalHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter medical history</value>
+  </data>
+  <data name="MitralValve" xml:space="preserve">
+    <value>Mitral Valve</value>
+  </data>
+  <data name="MitralValveInfoSpan" xml:space="preserve">
+    <value>Please enter mitral valve</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Others</value>
+  </data>
+  <data name="OthersInfoSpan" xml:space="preserve">
+    <value>Please enter others</value>
+  </data>
+  <data name="PharmacologicalPrecedents" xml:space="preserve">
+    <value>Pharmacological Precedents</value>
+  </data>
+  <data name="PharmacologicalPrecedentsInfoSpan" xml:space="preserve">
+    <value>Please enter pharmacological precedents</value>
+  </data>
+  <data name="PreviousCatheter" xml:space="preserve">
+    <value>Previous Catheter</value>
+  </data>
+  <data name="PreviousCatheterInfoSpan" xml:space="preserve">
+    <value>Please enter previous catheter</value>
+  </data>
+  <data name="PreviousSurgicalHistory" xml:space="preserve">
+    <value>Previous Surgical History</value>
+  </data>
+  <data name="PreviousSurgicalHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter previous surgical history</value>
+  </data>
+  <data name="Pulse" xml:space="preserve">
+    <value>Pulse</value>
+  </data>
+  <data name="PulseInfoSpan" xml:space="preserve">
+    <value>Please enter pulse</value>
+  </data>
+  <data name="RiskFactors" xml:space="preserve">
+    <value>Risk Factors</value>
+  </data>
+  <data name="RiskFactorsInfoSpan" xml:space="preserve">
+    <value>Please select risk factors</value>
+  </data>
+  <data name="UltrasoundHeartScan" xml:space="preserve">
+    <value>Ultrasound Heart Scan</value>
+  </data>
+  <data name="UltrasoundHeartScanInfoSpan" xml:space="preserve">
+    <value>Please enter ultrasound heart scan</value>
+  </data>
+</root>

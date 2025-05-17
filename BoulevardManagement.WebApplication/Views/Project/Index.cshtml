@@ -1,0 +1,65 @@
+﻿@using BoulevardManagement.WebApplication.Resources;
+
+@{
+    ViewBag.Title = ProjectViewResource.IndexTitle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+<div class="@customeClass">
+    @(Html.KendoGrid<BoulevardManagement.DTO.ProjectDTO>
+                                                    ()
+                                                    .Name("ProjectGrid").Scrollable(x => x.Enabled(true))
+                                                    .Columns(columns =>
+                                                    {
+                                                        columns.Bound(c => c.Code).Title(ProjectViewResource.Code);
+                                                        columns.Bound(c => c.Name).Title(ProjectViewResource.Name);
+                                                        columns.Bound(c => c.Description).Title(ProjectViewResource.Description);
+
+                                                        columns.Command(command =>
+                                {
+                                                        columns.Template(@<text></text>).ClientTemplate("<a href='" + Url.RouteUrl("Default", new { controller = "Project", action = "Edit" }) + "?projectId=#=EncrptedId#' class='k-button k-button-icontext'><span class='k-icon k-i-edit'></span>" + CommonResource.Edit + "</a>").Width(85);
+                                                                command.Custom("ProjectDestroy").Text("<span class='k-icon k-i-close'></span> " + CommonResource.Delete).Click("DeleteRowProjectGrid");
+                                                            }).Width(100);
+
+                                                            })
+                                                                            .ColumnMenu(c => c.Columns(true))
+                                                                            .HtmlAttributes(new { style = "height:1000px", @id = "ProjectGrid" })
+
+                                                                            .DataSource(dataSource => dataSource
+                                                                            .Ajax()
+                                                                            .Sort(sort => sort.Add(x => x.Code).Ascending())
+                                                                            .Model(model => model.Id(c => c.Id))
+                                                                            .Destroy(action => action.Action("Delete", "Project"))
+                                                                            .Read(read => read.Action("Read", "Project"))
+                                                                            .Events(events => events.Error("function(args){KendoGrid_ErrorHandler(args,'ProjectGrid');}")/*.RequestEnd("myOnReqEnd")*/)
+                                                                            .PageSize(50))
+    )
+</div>
+@Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+
+
+
+
+<script>
+    function DeleteRowProjectGrid(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#ProjectGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+</script>

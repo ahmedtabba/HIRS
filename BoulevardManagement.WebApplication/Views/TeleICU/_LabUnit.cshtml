@@ -1,0 +1,1550 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@model TelICULabUnitDTO
+
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.TelIcuLabUnit.EditLabUnit) || Model.CaseStatus == CaseStatus.Closed;
+    if (Model.Id > 0)
+    {
+        viewMode = true;
+    }
+    string radioMargin = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "margin-right:15px;" : "margin-left:15px;";
+
+}
+
+<style>
+    td {
+        border: 1px solid #EBEDF3;
+        vertical-align: middle !important;
+    }
+</style>
+@if (Model.CaseStatus == CaseStatus.Closed)
+{
+    <style>
+        .k-grid-TelIcuLabUnitDestroy {
+            display: none !important;
+        }
+    </style>
+}
+@if (Model.Id > 0 && Model.CaseStatus != CaseStatus.Closed && User.IsInRole(RoleConsistent.TelIcuLabUnit.EditLabUnit))
+{
+    <button type="button" id="AddTeleIcuBtn" class="btn btn-primary">@ICULabUnitResource.AddLabUnit</button>
+}
+<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>
+
+<!--begin::Form-->
+@using (Html.BeginForm("UpdateLabUnit", "TeleICU", FormMethod.Post, new { @id = "TelICULabUnitFormId", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.TeleICUId)
+
+    @Html.HiddenFor(model => model.BloodGasesAttachmentId)
+    @Html.HiddenFor(model => model.HasBloodGasesAttachment)
+    @Html.HiddenFor(model => model.BloodGasesFilename)
+    @Html.HiddenFor(model => model.BloodGasesFilePath)
+
+    @Html.HiddenFor(model => model.ChemistryAttachmentId)
+    @Html.HiddenFor(model => model.HasChemistryAttachment)
+    @Html.HiddenFor(model => model.ChemistryFilename)
+    @Html.HiddenFor(model => model.ChemistryFilePath)
+
+    @Html.HiddenFor(model => model.CBCAttachmentId)
+    @Html.HiddenFor(model => model.HasCBCAttachment)
+    @Html.HiddenFor(model => model.CBCFilename)
+    @Html.HiddenFor(model => model.CBCFilePath)
+
+    @Html.HiddenFor(model => model.ElectrolytesAttachmentId)
+    @Html.HiddenFor(model => model.HasElectrolytesAttachment)
+    @Html.HiddenFor(model => model.ElectrolytesFilename)
+    @Html.HiddenFor(model => model.ElectrolytesFilePath)
+
+    @Html.HiddenFor(model => model.CoagulationTestAttachmentId)
+    @Html.HiddenFor(model => model.HasCoagulationTestAttachment)
+    @Html.HiddenFor(model => model.CoagulationTestFilename)
+    @Html.HiddenFor(model => model.CoagulationTestFilePath)
+
+    @Html.HiddenFor(model => model.SerologyAttachmentId)
+    @Html.HiddenFor(model => model.HasSerologyAttachment)
+    @Html.HiddenFor(model => model.SerologyFilename)
+    @Html.HiddenFor(model => model.SerologyFilePath)
+
+    @Html.HiddenFor(model => model.UrineTestAttachmentId)
+    @Html.HiddenFor(model => model.HasUrineTestAttachment)
+    @Html.HiddenFor(model => model.UrineTestFilename)
+    @Html.HiddenFor(model => model.UrineTestFilePath)
+
+    @Html.HiddenFor(model => model.LabUnitGeneralAttachmentId)
+    @Html.HiddenFor(model => model.HasLabUnitGeneralAttachment)
+    @Html.HiddenFor(model => model.LabUnitGeneralFilename)
+    @Html.HiddenFor(model => model.LabUnitGeneralFilePath)
+    @*<input id="voice" name="voice" type="file" style="display:none" />*@
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                @ICULabUnitResource.LabUnit
+            </h3>
+        </div>
+        @*<div class="card-toolbar">
+                <a href="#" class="btn btn-light-primary font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+                </a>
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+            </div>*@
+    </div>
+
+
+    <div class="card-body">
+        <table class="table table-striped" style="border:1px solid">
+
+            <tbody>
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="BloodGasesfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="BloodGasesfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("BloodGasesfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddClinicalBloodGasesFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadBloodGasesFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.BloodGasesAttachmentId.HasValue)
+                            {
+                                @Model.BloodGasesFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.BloodGasesAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.BloodGases</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.BloodGases</td>
+                    <td>
+                        @if (viewMode)
+                        {
+                            if (Model.BloodGases != null)
+                            {
+                                <span>@Model.BloodGases.GetDescription()</span>
+                            }
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                @Html.RadioButtonFor(c => c.BloodGases, BloodGases.ABG, new { @class = "", @style = "height:10px;" }) <span style="font-weight:400">@BloodGases.ABG.GetDescription()</span>
+                                @Html.RadioButtonFor(c => c.BloodGases, BloodGases.VBG, new { @class = "", @style = "height:10px;" + radioMargin }) <span style="font-weight:400">@BloodGases.VBG.GetDescription()</span>
+                                @Html.RadioButtonFor(c => c.BloodGases, BloodGases.CBG, new { @class = "", @style = "height:10px;" + radioMargin }) <span style="font-weight:400">@BloodGases.CBG.GetDescription()</span>
+                                @Html.ValidationMessageFor(model => model.BloodGases)
+                            </div>
+                        }
+
+                    </td>
+                    <td>
+                        @ICULabUnitResource.PH
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.PH, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.PH, @id = "PH", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.PH)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @ICULabUnitResource.PCO2
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.PCO2, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.PCO2, @id = "PCO2", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.PCO2)
+                    </td>
+                    <td>
+                        @ICULabUnitResource.PO2
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.PO2, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.PO2, @id = "PO2", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.PO2)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @ICULabUnitResource.HCO3
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.HCO3, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.HCO3, @id = "HCO3", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.HCO3)
+                    </td>
+                    <td>
+                        @ICULabUnitResource.BE
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.BE, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.BE, @id = "BE", @type = "number", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.BE)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @ICULabUnitResource.AG
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.AG, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.AG, @id = "AG", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.AG)
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+
+        <table class="table table-striped" style="border:1px solid">
+
+            <tbody>
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="ChemistryfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="ChemistryfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("Chemistryfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddChemistryFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadChemistryFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.ChemistryAttachmentId.HasValue)
+                            {
+                                @Model.ChemistryFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.ChemistryAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.Chemistry</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.ChemistryGlucose</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryGlucose, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryGlucose, @id = "ChemistryGlucose" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryGlucose)
+                    </td>
+                    <td>
+                        70-110 mg/dl
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryBilirTotal</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryBilirTotal, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryBilirTotal, @id = "ChemistryBilirTotal" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryBilirTotal)
+                    </td>
+                    <td>
+                        0.1-1.3 mg/dl
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.ChemistryUrea</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryUrea, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryUrea, @id = "ChemistryUrea" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryUrea)
+                    </td>
+                    <td>
+                        15-45 mg/dl
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryBilirDirct</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryBilirDirct, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryBilirDirct, @id = "ChemistryBilirDirct" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryBilirDirct)
+                    </td>
+                    <td>
+                        0.1-0.4 mg/dl
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.ChemistryCreatinine</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryCreatinine, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryCreatinine, @id = "ChemistryCreatinine" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryCreatinine)
+                    </td>
+                    <td>
+                        0.5-1.4 mg/dl
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryBilirIndirect</td>
+
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryBilirIndirect, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryBilirIndirect, @id = "ChemistryBilirIndirect" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryBilirIndirect)
+                    </td>
+                    <td>
+                        0.2-0.8 mg/dl
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.ChemistryTotalProteins</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryTotalProteins, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryTotalProteins, @id = "ChemistryTotalProteins" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryTotalProteins)
+                    </td>
+                    <td>
+                        6-Sg/dl
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryCKMB</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryCKMB, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryBilirIndirect, @id = "ChemistryCKMB" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryCKMB)
+                    </td>
+                    <td>
+                        UTT025 U/L
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>@ICULabUnitResource.ChemistryAlbumin</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryAlbumin, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryAlbumin, @id = "ChemistryAlbumin" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryAlbumin)
+                    </td>
+                    <td>
+                        3,3-5,5 g/dl
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryCRP</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryCRP, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryCRP, @id = "ChemistryCRP" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryCRP)
+                    </td>
+                    <td>
+                        UPT06
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>@ICULabUnitResource.ChemistryGlobulins</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryGlobulins, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryGlobulins, @id = "ChemistryGlobulins" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryGlobulins)
+                    </td>
+                    <td>
+                        1.5-3.6 g/dl
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryALP</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryALP, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryALP, @id = "ChemistryALP" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryALP)
+                    </td>
+                    <td>
+                        20-110 U/L
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>@ICULabUnitResource.ChemistrySGPT</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistrySGPT, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistrySGPT, @id = "ChemistrySGPT" } })
+                        @Html.ValidationMessageFor(x => x.ChemistrySGPT)
+                    </td>
+                    <td>
+                        Up to  45 U/L
+                    </td>
+                    <td>@ICULabUnitResource.ChemistryAmylase</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryAmylase, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.ChemistryAmylase, @id = "ChemistryAmylase" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryAmylase)
+                    </td>
+                    <td>
+                        Up to 90 U/L
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.TROPONINT</td>
+                    <td>
+                        @Html.EditorFor(m => m.ChemistryTROPONINT, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.TROPONINT, @id = "ChemistryTROPONINT" } })
+                        @Html.ValidationMessageFor(x => x.ChemistryTROPONINT)
+                    </td>
+                    <td>
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <br />
+        <br />
+        <table class="table table-striped" style="border:1px solid">
+
+            <tbody>
+                <tr>
+                    <td colspan="8">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="CBCfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="CBCfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("CBCfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddCBCFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadCBCFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.CBCAttachmentId.HasValue)
+                            {
+                                @Model.CBCFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.CBCAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.CBC</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.CBCWBC</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCWBC, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCWBC, @id = "CBCWBC" } })
+                        @Html.ValidationMessageFor(x => x.CBCWBC)
+                    </td>
+
+                    <td>@ICULabUnitResource.CBCN</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCN, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCN, @id = "CBCN" } })
+                        @Html.ValidationMessageFor(x => x.CBCN)
+                    </td>
+
+
+                    <td>@ICULabUnitResource.CBCL</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCL, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCL, @id = "CBCL" } })
+                        @Html.ValidationMessageFor(x => x.CBCL)
+                    </td>
+
+                    <td>@ICULabUnitResource.CBCM</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCM, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCM, @id = "CBCM" } })
+                        @Html.ValidationMessageFor(x => x.CBCM)
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>@ICULabUnitResource.CBCHB</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCHB, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCHB, @id = "CBCHB" } })
+                        @Html.ValidationMessageFor(x => x.CBCHB)
+                    </td>
+
+                    <td></td>
+                    <td>
+                    </td>
+
+
+                    <td>@ICULabUnitResource.CBCPLT</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCPLT, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCPLT, @id = "CBCPLT" } })
+                        @Html.ValidationMessageFor(x => x.CBCPLT)
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.CBCHT</td>
+                    <td>
+                        @Html.EditorFor(m => m.CBCHT, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CBCHT, @id = "CBCHT" } })
+                        @Html.ValidationMessageFor(x => x.CBCHT)
+                    </td>
+
+                    <td></td>
+                    <td>
+                    </td>
+
+
+                    <td>@ICULabUnitResource.CBCBloodGroup</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.CBCBloodGroup)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetBloodTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "CBCBloodGroup", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.CBCBloodGroup.ToString():""))
+                        @Html.ValidationMessageFor(model => model.CBCBloodGroup)
+
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+        <br />
+        <br />
+
+
+        <table class="table table-striped" style="border:1px solid">
+
+            <tbody>
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="ElectrolytesfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="ElectrolytesfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("Electrolytesfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddLabElectrolytesFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadElectrolytesFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.ElectrolytesAttachmentId.HasValue)
+                            {
+                                @Model.ElectrolytesFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.ElectrolytesAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.Electrolytes</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.Sodium</td>
+                    <td>
+                        @Html.EditorFor(m => m.Sodium, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.Sodium, @id = "Sodium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.Sodium)
+
+                    </td>
+                    <td>
+                        @ICULabUnitResource.Potassium
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.Potassium, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.Potassium, @id = "Potassium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.Potassium)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @ICULabUnitResource.Chloride
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.Chloride, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.Chloride, @id = "Chloride", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.Chloride)
+                    </td>
+                    <td>
+                        @ICULabUnitResource.Calcium
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.Calcium, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.Calcium, @id = "Calcium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.Calcium)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @ICULabUnitResource.Magnesium
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.Magnesium, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.Magnesium, @id = "Magnesium", @type = "number", min = "0", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.Magnesium)
+                    </td>
+                    <td>
+                        @ICULabUnitResource.Phosphorous
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.Phosphorous, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.Phosphorous, @id = "Phosphorous", @type = "number", onclick = "$(this).select();" } })
+                        @Html.ValidationMessageFor(x => x.Phosphorous)
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <table class="table table-striped" style="border:1px solid">
+
+            <tbody>
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="CoagulationTestfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="CoagulationTestfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("CoagulationTestfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddCoagulationTestFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadCoagulationTestFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.CoagulationTestAttachmentId.HasValue)
+                            {
+                                @Model.CoagulationTestFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.CoagulationTestAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.CoagulationTest </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.CoagulationPT</td>
+                    <td>
+                        @ICULabUnitResource.CoagulationPatient
+                    </td>
+
+                    <td>@ICULabUnitResource.CoagulationActivity</td>
+                    <td>
+                        @ICULabUnitResource.CoagulationINR
+                    </td>
+
+
+                    <td>@ICULabUnitResource.CoagulationControl</td>
+
+                    <td></td>
+
+                </tr>
+
+                <tr>
+                    <td>@ICULabUnitResource.CoagulationPT</td>
+                    <td>
+                        @Html.EditorFor(m => m.CoagulationPtPatient, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CoagulationPatient, @id = "CoagulationPtPatient" } })
+                        @Html.ValidationMessageFor(x => x.CoagulationPtPatient)
+                    </td>
+
+                    <td>
+                        <div class="row" style="margin:auto">
+                            <div class="col-lg-11" style="padding:0px">
+                                @Html.EditorFor(m => m.CoagulationPtActivity, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CoagulationActivity, @id = "CoagulationPtActivity" } })
+
+                            </div>
+                            <div class="col-lg-1" style="padding:10px 0px 0px 0px">
+                                %
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(x => x.CoagulationPtActivity)
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.CoagulationPtINR, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CoagulationINR, @id = "CoagulationPtINR" } })
+                        @Html.ValidationMessageFor(x => x.CoagulationPtINR)
+                    </td>
+
+
+                    <td>
+                        @Html.EditorFor(m => m.CoagulationPtControl, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CoagulationControl, @id = "CoagulationPtControl" } })
+                        @Html.ValidationMessageFor(x => x.CoagulationPtControl)
+                    </td>
+
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.CoagulationBleedingTime</td>
+                    <td>
+                        @Html.EditorFor(m => m.CoagulationBleedingTime, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CoagulationBleedingTime, @id = "CoagulationBleedingTime" } })
+                        @Html.ValidationMessageFor(x => x.CoagulationBleedingTime)
+                    </td>
+                    <td>
+                    </td>
+                    <td>@ICULabUnitResource.CoagulationClottingtime</td>
+                    <td>
+                        @Html.EditorFor(m => m.CoagulationClottingTime, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.CoagulationClottingtime, @id = "CoagulationClottingTime" } })
+                        @Html.ValidationMessageFor(x => x.CoagulationClottingTime)
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="SerologyfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="SerologyfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("Serologyfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddSerologyFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadSerologyFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.SerologyAttachmentId.HasValue)
+                            {
+                                @Model.SerologyFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.SerologyAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.SEROLOGY</h3>
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>@ICULabUnitResource.Widal </td>
+
+                    <td>@ICULabUnitResource.SerologyO</td>
+                    <td>
+
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1" style="margin:10px 0px 0px 0px;padding:0px">
+                                @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                                {
+                                    <span>1\</span>
+                                }
+                                else
+                                {
+                                    <span>1/</span>
+                                }
+                            </div>
+                            <div class="col-lg-11" style="margin:0px;padding:0px">
+                                @Html.EditorFor(m => m.SerologyO, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.SerologyO, @id = "SerologyO", @Style = "width:95%" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(x => x.SerologyO)
+
+                        </div>
+                    </td>
+                    <td>@ICULabUnitResource.SerologyH</td>
+                    <td>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1" style="margin:10px 0px 0px 0px;padding:0px">
+                                @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                                {
+                                    <span>1\</span>
+                                }
+                                else
+                                {
+                                    <span>1/</span>
+                                }
+                            </div>
+                            <div class="col-lg-11" style="margin:0px;padding:0px">
+                                @Html.EditorFor(m => m.SerologyH, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.SerologyH, @id = "SerologyH", @Style = "width:95%" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(x => x.SerologyH)
+
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>@ICULabUnitResource.Wright </td>
+
+                    <td>@ICULabUnitResource.SerologyM</td>
+                    <td>
+
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1" style="margin:10px 0px 0px 0px;padding:0px">
+                                @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                                {
+                                    <span>1\</span>
+                                }
+                                else
+                                {
+                                    <span>1/</span>
+                                }
+                            </div>
+                            <div class="col-lg-11" style="margin:0px;padding:0px">
+                                @Html.EditorFor(m => m.SerologyM, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.SerologyM, @id = "SerologyM", @Style = "width:95%" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(x => x.SerologyM)
+
+
+                        </div>
+                    </td>
+                    <td>@ICULabUnitResource.SerologyA</td>
+                    <td>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1" style="margin:10px 0px 0px 0px;padding:0px">
+                                @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                                {
+                                    <span>1\</span>
+                                }
+                                else
+                                {
+                                    <span>1/</span>
+                                }
+                            </div>
+                            <div class="col-lg-11" style="margin:0px;padding:0px">
+                                @Html.EditorFor(m => m.SerologyA, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.SerologyA, @id = "SerologyA", @Style = "width:95%" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(x => x.SerologyA)
+
+
+                        </div>
+
+                    </td>
+                    <td></td>
+                </tr>
+
+
+
+
+
+                <tr>
+                    <td>@ICULabUnitResource.SerologyHBSAG </td>
+
+                    <td>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.SerologyHBSAG)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetPositiveNegativeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "SerologyHBSAG", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.SerologyHBSAG.ToString():""))
+
+                        @Html.ValidationMessageFor(x => x.SerologyHBSAG)
+                    </td>
+                    <td>
+                        @ICULabUnitResource.SerologyHCV
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.SerologyHCV)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetPositiveNegativeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "SerologyHCV", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.SerologyHCV.ToString():""))
+                        @Html.ValidationMessageFor(x => x.SerologyHCV)
+                    </td>
+                    <td>
+                        @ICULabUnitResource.SerologyHIV
+                    </td>
+                    <td>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.SerologyHIV)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetPositiveNegativeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "SerologyHIV", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.SerologyHIV.ToString():""))
+                        @Html.ValidationMessageFor(x => x.SerologyHIV)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <table class="table table-striped" style="border:1px solid">
+
+            <tbody>
+                <tr>
+                    <td colspan="6">
+                        <div>
+                            <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="UrineTestfileserrorMessage">
+                                <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="UrineTestfileserrorMsgTxt"></label>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("UrineTestfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddUrineTestFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadUrineTestFile")))
+                            }
+
+
+
+                            <br />
+                            @if (Model.UrineTestAttachmentId.HasValue)
+                            {
+                                @Model.UrineTestFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.UrineTestAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                            }
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="">
+                        <h3 style="width:100%;text-align:center;">@ICULabUnitResource.URINETEST </h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.UrinePH</td>
+                    <td>
+                        @Html.EditorFor(m => m.UrinePH, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.UrinePH, @id = "UrinePH" } })
+                        @Html.ValidationMessageFor(x => x.UrinePH)
+                    </td>
+                    <td>@ICULabUnitResource.UrineGlucose</td>
+                    <td>
+
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineGlucose)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineGlucose", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineGlucose.ToString():""))
+
+                        @Html.ValidationMessageFor(x => x.UrineGlucose)
+                    </td>
+                    <td>@ICULabUnitResource.UrineAppearance</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineAppearance)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetAppearanceEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineAppearance", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineAppearance.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineAppearance)
+                    </td>
+                </tr>
+                <tr>
+                    <td>@ICULabUnitResource.UrineSG</td>
+                    <td>
+                        @Html.EditorFor(m => m.UrineSG, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.UrineSG, @id = "UrineSG" } })
+                        @Html.ValidationMessageFor(x => x.UrineSG)
+                    </td>
+                    <td>@ICULabUnitResource.UrintHemoglobin</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.UrintHemoglobin)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrintHemoglobin", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrintHemoglobin.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrintHemoglobin)
+                    </td>
+                    <td>@ICULabUnitResource.UrineColor</td>
+                    <td>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineColor)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetColorEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineColor", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineColor.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineColor)
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>@ICULabUnitResource.UrineProtein</td>
+                    <td style="">
+                        @*@Html.EditorFor(m => m.UrineProtein, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.UrineProtein, @id = "UrineProtein" } })
+                            @Html.ValidationMessageFor(x => x.UrineProtein)*@
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineProtein)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineProtein", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineProtein.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineProtein)
+                    </td>
+                    <td>@ICULabUnitResource.UrineBilllrubin</td>
+                    <td>
+
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineBilllrubin)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineBilllrubin", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineBilllrubin.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineBilllrubin)
+                    </td>
+                    <td>@ICULabUnitResource.UrineKitones</td>
+                    <td>
+
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineKitones)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineKitones", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineKitones.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineKitones)
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>@ICULabUnitResource.UrineWBC</td>
+                    <td>
+                        @Html.EditorFor(m => m.UrineWBC, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.UrineWBC, @id = "UrineWBC" } })
+                        @Html.ValidationMessageFor(x => x.UrineWBC)
+                    </td>
+                    <td>@ICULabUnitResource.UrineCalciumOxalate</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineCalciumOxalate)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineCalciumOxalate", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineCalciumOxalate.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineCalciumOxalate)
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>@ICULabUnitResource.UrineRBC</td>
+                    <td>
+                        @Html.EditorFor(m => m.UrineRBC, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.UrineRBC, @id = "UrineRBC" } })
+                        @Html.ValidationMessageFor(x => x.UrineRBC)
+                    </td>
+                    <td>@ICULabUnitResource.UrineAmorphousUrate</td>
+                    <td>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineAmorphousUrate)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineAmorphousUrate", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineAmorphousUrate.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineAmorphousUrate)
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td>@ICULabUnitResource.UrineECells</td>
+                    <td>
+                        @Html.EditorFor(m => m.UrineECells, new { htmlAttributes = new { @class = "form-control", @placeholder = ICULabUnitResource.UrineECells, @id = "UrineECells" } })
+                        @Html.ValidationMessageFor(x => x.UrineECells)
+                    </td>
+                    <td>@ICULabUnitResource.UrineUACrystals</td>
+                    <td>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineUACrystals)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineUACrystals", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineUACrystals.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineUACrystals)
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>@ICULabUnitResource.UrineMucus</td>
+                    <td>
+
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineMucus)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineMucus", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineMucus.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineMucus)
+                    </td>
+                    <td>@ICULabUnitResource.UrineCandida</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineCandida)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineCandida", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineCandida.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineCandida)
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>@ICULabUnitResource.UrineBacteria</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineBacteria)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineBacteria", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineBacteria.ToString():""))
+
+                        @Html.ValidationMessageFor(x => x.UrineBacteria)
+                    </td>
+                    <td>@ICULabUnitResource.UrineGCylinders</td>
+                    <td>
+                        @(Html.Kendo().DropDownListFor(x=>x.UrineGCylinders)
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Filter("contains")
+        .OptionLabel(CommonResource.Select).Enable(!viewMode)
+        //.Events(ev => ev.Change("onChange"))
+        .DataSource(source =>
+        {
+            source.Read(read =>
+            {
+                read.Action("GetSignTypeEnumList", "TeleICU");
+            }).ServerFiltering(false);
+        }).HtmlAttributes(new{@class = "form-control custom-style", @id= "UrineGCylinders", @style = "width:100%"})
+        .AutoBind(true)
+        .ValuePrimitive(true)
+        .Value(Model.Id>0? Model.UrineGCylinders.ToString():""))
+                        @Html.ValidationMessageFor(x => x.UrineGCylinders)
+                    </td>
+                    <td></td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row" style="padding:10px">
+            <label style="padding-left:17px">@ICULabUnitResource.GeneralAttachment</label>
+            <div class="col-lg-12">
+                <div>
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="LabUnitGeneralfileserrorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="LabUnitGeneralfileserrorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("LabUnitGeneralfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddLabUnitGeneralFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFileCustom")
+                    .Success("onSuccessUploadLabUnitGeneralFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.LabUnitGeneralAttachmentId.HasValue)
+                    {
+                        @Model.LabUnitGeneralFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.LabUnitGeneralAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                    }
+
+                </div>
+            </div>
+        </div>
+        @if (!viewMode)
+        {
+            <div class="row">
+                <div class="col-lg-4">
+                    <button type="button" id="savelabunit" class="btn btn-primary">@CommonResource.Save</button>
+                    <button type="button" id="cancel" class="btn btn-default">@CommonResource.Cancel</button>
+                </div>
+
+            </div>
+        }
+
+
+        <!--<a href="#" class="btn btn-icon btn-warning btn-circle btn-lg" style="position:fixed; bottom:60px; right:115px;">
+        <span class="svg-icon">-->
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <rect x="0" y="0" width="24" height="24"></rect>
+                <path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3"></path>
+                <path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000"></path>
+            </g>
+        </svg>-->
+        <!--end::Svg Icon-->
+        <!--</span>
+        </a>-->
+
+    </div>
+
+
+
+
+}
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    var isRecordPressed = false;
+    var isStop = false;
+    var BufferVoiceMessage;
+    var BufferVoiceMessageForRemark;
+    var IsModalClosePressed = false;
+    var myFileRemarks;
+    var myFileCurrentComplaint;
+    var MyFileRiskAssessment;
+    var MyFileCaseSummary;
+
+    var PressedRecordButton="";
+        $(document).ready(function () {
+
+        if ('@viewMode'=='True') {
+            $('#TelICULabUnitFormId input').attr('readonly', 'readonly');
+            $('#TelICULabUnitFormId textarea').attr('readonly', 'readonly');
+           // document.getElementById("IsThereAnAllergyToDrugs").disabled = true;
+            $('select').attr('disabled', 'disabled');
+        }
+    });
+    //var myblob;
+    $("#TelICULabUnitFormId").on("submit", function (e) {
+
+            e.preventDefault();
+        var formData = new FormData();
+
+
+        var formdataSerialize = $(this).serializeArray();
+        for (var i = 0; i < formdataSerialize.length; i++) {
+
+            formData.append(formdataSerialize[i].name, formdataSerialize[i].value);
+        }
+
+
+       // console.log(formdata11);
+            $.ajax({
+                url: "@(Url.Action("UpdateLabUnit", "TeleICU"))",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetLabUnit", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+                            onmenueload();
+                            $("#LabUnitBtn").addClass("active");
+
+                        });
+                        refreshLabUnitGrid();
+                    } else {
+                        onJSError(data.Message);
+                        $("#savelabunit").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+    $("#savelabunit").on("click", function (e) {
+
+          //  $('#voice').val(formData);
+        $('#TelICULabUnitFormId').validate();
+        if ($("#TelICULabUnitFormId").valid()) {
+            $("#savelabunit").attr("disabled", "disabled");
+
+
+
+            $("#TelICULabUnitFormId").submit();
+        }
+    });
+    $("input[type=text]").on("keypress", function (evt) {
+
+        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+            if (evt.which==46) {
+                return;
+            }
+            evt.preventDefault();
+        }
+    });
+    $("input[type=number]").on("keypress", function (evt) {
+
+
+        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+            if (evt.which == 45 || evt.which == 43) {
+                return;
+            }
+            evt.preventDefault();
+        }
+    });
+     $("#AddTeleIcuBtn").on("click", function () {
+         $('#main-content').load('@Url.Action("GetTelIcuLabUnitForAdd", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {});
+
+     });
+                        $("#cancel").on("click", function (e) {
+       $('#main-content').load('@Url.Action("GetLabUnit", "TeleICU", new { labUnitId = "", ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () { });
+    });
+</script>

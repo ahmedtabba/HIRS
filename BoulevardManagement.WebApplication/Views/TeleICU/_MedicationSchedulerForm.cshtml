@@ -1,0 +1,325 @@
+﻿@using BoulevardManagement.DTO;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Resources;
+@model TelICUMedicationSchedulerDTO
+
+
+<style>
+    .custom-style.k-datetimepicker .k-picker-wrap .k-icon {
+        margin-top: 10px !important;
+    }
+</style>
+
+
+@using (Html.BeginForm("UpdateMedicationScheduler", "TeleICU", FormMethod.Post, new { @id = "TelICUMedicationSchedulerFormId" }))
+{
+    <div class="modal-body">
+
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="Id" name="Id" value="@Model.Id" class="MedicationId"/>
+        @Html.HiddenFor(x => x.TeleICUId)
+        <div class="row">
+
+
+            <div class="form-group col-lg-4">
+                <label>@MedicationSchedulerFormResource.MedicationName:</label>
+                @Html.EditorFor(m => m.MedicationName, new { htmlAttributes = new { @class = "form-control", @placeholder = @MedicationSchedulerFormResource.MedicationName, @id = "MedicationName" } })
+                @Html.ValidationMessageFor(x => x.MedicationName)
+                <span class="form-text text-muted">@MedicationSchedulerFormResource.MedicationNameInfoSpan</span>
+            </div>
+
+            <div class="form-group col-lg-4">
+                <label>
+                    @MedicationSchedulerFormResource.Concentration:
+                </label>
+                @Html.EditorFor(m => m.Concentration, new { htmlAttributes = new { @class = "form-control", @placeholder = @MedicationSchedulerFormResource.Concentration, @id = "Concentration" } })
+                @Html.ValidationMessageFor(x => x.Concentration)
+                <span class="form-text text-muted">@MedicationSchedulerFormResource.ConcentrationInfoSpan</span>
+            </div>
+            <div class="form-group col-lg-4">
+                <label>@MedicationSchedulerFormResource.NumberOfTimes:</label>
+                @Html.EditorFor(m => m.NumberOfTimes, new { htmlAttributes = new { @class = "form-control", @placeholder = @MedicationSchedulerFormResource.NumberOfTimes, @id = "NumberOfTimes", @type = "number", @min = "0" } })
+                @Html.ValidationMessageFor(x => x.NumberOfTimes)
+                <span class="form-text text-muted">@MedicationSchedulerFormResource.NumberOfTimesInfoSpan</span>
+            </div>
+
+          
+
+        </div>
+
+        <div class="row">
+            <div class="form-group col-lg-4">
+                <label>@MedicationSchedulerFormResource.RouteOfAdministratinOfDrug:</label>
+                @Html.EditorFor(m => m.RouteOfAdministratinOfDrug, new { htmlAttributes = new { @class = "form-control", @placeholder = @MedicationSchedulerFormResource.RouteOfAdministratinOfDrug, @id = "RouteOfAdministratinOfDrug" } })
+                @Html.ValidationMessageFor(x => x.RouteOfAdministratinOfDrug)
+                <span class="form-text text-muted">@MedicationSchedulerFormResource.RouteOfAdministratinOfDrugInfoSpan</span>
+            </div>
+        </div>
+        <h5>@MedicationSchedulerFormResource.Times:</h5>
+        <hr />
+        <div class="row">
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Morning_8, new { htmlAttributes = new { style = "width:100%", value = Model.Morning_8 } })
+                        <label>@MedicationSchedulerFormResource.Morning_8</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Morning_8)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Morning_10, new { htmlAttributes = new { style = "width:100%", value = Model.Morning_10 } })
+                        <label>@MedicationSchedulerFormResource.Morning_10</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Morning_10)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Afternoon_12, new { htmlAttributes = new { style = "width:100%", value = Model.Afternoon_12 } })
+                        <label>@MedicationSchedulerFormResource.Afternoon_12</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Afternoon_12)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Afternoon_2, new { htmlAttributes = new { style = "width:100%", value = Model.Afternoon_2 } })
+                        <label>@MedicationSchedulerFormResource.Afternoon_2</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Afternoon_2)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Afternoon_4, new { htmlAttributes = new { style = "width:100%", value = Model.Afternoon_4 } })
+                        <label>@MedicationSchedulerFormResource.Afternoon_4</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Afternoon_4)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Night_6, new { htmlAttributes = new { style = "width:100%", value = Model.Night_6 } })
+                        <label>@MedicationSchedulerFormResource.Night_6</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Night_6)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+                        @Html.CheckBoxFor(m => m.Night_8, new { htmlAttributes = new { style = "width:100%", value = Model.Night_8 } })
+                        <label>@MedicationSchedulerFormResource.Night_8</label>
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Night_8)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Night_10, new { htmlAttributes = new { style = "width:100%", value = Model.Night_10 } })
+                        <label>@MedicationSchedulerFormResource.Night_10</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Night_10)
+
+
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Morning_12, new { htmlAttributes = new { style = "width:100%", value = Model.Morning_12 } })
+                        <label>@MedicationSchedulerFormResource.Morning_12</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Morning_12)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Morning_2, new { htmlAttributes = new { style = "width:100%", value = Model.Morning_2 } })
+                        <label>@MedicationSchedulerFormResource.Morning_2</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Morning_2)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Morning_4, new { htmlAttributes = new { style = "width:100%", value = Model.Morning_4 } })
+                        <label>@MedicationSchedulerFormResource.Morning_4</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Morning_4)
+
+
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <label class="checkbox_margin">
+
+                        @Html.CheckBoxFor(m => m.Morning_6, new { htmlAttributes = new { style = "width:100%", value = Model.Morning_6 } })
+                        <label>@MedicationSchedulerFormResource.Morning_6</label>
+
+                    </label>
+                    @Html.ValidationMessageFor(x => x.Morning_6)
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">@CommonResource.Cancel</button>
+        <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+    </div>
+}
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    $("#TelICUMedicationSchedulerFormId").on("submit", function (e) {
+        debugger;
+        var dateForm = $(this).serialize();
+    e.preventDefault();
+            $.ajax({
+    url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (data) {
+            if (data.Success) {
+                ShowSuccessfllyMsg(data.Message);
+                $("#AddMedicationSchedulerModal").modal("hide");
+                $("#TelICUMedicationSchedulerGrid").data("kendoGrid").dataSource.read();
+                $("#TelICUMedicationSchedulerGrid").data("kendoGrid").refresh();
+                    } else {
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+        $("#save").on("click", function (e) {
+            
+            $('#TelICUMedicationSchedulerFormId').validate();
+
+            if ($("#TelICUMedicationSchedulerFormId").valid()) {
+
+
+
+            $("#save").attr("disabled", "disabled");
+
+
+
+                $("#TelICUMedicationSchedulerFormId").submit();
+        }
+        });
+
+    $('#AddMedicationSchedulerModal').on('hidden.bs.modal', function (e) {
+        debugger;
+        $('.MedicationId').val(0);
+        $('#MedicationName').val('');
+        $('#Concentration').val('');
+        $('#NumberOfTimes').val(0);
+        $('#RouteOfAdministratinOfDrug').val(0); 
+        $('#Morning_8').prop("checked", false);
+        $('#Morning_10').prop("checked", false);
+        $('#Afternoon_12').prop("checked", false);
+        $('#Afternoon_2').prop("checked", false);
+        $('#Afternoon_4').prop("checked", false);
+        $('#Night_6').prop("checked", false);
+        $('#Night_8').prop("checked", false);
+        $('#Night_10').prop("checked", false);
+        $('#Morning_12').prop("checked", false);
+
+        $('#Morning_2').prop("checked", false);
+        $('#Morning_4').prop("checked", false);
+
+        $('#Morning_6').prop("checked", false);
+
+        //$(this)
+        //    .find("input,textarea,select")
+        //    .val('')
+        //    .end()
+        //    .find("input[type=checkbox], input[type=radio]")
+        //    .prop("checked", false)
+        //    .end();
+        //$("#TeleICUId").val(TeleIcuRealId);
+
+        $("#save").removeAttr("disabled");
+    })
+    $("input[type=number]").on("keypress", function (evt) {
+        
+        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+        }
+    });
+</script>

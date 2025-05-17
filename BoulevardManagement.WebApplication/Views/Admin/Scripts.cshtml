@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Scripts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Scripts</h2>
+
+@using (Html.BeginForm("ReadDiagnosisFile", "Admin", FormMethod.Post))
+{
+    <button type="submit" class="btn btn-primary">Add Diagnosis Script</button>
+}
+
+@using (Html.BeginForm("ReadMostLikelyDiagnosisFile", "Admin", FormMethod.Post))
+{
+<button type="submit" class="btn btn-primary">Add Most Likely Diagnosis Script</button>
+}

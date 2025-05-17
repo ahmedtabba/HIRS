@@ -1,0 +1,70 @@
+﻿
+@using System.Configuration;
+@using BoulevardManagement.WebApplication.Models;
+@{
+    ViewBag.Title = "User Group";
+}
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+<div class="@customeClass" id="ControlRegion">
+    @(Html.Kendo().Grid<ApplicationGroup>()
+                                                     .Name("groups")
+                                                     .Columns(columns =>
+                                                     {
+                                                         columns.Bound(c => c.Name).Title("Name").Width("70%");
+                                                         columns.Command(command =>
+                                             {
+                                                         columns.Template(@<text></text>).ClientTemplate("<a href='" + Url.RouteUrl("Default", new { controller = "UserGroup", action = "Edit" }) + "?Id=#=Id#' class='k-button k-button-icontext'><span class='k-icon k-i-edit'></span>Edit</a>");
+                                                                command.Custom("GroupDestroy").Text("<span class='k-icon k-i-close'></span> Delete").Click("DeleteRow");
+
+                                                            });
+                                                            }
+                       )
+                   .HtmlAttributes(new { style = "height:1000px", @id = "ZestGroupGrid" })
+                   .ToolBar(toolbar => { toolbar.Excel(); toolbar.Pdf(); })
+                   .Pdf(exp => exp.FileName("Groups.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+                   .Excel(exp => exp.FileName("Groups.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+                   .Scrollable()
+                   .Resizable(resize => resize.Columns(true))
+                   .Sortable()
+                   .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+                   .Filterable(filterable => filterable.Messages(m => m.IsFalse("No")).Messages(m => m.IsTrue("Yes")))
+                   .Pageable(pageable => pageable.Refresh(true).PageSizes(new List<object> { 5, 10, 20, 50, 100 }).ButtonCount(5))
+                   .DataSource(dataSource => dataSource
+                               .Ajax()
+                               .Model(model => model.Id(c => c.Id))
+                               .Destroy(action => action.Action("Delete", "UserGroup"))
+                               .Read(read => read.Action("Read", "UserGroup"))
+                               .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'ZestGroupGrid');}"))
+                               .PageSize(20))
+    )
+</div>
+@Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+
+
+
+<script type="text/javascript">
+
+    function DeleteRow(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#ZestGroupGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+</script>
+
+

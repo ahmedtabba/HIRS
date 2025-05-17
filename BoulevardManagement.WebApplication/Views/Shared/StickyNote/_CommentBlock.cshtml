@@ -1,0 +1,758 @@
+﻿
+@using BoulevardManagement.WebApplication.Models.StickyNote;
+@using BoulevardManagement.WebApplication.Resources;
+
+@using BoulevardManagement.DTO;
+@model CommentsVM
+
+
+
+<style>
+    .kt-notes .kt-notes__items .kt-notes__item .kt-notes__content:after {
+        position: absolute;
+        content: '';
+        width: 0;
+        height: 0;
+        top: 10px;
+        right: 100%;
+        margin-right: -3.5rem;
+        border-right: solid 10px #F7F8FC;
+        border-bottom: solid 17px transparent;
+        border-left: solid 17px transparent;
+        border-top: solid 17px transparent;
+        display: none !important;
+    }
+
+    .recbutton {
+        width: 35px;
+        height: 35px;
+        // background-color: red;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+    .recbutton-sm {
+        width: 10px;
+        height: 10px;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+    .notRec {
+        //background-color: darkred;
+    }
+
+    .Rec {
+        animation-name: pulse;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    @@keyframes pulse {
+        0% {
+            box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
+        }
+
+        65% {
+            box-shadow: 0px 0px 5px 13px rgba(173,0,0,.3);
+        }
+
+        90% {
+            box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
+        }
+    }
+
+    .send-input {
+        width: 91%;
+        display: inline-block;
+    }
+
+    /*.box-comments .box-comment:first-of-type {
+        padding-top: 5px;
+    }
+
+    .box-comments {
+        /*background-color: #66666630;*/
+    /* background-color: #d0d0d014;
+    }
+
+    */
+
+    .send-btn {
+        /*display: none;*/
+        margin: 0 0 4px 4px;
+        position: absolute;
+    }
+
+    .multiline {
+        white-space: pre-line;
+        margin-top: -10px;
+    }
+
+
+    textarea {
+        resize: none;
+    }
+
+    @@media only screen and (max-width: 600px) {
+        audio {
+            width: 190px;
+            height: 50px;
+        }
+    }
+
+    @@media only screen and (max-width: 400px) {
+        audio {
+            width: 100px;
+            height: 30px;
+        }
+    }
+</style>
+
+
+@{
+    var UserColor = ViewBag.UserColor;
+}
+
+
+
+
+@********************************************************************************************************@
+<div class=" box-comments">
+    <div class="kt-notes">
+        <div class="kt-notes__items" id="cmnt-box">
+            @for (var i = 0; i < Model.Comments.Count; i++)
+            {
+
+
+
+
+                <div class="kt-notes__item box-comment" id="new-cmnt-@Model.Comments[i].Id">
+                    <div class="kt-notes__media">
+                        <span class="kt-notes__icon">
+                            <img class="img-circle img-sm" src="@Model.Comments[i].UserPhoto" alt="User Image">
+                        </span>
+                    </div>
+                    <div class="kt-notes__content" style="border:5px @(Model.Comments[i].UserColor) solid; background-color:@(Model.Comments[i].UserColor)17; border-radius:25px;">
+                        <div class="kt-notes__section">
+                            <div class="kt-notes__info">
+                                <a href="#" class="kt-notes__title">
+                                    @*@if (Model.Comments[i].UserColor !=null)
+            {
+                <span data-toggle="kt-tooltip" title="" data-placement="top" style="vertical-align: middle;display: inline-block;width: 20px;height: 20px;border-radius: 50%;background-color:@Model.Comments[i].UserColor"></span>
+
+            }*@
+
+                                    @Model.Comments[i].UserFullName
+
+                                </a>
+                                <span class="kt-notes__desc badge badge-secondary" style="color: #414b4c; margin: 0 5px;">
+                                    @Model.Comments[i].Duration.Split('|')[0]
+                                </span>
+                                <span class="kt-notes__desc badge badge-secondary" style="color: #414b4c; margin: 0 5px;">
+                                    @Model.Comments[i].Duration.Split('|')[1]
+                                </span>
+
+
+                            </div>
+                            <div class="">
+                                <span id="replies-count-@Model.Comments[i].Id" style="display:inline-block; margin-right:2px; cursor: pointer;" onclick="toggelReplaies(@Model.Comments[i].Id)">@Model.Comments[i].ChildComments.Count </span>
+                                <span id="replies-@Model.Comments[i].Id" style="display:inline-block; margin-right:10px; cursor: pointer;" onclick="toggelReplaies(@Model.Comments[i].Id)">@NotesResource.Replies</span>
+                                <a href="javascript:void(0);" class="btn btn-sm btn-icon-md btn-icon ChatReplySection">
+                                    <span onclick="ShowReplayInput(@Model.Comments[i].Id)" style="cursor: pointer;">  <i class="flaticon-reply kt-font-brand"></i></span>
+                                </a>
+                                @if (Model.Comments.Count > 0 && Model.Comments[i].StickyNoteMessageType == StickyNoteMessageTypeEnum.VoiceMessageNote && Model.Comments[i].CreatedBy == User.Identity.GetId() && Model.Comments[i].ChildComments.Count == 0 && User.IsInRole(RoleConsistent.StickyNote.Delete))
+                                {
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-icon-md btn-icon ChatReplySection">
+                                        <span onclick="DeleteVoice(@Model.Comments[i].Id,'@Model.Comments[i].ObjectType','@Model.Comments[i].ObjectTag','@Model.Comments[i].ObjectEncriptedId','@((int)Model.Comments[i].Channel)')" style="cursor: pointer;">  <i class="flaticon2-trash kt-font-brand"></i></span>
+                                    </a>
+                                }
+
+
+
+                            </div>
+                        </div>
+                        <span class="kt-notes__body" style="color: #414b4c">
+
+                            @if (Model.Comments[i].StickyNoteMessageType == StickyNoteMessageTypeEnum.VoiceMessageNote)
+                            {
+
+                                if (User.IsInRole(RoleConsistent.StickyNote.DownloadRecord))
+                                {
+
+                                    @Html.Raw(Model.Comments[i].Note.Replace("\n", "<br>"))
+
+                                }
+                                else
+                                {
+                                    var record = Model.Comments[i].Note.Replace("<audio controls=''", "<audio controls='' controlsList='nodownload'");
+                                    @Html.Raw(record.Replace("\n", "<br>"))
+
+                                }
+
+                            }
+                            else
+                            {
+                                @Html.Raw(Model.Comments[i].Note.Replace("\n", "<br>"))
+
+                            }
+
+                        </span>
+                    </div>
+                </div>
+
+
+                <!--Reply Block-->
+                <div id="reply-bolck-@Model.Comments[i].Id" style=" padding-right:30px; padding-left:50px;">
+                    <div id="replat-container-@Model.Comments[i].Id">
+                        @for (var j = 0; j < Model.Comments[i].ChildComments.Count; j++)
+                        {
+                            <div class="kt-notes__item box-comment" id="new-cmnt-@Model.Comments[i].ObjectId-@Model.Comments[i].ChildComments[j].Id ">
+                                <div class="kt-notes__media">
+                                    <span class="kt-notes__icon">
+                                        <img class="img-circle img-sm" src="@Model.Comments[i].ChildComments[j].UserPhoto" alt="User Image">
+                                    </span>
+                                </div>
+                                <div class="kt-notes__content" style="border:5px @(Model.Comments[i].ChildComments[j].UserColor) solid; background-color:@(Model.Comments[i].ChildComments[j].UserColor)17; border-radius:25px;">
+                                    <div class="kt-notes__section">
+                                        <div class="kt-notes__info">
+                                            <a href="#" class="kt-notes__title">
+                                                @*@if (Model.Comments[i].ChildComments[j].UserColor != null)
+            {
+                <span data-toggle="kt-tooltip" title="" data-placement="top" style="vertical-align: middle;display: inline-block;width: 20px;height: 20px;border-radius: 50%;background-color:@Model.Comments[i].ChildComments[j].UserColor"></span>
+
+            }*@
+                                                @Model.Comments[i].ChildComments[j].UserFullName
+                                            </a>
+                                            <span class="kt-notes__desc badge badge-secondary" style="color: #414b4c; margin:0 5px;">
+                                                @Model.Comments[i].ChildComments[j].Duration.Split('|')[0]
+                                            </span>
+                                            <span class="kt-notes__desc badge badge-secondary" style="color: #414b4c; margin: 0 5px;">
+                                                @Model.Comments[i].ChildComments[j].Duration.Split('|')[1]
+                                            </span>
+
+                                        </div>
+                                        <div class="">
+
+                                            @if (Model.Comments[i].ChildComments.Count > 0 && Model.Comments[i].ChildComments[j].StickyNoteMessageType == StickyNoteMessageTypeEnum.VoiceMessageNote && Model.Comments[i].ChildComments[j].CreatedBy == User.Identity.GetId() && User.IsInRole(RoleConsistent.StickyNote.Delete))
+                                            {
+                                                <a href="javascript:void(0);" class="btn btn-sm btn-icon-md btn-icon ChatReplySection">
+                                                    <span onclick="DeleteVoice(@Model.Comments[i].ChildComments[j].Id,'@Model.Comments[i].ObjectType','@Model.Comments[i].ObjectTag','@Model.Comments[i].ObjectEncriptedId','@((int)Model.Comments[i].Channel)')" style="cursor: pointer;">  <i class="flaticon2-trash kt-font-brand"></i></span>
+                                                </a>
+                                            }
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <span class="kt-notes__body" style="color: #414b4c">
+                                        @if (Model.Comments[i].ChildComments[j].StickyNoteMessageType == StickyNoteMessageTypeEnum.VoiceMessageNote)
+                                        {
+
+                                            if (User.IsInRole(RoleConsistent.StickyNote.DownloadRecord))
+                                            {
+
+                                                @Html.Raw(Model.Comments[i].ChildComments[j].Note.Replace("\n", "<br>"))
+
+                                            }
+                                            else
+                                            {
+                                                var record = Model.Comments[i].ChildComments[j].Note.Replace("<audio controls=''", "<audio controls='' controlsList='nodownload'");
+                                                @Html.Raw(record.Replace("\n", "<br>"))
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(Model.Comments[i].ChildComments[j].Note.Replace("\n", "<br>"))
+
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+
+
+
+
+
+                    <div id="replay-input-div-@Model.Comments[i].Id" style="margin-top:10px; margin-bottom:10px; display:none;">
+
+
+
+                        <div class="img-push">
+                            <input hidden />
+                            <div class="form-group">
+                                <textarea class="form-control send-input" style="width:100%;" rows="3" id="replay-input-@Model.Comments[i].Id" placeholder="@NotesResource.TypeReply"
+                                          onkeyup="onKeyUpHandler('@Model.Comments[i].ObjectId',@Model.Comments[i].Id)"></textarea>
+                                <input hidden id="parentIdHolder" value=null />
+                            </div>
+                            <div class="row" style="margin-bottom:50px;">
+                                <div class="col">
+                                    <button type="button" id="send-replay-btn-@Model.Comments[i].Id"
+                                            onclick="addComment('@Model.Comments[i].ObjectType','@Model.Comments[i].ObjectEncriptedId','@Model.Comments[i].ObjectTag','@Model.CurrentUserImageURL','@Model.Comments[i].ObjectId',@Model.Comments[i].Id,'@Model.Comments[i].Channel')"
+                                            class="btn btn-light-primary font-weight-bolder mr-2 pull-right" style="vertical-align: top">
+                                        <i class="fab fa-telegram"></i>
+                                        @NotesResource.AddReply
+                                    </button>
+                                    @if (User.IsInRole(RoleConsistent.StickyNote.Record))
+                                    {
+                                        <button type="button" id="send-voice-btn-@Model.Comments[i].Id" data-parentId="@Model.Comments[i].Id" data-objecttype="@Model.Comments[i].ObjectType" data-objecttag="@Model.Comments[i].ObjectTag" data-objectid="@Model.Comments[i].ObjectEncriptedId" data-channelid="@((int)Model.Comments[i].Channel)"
+                                                class="recordReplyButtonClass recbutton pull-right" style="margin:0 10px !important;">
+                                        </button>
+                                    }
+                                    @*@if (true)
+                                        {
+                                            <button type="button" id="send-voice-btn-@Model.Comments[i].Id" data-parentId="@Model.Comments[i].Id" data-objecttype="@Model.Comments[i].ObjectType" data-objecttag="@Model.Comments[i].ObjectTag" data-objectid="@Model.Comments[i].ObjectEncriptedId" data-channelid="@((int)Model.Comments[i].Channel)"
+                                                    class="recordReplyButtonClass recbutton " style="margin-left:0px !important;">
+                                            </button>
+                                        }*@
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                </div>
+                <!--End ReplyBlock-->
+            }
+
+
+        </div>
+    </div>
+</div>
+
+@*********************************************************************************************************@
+
+
+
+
+
+<script>
+
+    var ObjectType = "";
+    var ObjectId = "";
+    var ObjectTag = "";
+    var datachannelreply = 0;
+    var IsRecordReplyPressed = false;
+
+    $(document).ready(function () {
+        debugger;
+        $('.recordReplyButtonClass').addClass("notRec");
+
+    });
+
+
+    function removeBookMark(commentId,objectType) {
+         var data = {
+             commentId: commentId
+            };
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("RemoveBookMarkNote", "StickyNote", new { @Area = "" })",
+                data: data,
+                dataType: 'json',
+                success: function (data) {
+                    $(`#bookMarkContainer-${commentId}`).empty();
+                    $(`#bookMarkContainer-${commentId}`).append(`
+ <span id="notBookmarked-${commentId}" onclick="showTagModel(${commentId},'${objectType}')" style="cursor:pointer;" class="kt-badge kt-badge--info kt-badge--inline">UnMarked</span>
+
+`);
+
+                }
+                ,
+                error: function (err) {
+
+
+                }
+            });
+    }
+
+
+    function showTagModel(commentId, objectType) {
+
+        $(".tag-div").hide();
+
+
+
+
+        if (objectType != "Customer" && objectType != "ZestItem") {
+            $(`#bookMarkContainer-${commentId}`).append(`
+
+<div class="card tag-div" id="tag-div-${commentId}" style="position: absolute; top: -40px; right: 390px; z-index: 100; width: 500px;">
+														<div class="card-header kt-font-bolder kt-bg-fill-primary" style="padding:10px">
+															Remark
+														</div>
+														<div class="card-body" style="background-color:#eae3fb8c;">
+<div class="form-group">
+<label>Remark:</label>
+															<input id="tag-input-${commentId}" type="text" style="display:block;" class="form-control" />
+</div>
+<div class="form-group">
+       <button type="button" onclick="toggelOptionalDiv('${commentId}')" class="btn btn-sm btn-primary">More Options</button>
+    </div>
+<div id="optional-${commentId}" style="display:none;">
+    <div class="form-group">
+        <label>User:</label>
+        <input id="userId-${commentId}"  style="width: 100%;" />
+    </div>
+    <div class="form-group">
+        <label style="display:block;">Time Type:</label>
+
+        <input type="radio" id="Hours-${commentId}" name="timetype-${commentId}" value="Hours">
+<label for="Hours">Hours</label><br>
+<input type="radio" id="Days-${commentId}" name="timetype-${commentId}" value="Days">
+<label for="Days">Days</label><br>
+<input type="radio" id="Weeks-${commentId}" name="timetype-${commentId}" value="Weeks">
+<label for="Weeks">Weeks</label><br>
+    </div>
+        <div class="form-group">
+        <label>Time:</label>
+
+            <input class="form-control" type="number" min="1" value="1" id="timeVal-${commentId}" />
+       </div>
+</div>
+<button onclick="addBookMark(${commentId},'${objectType}')" class="btn btn-primary" type="button">Ok</button>
+            <button onclick="cancelAddBookMark(${commentId})" class="btn btn-primary" type="button">Cancel</button>
+														</div>
+
+													</div>
+
+
+
+
+`);
+
+            $(`#userId-${commentId}`).kendoDropDownList({
+                filter: "contains",
+                autoBind: true,
+                optionLabel: "Select User...",
+                dataTextField: "FullName",
+                dataValueField: "Id",
+                dataSource: {
+                    type: "json",
+                    serverFiltering: true,
+
+                    transport: {
+                        read: {
+                            url:"@Url.Action("GetUsers", "Account")",
+                            data: function (e) {
+                                var filterText = $(`#userId-${commentId}`).getKendoDropDownList().filterInput.val();
+
+                                return { text: filterText }
+                            }}
+                    }
+                }
+            }).data("kendoDropDownList");
+
+        } else {
+            $(`#bookMarkContainer-${commentId}`).append(`
+
+<div class="card tag-div" id="tag-div-${commentId}" style="position: absolute; top: -40px; right: 390px; z-index: 100; width: 500px;">
+														<div class="card-header kt-font-bolder kt-bg-fill-primary" style="padding:10px">
+															Remark
+														</div>
+														<div class="card-body" style="background-color:#eae3fb8c;">
+<div class="form-group">
+<label>Remark:</label>
+															<input id="tag-input-${commentId}" type="text" style="display:block;" class="form-control" />
+</div>
+
+<button onclick="addBookMark(${commentId},'${objectType}')" class="btn btn-primary" type="button">Ok</button>
+            <button onclick="cancelAddBookMark(${commentId})" class="btn btn-primary" type="button">Cancel</button>
+														</div>
+
+													</div>
+
+
+
+
+`);
+
+
+        }
+
+        $(`#tag-div-${commentId}`).fadeIn();
+
+    }
+
+    function toggelOptionalDiv(commentId) {
+        $(`#optional-${commentId}`).toggle();
+    }
+
+
+    function addBookMark(commentId, objectType) {
+
+        var userId = "";
+        var timeType = "";
+        var timeVal = "";
+        if (objectType != "Customer" && objectType != "ZestItem") {
+            userId= $(`#userId-${commentId}`).data("kendoDropDownList").value();
+            var timeTypeRadio = document.getElementsByName(`timetype-${commentId}`);
+            for (var i = 0, length = timeTypeRadio.length; i < length; i++) {
+                if (timeTypeRadio[i].checked) {
+                    // do whatever you want with the checked radio
+                    timeType = timeTypeRadio[i].value;
+                    // only one radio can be logically checked, don't check the rest
+                    break;
+                }
+            }
+            timeVal = $(`#timeVal-${commentId}`).val();
+        }
+
+
+
+
+        if (userId != "") {
+            if (timeType == "") {
+                onJSError("Please select Time Type!!");
+                return;
+            }
+
+            if (timeVal == "" || timeVal == "0" || timeVal == 0) {
+                onJSError("Please enter the Time!!");
+                return;
+            }
+        }
+
+
+
+        var data = {
+            commentId: commentId,
+            tag: $(`#tag-input-${commentId}`).val(),
+            userId: userId,
+            timeType: timeType,
+            timeVal: timeVal
+        };
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("AddBookMarkNote", "StickyNote", new { @Area = "" })",
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+
+                if (data != false) {
+                    $(`#tag-div-${commentId}`).hide();
+
+                    $(`#bookMarkContainer-${commentId}`).empty();
+                    $(`#bookMarkContainer-${commentId}`).append(`
+<span id="bookmarked-${commentId}" onclick="removeBookMark(${commentId},'${objectType}')" style="cursor:pointer;" class="kt-badge kt-badge--danger kt-badge--inline">Marked</span>
+`);
+                }
+                else
+                    onJSError("Choosen User in Bookmark has no permission to see this page!! ");
+            }
+            ,
+            error: function (err) {
+
+
+            }
+        });
+    }
+
+
+    function cancelAddBookMark(commentId) {
+        //$(`#bookMarkContainer-${commentId}`).empty();
+        $(`#tag-div-${commentId}`).remove();
+    }
+
+
+        function toggelReplaies(commentId) {
+            $(`#replat-container-${commentId}`).toggle();
+            // $(`#reply-bolck-${commentId}`).toggle();
+        }
+
+        function ShowReplayInput(commentId) {
+            $(`#replay-input-div-${commentId}`).toggle();
+            // $(`#replat-container-${commentId}`).toggle();
+            var recordReplyButton = document.getElementsByClassName("recordReplyButtonClass");
+            for (var i = 0; i < recordReplyButton.length; i++) {
+                recordReplyButton[i].addEventListener("mousedown", startReplyRecording);
+                recordReplyButton[i].addEventListener("mouseup", stopReplyRecording);
+            }
+        }
+    function DeleteVoice(commentId, ObjectType, ObjectTag, ObjectId, channel) {
+
+        var data = {
+            id: commentId
+        };
+               $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Delete", "StickyNote", new { @Area = "" })",
+                data: data,
+                //dataType: 'json',
+                   success: function (response) {
+                       if (response == "Success") {
+                           StickyNotesload(ObjectType, ObjectId, ObjectTag, channel); //HERE
+                           ShowSuccessfllyMsg("@NotesResource.VoiceDeleted");
+                       } else {
+                           onJSError("@NotesResource.DeleteVoiceFeild");
+                       }
+
+
+                }
+                ,
+                   error: function (response) {
+
+                           onJSError("@NotesResource.DeleteVoiceFeild");
+
+                }
+            });
+    }
+        function onKeyUpHandler(postId, parentId) {
+
+            if (event.keyCode == 13 && event.shiftKey) {
+
+
+            } else if (event.keyCode == 13) {
+                if (parentId == null)
+                    $(`#send-btn-${postId}`).click();
+                else
+                    $(`#send-replay-btn-${parentId}`).click();
+            }
+        }
+
+
+
+
+         function addComment(EntityType, ObjectId, objectTag, userImg, InptId,parentId,chanal) {
+
+             debugger;
+        var msg = "";
+        if (parentId == null) {
+            msg = $(`#cmnt-inpt-${InptId}`).val();
+            $(`#cmnt-inpt-${InptId}`).attr("disabled", "disabled");
+
+        } else {
+            msg = $(`#replay-input-${parentId}`).val();
+            $(`#replay-input-${parentId}`).attr("disabled", "disabled");
+
+        }
+
+        if (msg.trim() == '') {
+            onJSError("@NotesResource.Empty");
+        } else {
+
+            var channel = 0;
+            if (chanal == '@ChannelEnum.General')
+                channel = 0;
+            else
+                channel = 1;
+
+            var data = {
+                objectType: EntityType
+                , objectId: ObjectId
+                , objectTag: objectTag
+                , Channel: channel
+                , note: msg.trim(),
+                parantId: parentId
+            };
+            //var sendbtn = $('#send-replay-btn-' + channel);
+            //sendbtn.attr("disabled", "disabled");
+
+
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("AddNote", "StickyNote", new { @Area = "" })",
+                data: data,
+                dataType: 'json',
+                success: function (data) {
+                    StickyNotesload(EntityType, ObjectId, objectTag, channel);
+                  //  sendbtn.removeAttr("disabled");
+
+                }
+                ,
+                error: function (err) {
+                    StickyNotesload(EntityType, ObjectId, objectTag, channel);
+                    //sendbtn.removeAttr("disabled");
+                    //$(`#cmnt-counts-${InptId}`).text(commentCount);
+                    //$(`#cmnt-inpt-${InptId}`).removeAttr("disabled");
+                    //onJSError("Adding Comment failed");
+
+                }
+            });
+        }
+
+
+
+
+    }
+        function UploadReplyVoiceNote(formData,parentId) {
+
+        $.ajax({
+            type: "POST",
+            url: '/StickyNote/Upload',
+            data: formData,
+            // dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+                var channel = datachannelreply;
+                var data = {
+           objectType: ObjectType
+            , objectId: ObjectId
+            , objectTag: ObjectTag
+                , Channel: channel
+                , note: response,
+                parantId: parentId,
+                isVoice:true
+            };
+                  $.ajax({
+                type: 'POST',
+                url: "@Url.Action("AddNote", "StickyNote", new { @Area = "" })",
+                data: data,
+                //dataType: 'json',
+                success: function (data) {
+                                    StickyNotesload(ObjectType,ObjectId,ObjectTag,channel); //HERE
+                    ShowSuccessfllyMsg("@NotesResource.VoiceAdded");
+
+                }
+                ,
+                error: function (err) {
+
+                    onJSError("@NotesResource.VoiceField");
+
+                }
+            });
+            },
+            error: function (error) {
+
+                alert("errror");
+            },
+
+        });
+
+    }
+
+
+
+
+</script>

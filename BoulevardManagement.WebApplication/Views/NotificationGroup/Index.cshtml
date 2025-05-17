@@ -1,0 +1,213 @@
+﻿
+@using System.Configuration;
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@{
+    ViewBag.Title = "Notification Group";
+}
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+<style>
+    .k-rtl .k-grid td {
+        position: inherit !important;
+    }
+
+    .k-grid-content .btn-group {
+        position: absolute !important;
+    }
+</style>
+<div class="container">
+
+    <div class="card card-custom" data-card="true" id="kt_card_3">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@NotificationResource.NotificationGroup</h3>
+            </div>
+            <div class="card-toolbar">
+
+
+                <a href="javascript:void(0);" onclick=" $('.k-grid-excel').trigger('click');" class="btn btn-icon btn-circle btn-sm btn-light-skype mr-1" data-card-tool="">
+                    <i class="fa fas fa-file-excel icon-nm"></i>
+                </a>
+
+                <a href="javascript:void(0);" onclick=" $('.k-grid-pdf').trigger('click');" class="btn btn-icon btn-circle btn-sm btn-light-youtube mr-1" data-card-tool="">
+                    <i class="fa fas fa-file-pdf icon-nm"></i>
+                </a>
+                @if (User.IsInRole(RoleConsistent.NotificationGroup.Add))
+                {
+                    <a href="@Url.Action("Create", "NotificationGroup", new { @Area = "" })" class="btn btn-icon btn-circle btn-sm btn-light-facebook mr-1" data-card-tool="">
+                        <i class="ki ki-plus icon-nm"></i>
+                    </a>
+                }
+
+                <a href="javascript:void(0);" onclick="$('.k-i-refresh').trigger('click');" class="btn btn-icon btn-circle btn-sm btn-light-google mr-1" data-card-tool="reload">
+                    <i class="ki ki-reload icon-nm"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body" kt-hidden-height="471" style="">
+
+            <div class="@customeClass">
+                @(Html.KendoGrid<NotificationGroupDTO>()
+                                                                .Name("groups")
+                                                                .Columns(columns =>
+                                                                {
+                                                                    columns.Bound(c => c.Name).ClientTemplate("#=LinkTemplate(EncrptedId,Name)#").Title(NotificationResource.Name).Width(300);
+                                                                    columns.Command(command =>
+                                                                                    {
+
+                                                                                        if (this.User.IsInRoles(RoleConsistent.NotificationGroup.Edit) || this.User.IsInRoles(RoleConsistent.NotificationGroup.Delete))
+                                                                                            columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=templateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(40);
+                                                            @*if (User.IsInRole(RoleConsistent.NotificationGroup.AddAndEdit))
+                                                                columns.Template(@<text></text>).ClientTemplate("<a href='" + Url.RouteUrl("Default", new { controller = "NotificationGroup", action = "Create" }) + "?Id=#=EncrptedId#' class='k-button k-button-icontext'><span class='k-icon k-i-edit'></span>Edit</a>").Width(75);*@
+
+                                if (User.IsInRole(RoleConsistent.NotificationGroup.Delete))
+                                    command.Custom("NotificationGroupDestroy").Text("<span class='k-icon k-i-close'></span> Delete").Click("DeleteRow");
+
+                            }).Hidden();
+        }
+)
+.HtmlAttributes(new { style = "height:1000px", @id = "NotificationGroupGrid" })
+.ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+.Pdf(exp => exp.FileName("NotificationGroups.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+.Excel(exp => exp.FileName("NotificationGroups.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+.Scrollable()
+.Resizable(resize => resize.Columns(true))
+.Sortable()
+.Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+.Filterable(filterable => filterable.Messages(m => m.IsFalse("No")).Messages(m => m.IsTrue("Yes")))
+.Pageable(pageable => pageable.Refresh(true).PageSizes(new List<object> { 5, 10, 20, 50, 100 }).ButtonCount(5))
+.DataSource(dataSource => dataSource
+.Ajax()
+.Model(model => model.Id(c => c.Id))
+.Destroy(action => action.Action("Delete", "NotificationGroup"))
+.Read(read => read.Action("Read", "NotificationGroup"))
+.Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'NotificationGroupGrid');}").RequestEnd("myOnReqEnd"))
+.PageSize(20))
+            )
+            </div>
+            <!--Grid Here-->
+        
+        </div>
+    </div>
+</div>
+
+
+
+
+@Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+    var deletedGroup;
+    function myOnReqEnd(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = `(${deletedGroup.Name}) `;
+            onRequestEnd(e, details);
+        }
+    }
+
+    function DeleteRow(e) {
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#NotificationGroupGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedGroup = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+                function templateOptions(id, ob) {
+
+                    var EditUrl = "";
+                    var DeleteLi = "";
+                    if ('@this.User.IsInRole(RoleConsistent.NotificationGroup.Delete)' == 'True') {
+                        DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRow(" + ob + ")\"" + " href='javascript:void(0);' class='navi-link  k-button-icontext k-grid-NotificationGroupDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+
+                    }
+                    if ('@this.User.IsInRole(RoleConsistent.NotificationGroup.Edit)' == 'True') {
+                        EditUrl = '@Url.RouteUrl("Default", new { controller = "NotificationGroup", action = "Create" })' + "?Id=" + id;
+                    }
+                    var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+
+                    if (EditUrl != "") {
+                        result = result + "<li class='navi-item'><a href=" + EditUrl + " class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+                    }
+                    if (DeleteLi != "") {
+                        result = result + DeleteLi;
+                    }
+                    result = result +
+                        "</ul></div></div>";
+                    return result;
+                }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+
+    });
+
+          function LinkTemplate(id, text) {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "NotificationGroup", action = "Create" })' + "?Id=" + id;
+        if (text == null) {
+            text = '';
+            }
+                @if (User.IsInRoles(RoleConsistent.NotificationGroup.Edit))
+                    {
+                    <text>
+              return '<a   href="' + EditUrl + '"> ' + text + '</a>';
+                    </text>
+                }else
+                {
+                    <text>
+        return "<span>" + text+"</span>";
+                    </text>
+                }
+
+        }
+</script>
+
+

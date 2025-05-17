@@ -1,0 +1,1163 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@model TelMHClinicalStoryDTO
+
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.TeleMentalHealth.EditClinicalStory)||Model.CaseStatus==CaseStatus.Closed;
+
+}
+
+
+<style>
+    .k-icon.k-i-add, .k-icon.k-i-edit, .k-icon.k-i-cancel {
+        color: #fff !important;
+    }
+</style>
+
+<!--begin::Form-->
+
+
+    @*<input id="voice" name="voice" type="file" style="display:none" />*@
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+
+                @ClinicalStoryResource.ClinicalStory
+
+
+            </h3>
+        </div>
+        @*<div class="card-toolbar">
+                <a href="#" class="btn btn-light-primary font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+                </a>
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+            </div>*@
+    </div>
+
+
+    <div class="card-body">
+        @using (Html.BeginForm("UpdateClinicalStory", "TeleMentalHealth", FormMethod.Post, new { @id = "TelMHClinicalStoryFormId", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.TeleMentalHealthId)
+            <input type="hidden" id="IsRemarksVoiceDeleted" name="IsRemarksVoiceDeleted" value="@Model.IsRemarksVoiceDeleted" />
+            <input type="hidden" id="IsCurrentComplaintVoiceDeleted" name="IsCurrentComplaintVoiceDeleted" value="@Model.IsCurrentComplaintVoiceDeleted" />
+            <input type="hidden" id="IsRiskAssessmentVoiceDeleted" name="IsRiskAssessmentVoiceDeleted" value="@Model.IsRiskAssessmentVoiceDeleted" />
+            <input type="hidden" id="IsCaseSummaryVoiceDeleted" name="IsCaseSummaryVoiceDeleted" value="@Model.IsCaseSummaryVoiceDeleted" />
+
+            <input type="hidden" id="RemarksVoiceAttachPath" name="RemarksVoiceAttachPath" value="@Model.RemarksVoiceAttachPath" />
+            <input type="hidden" id="CurrentComplaintVoiceAttachPath" name="CurrentComplaintVoiceAttachPath" value="@Model.CurrentComplaintVoiceAttachPath" />
+            <input type="hidden" id="RiskAssessmentVoiceAttachPath" name="RiskAssessmentVoiceAttachPath" value="@Model.RiskAssessmentVoiceAttachPath" />
+            <input type="hidden" id="CaseSummaryVoiceAttachPath" name="CaseSummaryVoiceAttachPath" value="@Model.CaseSummaryVoiceAttachPath" />
+            <h4>
+                @ClinicalStoryResource.PersonalInformation
+            </h4>
+            <hr />
+
+            <div class="form-group row" style="margin-top:20px;">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.EducationalLevel:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.EducationalLevel, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.EducationalLevel, @id = "EducationalLevel", @readonly = "readonly" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.EducationalLevel, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.EducationalLevel, @id = "EducationalLevel" } })
+                        @Html.ValidationMessageFor(x => x.EducationalLevel)
+                        <span class="form-text text-muted">@ClinicalStoryResource.EducationalLevelInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.CurrentWork:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.CurrentWork, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.CurrentWork, @id = "CurrentWork", @readonly = "readonly" } })
+
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.CurrentWork, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.CurrentWork, @id = "CurrentWork" } })
+                        @Html.ValidationMessageFor(x => x.CurrentWork)
+                        <span class="form-text text-muted">@ClinicalStoryResource.CurrentWorkInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.PreviousWork:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.PreviousWork, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.PreviousWork, @id = "PreviousWork", @readonly = "readonly" } })
+
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.PreviousWork, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.PreviousWork, @id = "PreviousWork" } })
+                        @Html.ValidationMessageFor(x => x.PreviousWork)
+                        <span class="form-text text-muted">@ClinicalStoryResource.PreviousWorkInfoSpan</span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.CurrentPlaceResidence:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.CurrentPlaceResidence, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.CurrentPlaceResidence, @id = "CurrentPlaceResidence", @readonly = "readonly" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.CurrentPlaceResidence, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.CurrentPlaceResidence, @id = "CurrentPlaceResidence" } })
+                        @Html.ValidationMessageFor(x => x.CurrentPlaceResidence)
+                        <span class="form-text text-muted">@ClinicalStoryResource.CurrentPlaceResidenceInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.PreviousPlaceResidence:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.PreviousPlaceResidence, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.PreviousPlaceResidence, @id = "PreviousPlaceResidence", @readonly = "readonly" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.PreviousPlaceResidence, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.PreviousPlaceResidence, @id = "PreviousPlaceResidence" } })
+                        @Html.ValidationMessageFor(x => x.PreviousPlaceResidence)
+                        <span class="form-text text-muted">@ClinicalStoryResource.PreviousPlaceResidenceInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.NumberOfBrothers:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.NumberOfBrothers, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.NumberOfBrothers, @id = "NumberOfBrothers", @readonly = "readonly" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.NumberOfBrothers, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.NumberOfBrothers, @id = "NumberOfBrothers" } })
+                        @Html.ValidationMessageFor(x => x.NumberOfBrothers)
+                        <span class="form-text text-muted">@ClinicalStoryResource.NumberOfBrothersInfoSpan</span>
+                    }
+
+                </div>
+
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.PlaceOfInterview:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.PlaceOfInterview, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.PlaceOfInterview, @id = "PlaceOfInterview", @readonly = "readonly" } })
+
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.PlaceOfInterview, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.PlaceOfInterview, @id = "PlaceOfInterview" } })
+                        @Html.ValidationMessageFor(x => x.PlaceOfInterview)
+                        <span class="form-text text-muted">@ClinicalStoryResource.PlaceOfInterviewInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.SourceOfReferral:</label>
+                    @if (viewMode)
+                    {
+                        @Html.EditorFor(m => m.SourceOfReferral, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.SourceOfReferral, @id = "SourceOfReferral", @readonly = "readonly" } })
+
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.SourceOfReferral, new { htmlAttributes = new { @class = "form-control", @placeholder = ClinicalStoryResource.SourceOfReferral, @id = "SourceOfReferral" } })
+                        @Html.ValidationMessageFor(x => x.SourceOfReferral)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SourceOfReferralInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>
+                        @ClinicalStoryResource.AccompanyingPersonExisted:
+                    </label>
+                    <div class="form-check" style="margin-top:10px;">
+                        @Html.CheckBoxFor(x => x.AccompanyingPersonExisted, viewMode ? new { @disabled = "disabled" } : null)
+                        @*<input class="form-check-input" type="checkbox" value="@Model.AccompanyingPersonExisted" name="AccompanyingPersonExisted" id="AccompanyingPersonExisted">*@
+                        <label class="form-check-label" for="AccompanyingPersonExisted">
+                            @ClinicalStoryResource.Existed
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.CauseOfReferral:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.CauseOfReferral, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CauseOfReferral, @id = "CauseOfReferral", @readonly = "readonly" })
+
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.CauseOfReferral, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CauseOfReferral, @id = "CauseOfReferral" })
+                        @Html.ValidationMessageFor(x => x.PlaceOfInterview)
+                        <span class="form-text text-muted">@ClinicalStoryResource.CauseOfReferralInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.Remarks:</label>
+
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.Remarks, @id = "Remarks", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.Remarks, @id = "Remarks" })
+                        @Html.ValidationMessageFor(x => x.Remarks)
+                        <span class="form-text text-muted">@ClinicalStoryResource.RemarksInfoSpan</span>
+                        <button type="button" id="RemarksVoiceRecorder" class="recordButtonClass recbutton-sm" style="@(Model.RemarksVoiceAttachPath!=null?"display:none":"")"></button>
+
+                    }
+
+                    @if (Model.RemarksVoiceAttachPath != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <ul id="Remarkrecord" class="recordsection">
+                                    <li>
+                                        <audio controls="" src="@(Model.RemarksVoiceAttachPath)"></audio>
+                                    </li>
+                                </ul>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                <div class="col-md-2" style="padding:20px">
+                                    <span class="fa fa-trash recycler" id="RemarkrecordTrash" style="font-size:20px"></span>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <ul id="Remarkrecord" class="recordsection">
+                                </ul>
+                            </div>
+                            <div class="col-md-2" style="padding:20px">
+                                <span class="fa fa-trash recycler" id="RemarkrecordTrash" style="font-size:20px;display:none"></span>
+                            </div>
+                        </div>
+                    }
+
+
+
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.CurrentComplaint:</label>
+
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.CurrentComplaint, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CurrentComplaint, @id = "CurrentComplaint", @readonly = "readonly" })
+                    }
+                    else
+                    {
+
+                        @Html.TextAreaFor(m => m.CurrentComplaint, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CurrentComplaint, @id = "CurrentComplaint" })
+                        @Html.ValidationMessageFor(x => x.CurrentComplaint)
+                        <span class="form-text text-muted">@ClinicalStoryResource.CurrentComplaintInfoSpan</span>
+                        <button type="button" id="CurrentComplaintRecorder" class="recordButtonClass  recbutton-sm" @*href="javascript:void(0);"*@ style="@(Model.CurrentComplaintVoiceAttachPath!=null?"display:none":"")"></button>
+
+                    }
+
+
+
+                    @if (Model.CurrentComplaintVoiceAttachPath != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <ul id="CurrentComplaintVoicerecord" class="recordsection">
+                                    <li>
+                                        <audio controls="" src="@(Model.CurrentComplaintVoiceAttachPath)"></audio>
+                                    </li>
+                                </ul>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                <div class="col-md-2" style="padding:20px">
+                                    <span class="fa fa-trash recycler" id="CurrentComplaintTrash" style="font-size:20px"></span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-10">
+                                <ul id="CurrentComplaintVoicerecord" class="recordsection">
+                                </ul>
+                            </div>
+                            <div class="col-md-2" style="padding:20px">
+                                <span class="fa fa-trash recycler" id="CurrentComplaintTrash" style="font-size:20px;display:none"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-lg-4">
+                    <label style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"":"margin-bottom: 25px;")">@ClinicalStoryResource.ComplaintDetails:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.ComplaintDetails, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.ComplaintDetails, @id = "ComplaintDetails", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.ComplaintDetails, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.ComplaintDetails, @id = "ComplaintDetails" })
+                        @Html.ValidationMessageFor(x => x.ComplaintDetails)
+                        <span class="form-text text-muted">@ClinicalStoryResource.ComplaintDetailsInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.PsychologicalNeurologicalAndPersonalAddictivePrecedents:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.PsychologicalNeurologicalAndPersonalAddictivePrecedents, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.PsychologicalNeurologicalAndPersonalAddictivePrecedents, @id = "PsychologicalNeurologicalAndPersonalAddictivePrecedents", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.PsychologicalNeurologicalAndPersonalAddictivePrecedents, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.PsychologicalNeurologicalAndPersonalAddictivePrecedents, @id = "PsychologicalNeurologicalAndPersonalAddictivePrecedents" })
+                        @Html.ValidationMessageFor(x => x.PsychologicalNeurologicalAndPersonalAddictivePrecedents)
+                        <span class="form-text text-muted">@ClinicalStoryResource.PsychologicalNeurologicalAndPersonalAddictivePrecedentsInfoSpan</span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.GeneralMedicalPrecedents:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.GeneralMedicalPrecedents, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.GeneralMedicalPrecedents, @id = "GeneralMedicalPrecedents", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.GeneralMedicalPrecedents, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.GeneralMedicalPrecedents, @id = "GeneralMedicalPrecedents" })
+                        @Html.ValidationMessageFor(x => x.GeneralMedicalPrecedents)
+                        <span class="form-text text-muted">@ClinicalStoryResource.GeneralMedicalPrecedentsInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"":"margin-bottom: 25px;")">@ClinicalStoryResource.FamilyPrecedents:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.FamilyPrecedents, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.FamilyPrecedents, @id = "FamilyPrecedents", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.FamilyPrecedents, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.FamilyPrecedents, @id = "FamilyPrecedents" })
+                        @Html.ValidationMessageFor(x => x.FamilyPrecedents)
+                        <span class="form-text text-muted">@ClinicalStoryResource.FamilyPrecedentsInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.SocialStory:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SocialStory, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SocialStory, @id = "SocialStory", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SocialStory, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SocialStory, @id = "SocialStory" })
+                        @Html.ValidationMessageFor(x => x.SocialStory)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SocialStoryInfoSpan</span>
+                    }
+
+                </div>
+
+
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-lg-4">
+                    <label>@ClinicalStoryResource.CharacteristicsOfThePreDisorder:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.CharacteristicsOfThePreDisorder, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CharacteristicsOfThePreDisorder, @id = "CharacteristicsOfThePreDisorder", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.CharacteristicsOfThePreDisorder, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CharacteristicsOfThePreDisorder, @id = "CharacteristicsOfThePreDisorder" })
+                        @Html.ValidationMessageFor(x => x.CharacteristicsOfThePreDisorder)
+                        <span class="form-text text-muted">@ClinicalStoryResource.CharacteristicsOfThePreDisorderInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+            <br />
+            <br />
+
+            <h4>
+                @ClinicalStoryResource.PsychologicalExamination
+            </h4>
+            <hr />
+
+            <div class="form-group row" style="margin-top:20px;">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.AppearanceBehaviorAndCooperationWithTheExaminer:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.AppearanceBehaviorAndCooperationWithTheExaminer, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.AppearanceBehaviorAndCooperationWithTheExaminer, @id = "AppearanceBehaviorAndCooperationWithTheExaminer", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.AppearanceBehaviorAndCooperationWithTheExaminer, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.AppearanceBehaviorAndCooperationWithTheExaminer, @id = "AppearanceBehaviorAndCooperationWithTheExaminer" })
+                        @Html.ValidationMessageFor(x => x.AppearanceBehaviorAndCooperationWithTheExaminer)
+                        <span class="form-text text-muted">@ClinicalStoryResource.AppearanceBehaviorAndCooperationWithTheExaminerInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.PsychomotorActivity:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.PsychomotorActivity, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.PsychomotorActivity, @id = "PsychomotorActivity", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.PsychomotorActivity, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.PsychomotorActivity, @id = "PsychomotorActivity" })
+                        @Html.ValidationMessageFor(x => x.PsychomotorActivity)
+                        <span class="form-text text-muted">@ClinicalStoryResource.PsychomotorActivityInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.Speech:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.Speech, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.Speech, @id = "Speech", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.Speech, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.Speech, @id = "Speech" })
+                        @Html.ValidationMessageFor(x => x.Speech)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SpeechInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.MoodAndAffection:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.MoodAndAffection, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.MoodAndAffection, @id = "MoodAndAffection", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.MoodAndAffection, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.MoodAndAffection, @id = "MoodAndAffection" })
+                        @Html.ValidationMessageFor(x => x.MoodAndAffection)
+                        <span class="form-text text-muted">@ClinicalStoryResource.MoodAndAffectionInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.Thinking:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.Thinking, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.Thinking, @id = "Thinking", @readonly = "readonly" })
+
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.Thinking, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.Thinking, @id = "Thinking" })
+                        @Html.ValidationMessageFor(x => x.Thinking)
+                        <span class="form-text text-muted">@ClinicalStoryResource.ThinkingInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.PerceptionAndConsciousness:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.PerceptionAndConsciousness, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.PerceptionAndConsciousness, @id = "PerceptionAndConsciousness", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.PerceptionAndConsciousness, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.PerceptionAndConsciousness, @id = "PerceptionAndConsciousness" })
+                        @Html.ValidationMessageFor(x => x.PerceptionAndConsciousness)
+                        <span class="form-text text-muted">@ClinicalStoryResource.PerceptionAndConsciousnessInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.SenseAndCognition:</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-6">
+                    <label>@ClinicalStoryResource.SenseAndCognition_ConsciousnessAndOrientation:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_ConsciousnessAndOrientation, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_ConsciousnessAndOrientation, @id = "SenseAndCognition_ConsciousnessAndOrientation", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_ConsciousnessAndOrientation, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_ConsciousnessAndOrientation, @id = "SenseAndCognition_ConsciousnessAndOrientation" })
+                        @Html.ValidationMessageFor(x => x.SenseAndCognition_ConsciousnessAndOrientation)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SenseAndCognition_ConsciousnessAndOrientationInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-6">
+                    <label>@ClinicalStoryResource.SenseAndCognition_Memory:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Memory, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Memory, @id = "SenseAndCognition_Memory", @readonly = "readonly" })
+
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Memory, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Memory, @id = "SenseAndCognition_Memory" })
+                        @Html.ValidationMessageFor(x => x.SenseAndCognition_Memory)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SenseAndCognition_MemoryInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-6">
+                    <label>@ClinicalStoryResource.SenseAndCognition_AttentionAndConcentration:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_AttentionAndConcentration, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_AttentionAndConcentration, @id = "SenseAndCognition_AttentionAndConcentration", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_AttentionAndConcentration, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_AttentionAndConcentration, @id = "SenseAndCognition_AttentionAndConcentration" })
+                        @Html.ValidationMessageFor(x => x.SenseAndCognition_AttentionAndConcentration)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SenseAndCognition_AttentionAndConcentrationInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-6">
+                    <label>@ClinicalStoryResource.SenseAndCognition_Abstraction:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Abstraction, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Abstraction, @id = "SenseAndCognition_Abstraction", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Abstraction, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Abstraction, @id = "SenseAndCognition_Abstraction" })
+                        @Html.ValidationMessageFor(x => x.SenseAndCognition_Abstraction)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SenseAndCognition_AbstractionInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-lg-6">
+                    <label>@ClinicalStoryResource.SenseAndCognition_Judgment:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Judgment, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Judgment, @id = "SenseAndCognition_Judgment", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Judgment, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Judgment, @id = "SenseAndCognition_Judgment" })
+                        @Html.ValidationMessageFor(x => x.SenseAndCognition_Judgment)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SenseAndCognition_JudgmentInfoSpan</span>
+                    }
+
+                </div>
+
+                <div class="col-lg-6">
+                    <label>@ClinicalStoryResource.SenseAndCognition_Insight:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Insight, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Insight, @id = "SenseAndCognition_Insight", @readonly = "readonly" })
+
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.SenseAndCognition_Insight, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.SenseAndCognition_Insight, @id = "SenseAndCognition_Insight" })
+                        @Html.ValidationMessageFor(x => x.SenseAndCognition_Insight)
+                        <span class="form-text text-muted">@ClinicalStoryResource.SenseAndCognition_InsightInfoSpan</span>
+                    }
+
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.RiskAssessment:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.RiskAssessment, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.RiskAssessment, @id = "RiskAssessment", @readonly = "readonly" })
+
+                    }
+                    else
+                    {
+
+                        @Html.TextAreaFor(m => m.RiskAssessment, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.RiskAssessment, @id = "RiskAssessment" })
+                        @Html.ValidationMessageFor(x => x.RiskAssessment)
+                        <span class="form-text text-muted">@ClinicalStoryResource.RiskAssessmentInfoSpan</span>
+                        <button type="button" id="RiskAssessmentRecorder" class="recordButtonClass recbutton-sm" style="@(Model.RiskAssessmentVoiceAttachPath!=null?"display:none":"")"></button>
+
+                    }
+
+                    @if (Model.RiskAssessmentVoiceAttachPath != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <ul id="RiskAssessmentVoicerecord" class="recordsection">
+                                    <li>
+                                        <audio controls="" src="@(Model.RiskAssessmentVoiceAttachPath)"></audio>
+                                    </li>
+                                </ul>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                <div class="col-md-8" style="padding:20px">
+                                    <span class="fa fa-trash recycler" id="RiskAssessmentTrash" style="font-size:20px"></span>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <ul id="RiskAssessmentVoicerecord" class="recordsection">
+                                </ul>
+                            </div>
+                            <div class="col-md-8" style="padding:20px">
+                                <span class="fa fa-trash recycler" id="RiskAssessmentTrash" style="font-size:20px;display:none"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-12">
+                    <label>@ClinicalStoryResource.CaseSummary:</label>
+                    @if (viewMode)
+                    {
+                        @Html.TextAreaFor(m => m.CaseSummary, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CaseSummary, @id = "CaseSummary", @readonly = "readonly" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(m => m.CaseSummary, new { @class = "form-control", @rows = "3", @placeholder = ClinicalStoryResource.CaseSummary, @id = "CaseSummary" })
+                        @Html.ValidationMessageFor(x => x.CaseSummary)
+                        <span class="form-text text-muted">@ClinicalStoryResource.CaseSummaryInfoSpan</span>
+                        <button type="button" id="CaseSummaryRecorder" class="recordButtonClass recbutton-sm" style="@(Model.CaseSummaryVoiceAttachPath!=null?"display:none":"")"></button>
+
+                    }
+
+                    @if (Model.CaseSummaryVoiceAttachPath != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <ul id="CaseSummaryVoicerecord" class="recordsection">
+                                    <li>
+                                        <audio controls="" src="@(Model.CaseSummaryVoiceAttachPath)"></audio>
+                                    </li>
+                                </ul>
+                            </div>
+                            @if (!viewMode)
+                            {
+                                <div class="col-md-8" style="padding:20px">
+                                    <span class="fa fa-trash recycler" id="CaseSummaryTrash" style="font-size:20px"></span>
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <ul id="CaseSummaryVoicerecord" class="recordsection">
+                                </ul>
+                            </div>
+                            <div class="col-md-8" style="padding:20px">
+                                <span class="fa fa-trash recycler" id="CaseSummaryTrash" style="font-size:20px;display:none"></span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-lg-12 @customeClass">
+                <label>@ClinicalStoryResource.Diagnosis:</label>
+                @(Html.Kendo().Grid<TelMHDiagnosisDTO>(@*Model.Diagnosis*@)
+.Name("Diagnosis")
+.Sortable()
+.Columns(columns =>
+{
+
+    //columns.Bound(p => p.Id).Hidden(true).ClientTemplate("<input type='hidden' name='Diagnosis[#= DiagnosisGridIndex(data)#].Id' value='#= Id #' />");
+
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        columns.Bound(p => p.TelMHDiagnosisCategoryId).EditorTemplateName("TelMHDiagnosisCategoryDDL_ar").ClientTemplate("#=TelMHDiagnosisCategoryArabicName#")
+        .Title(ClinicalStoryResource.DiagnosisTitle).Width(400);
+    }
+    else
+    {
+
+        columns.Bound(p => p.TelMHDiagnosisCategoryId).EditorTemplateName("TelMHDiagnosisCategoryDDL").ClientTemplate("#=TelMHDiagnosisCategoryName#")
+        .Title(ClinicalStoryResource.DiagnosisTitle).Width(400);
+    }
+
+    columns.Command(command =>
+    {
+        if (!viewMode)
+        {
+            command.Edit().Text(CommonResource.Edit).UpdateText(CommonResource.Edit).CancelText(CommonResource.Cancel);
+            command.Custom("DiagnosisDestroy").Text("<span class='k-icon k-i-close'></span> "+ CommonResource.Delete).Click("DeleteRowDiagnosisGrid");
+
+            //command.Destroy().Text(CommonResource.Delete);
+        }
+    }).Width(200);
+})
+ .ToolBar(toolBar =>
+ {
+     if (!viewMode)
+         toolBar.Create().Text(CommonResource.AddNew);
+ })
+.Scrollable(s => s.Enabled(true))
+
+.HtmlAttributes(new { style = "height:280px !important", @id = "Diagnosis" })
+ .Editable(editable => editable.Enabled(!viewMode).Mode(GridEditMode.InLine).CreateAt(GridInsertRowPosition.Bottom).DisplayDeleteConfirmation(false))
+.DataSource(dataSource => dataSource
+.Ajax()
+.Model(model =>
+{
+    model.Id(p => p.Id);
+    model.Field(p => p.TelMHClinicalStoryId).DefaultValue(Model.Id);
+})
+ .Create(update => update.Action("Diagnosis_Create", "TeleMentalHealth"))
+        .Read(read => read.Action("Diagnosis_Read", "TeleMentalHealth",new { TelMHClinicalStoryId=Model.Id}))
+        .Update(update => update.Action("Diagnosis_Update", "TeleMentalHealth"))
+        .Destroy(update => update.Action("Diagnosis_Destroy", "TeleMentalHealth"))
+.ServerOperation(false)
+
+.Events(events => events.Error("function(args){KendoGrid_ErrorHandler(args,'Diagnosis');}").RequestEnd("myOnReqEnd").Change("onGridChanges"))
+).Events(c => { c.Remove("onDeleteItem").Edit("onEvent"); })
+)
+            </div>
+        </div>
+
+        <br />
+        <div class="form-group row">
+            <div class="col-lg-12 @customeClass">
+                <label>@ClinicalStoryResource.MostLikelyDiagnosis:</label>
+
+                @(Html.Kendo().Grid<TelMHMostLikelyDiagnosisDTO>(@*Model.Diagnosis*@)
+.Name("MostLikelyDiagnosis")
+.Sortable()
+.Columns(columns =>
+{
+
+    //columns.Bound(p => p.Id).Hidden(true).ClientTemplate("<input type='hidden' name='Diagnosis[#= DiagnosisGridIndex(data)#].Id' value='#= Id #' />");
+
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        columns.Bound(p => p.TelMHDiagnosisCategoryId).EditorTemplateName("TelMHDiagnosisCategoryForMLDDDL_ar").ClientTemplate("#=TelMHDiagnosisCategoryArabicName#")
+        .Title(ClinicalStoryResource.DiagnosisTitle).Width(200);
+    }
+    else
+    {
+
+        columns.Bound(p => p.TelMHDiagnosisCategoryId).EditorTemplateName("TelMHDiagnosisCategoryForMLDDDL").ClientTemplate("#=TelMHDiagnosisCategoryName#")
+        .Title(ClinicalStoryResource.DiagnosisTitle).Width(200);
+    }
+
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        columns.Bound(p => p.TelMHMostLikelySubDiagnosesIds).EditorTemplateName("TelMHMostLikelySubDiagnosesMS_ar").ClientTemplate("#=TelMHMostLikelySubDiagnosesArabicNamesStr#")
+     .Title(ClinicalStoryResource.SubDiagnosisTitle).Width(200);
+    }
+    else
+    {
+
+        columns.Bound(p => p.TelMHMostLikelySubDiagnosesIds).EditorTemplateName("TelMHMostLikelySubDiagnosesMS").ClientTemplate("#=TelMHMostLikelySubDiagnosesNamesStr#")
+    .Title(ClinicalStoryResource.SubDiagnosisTitle).Width(200);
+    }
+    columns.Command(command =>
+    {
+        if (!viewMode)
+        {
+            command.Edit().Text(CommonResource.Edit).UpdateText(CommonResource.Edit).CancelText(CommonResource.Cancel);
+            command.Destroy().Text(CommonResource.Delete);
+        }
+    }).Width(200);
+})
+ .ToolBar(toolBar =>
+ {
+     if (!viewMode)
+         toolBar.Create().Text(CommonResource.AddNew);
+ })
+.Scrollable(s => s.Enabled(true))
+
+.HtmlAttributes(new { style = "height:280px !important", @id = "MostLikelyDiagnosis" })
+ .Editable(editable => editable.Enabled(!viewMode).Mode(GridEditMode.InLine).CreateAt(GridInsertRowPosition.Bottom).DisplayDeleteConfirmation(false))
+.DataSource(dataSource => dataSource
+.Ajax()
+.Model(model =>
+{
+    model.Id(p => p.Id);
+    model.Field(p => p.TelMHClinicalStoryId).DefaultValue(Model.Id);
+})
+ .Create(update => update.Action("MostLikelyDiagnosis_Create", "TeleMentalHealth"))
+        .Read(read => read.Action("MostLikelyDiagnosis_Read", "TeleMentalHealth",new { TelMHClinicalStoryId=Model.Id}))
+        .Update(update => update.Action("MostLikelyDiagnosis_Update", "TeleMentalHealth"))
+        .Destroy(update => update.Action("MostLikelyDiagnosis_Destroy", "TeleMentalHealth"))
+                    .Events(events => events.RequestEnd("myOnReqEnd"))
+
+.ServerOperation(false)
+
+.Events(events => events.Error("function(args){KendoGrid_ErrorHandler(args,'MostLikelyDiagnosis');}")/*.Change("onGridChanges")*/)
+).Events(c => { c.Remove("onDeleteItem").Edit("onMostLikelySubDiagnosesEvent").Save("onGridSave"); })
+)
+
+
+            </div>
+
+
+
+
+        </div>
+        <br />
+        <br />
+        @if (!viewMode)
+        {
+            <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+            
+
+
+        }
+
+        <!--<a href="#" class="btn btn-icon btn-warning btn-circle btn-lg" style="position:fixed; bottom:60px; right:115px;">
+    <span class="svg-icon">-->
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <rect x="0" y="0" width="24" height="24"></rect>
+            <path d="M3,16 L5,16 C5.55228475,16 6,15.5522847 6,15 C6,14.4477153 5.55228475,14 5,14 L3,14 L3,12 L5,12 C5.55228475,12 6,11.5522847 6,11 C6,10.4477153 5.55228475,10 5,10 L3,10 L3,8 L5,8 C5.55228475,8 6,7.55228475 6,7 C6,6.44771525 5.55228475,6 5,6 L3,6 L3,4 C3,3.44771525 3.44771525,3 4,3 L10,3 C10.5522847,3 11,3.44771525 11,4 L11,19 C11,19.5522847 10.5522847,20 10,20 L4,20 C3.44771525,20 3,19.5522847 3,19 L3,16 Z" fill="#000000" opacity="0.3"></path>
+            <path d="M16,3 L19,3 C20.1045695,3 21,3.8954305 21,5 L21,15.2485298 C21,15.7329761 20.8241635,16.200956 20.5051534,16.565539 L17.8762883,19.5699562 C17.6944473,19.7777745 17.378566,19.7988332 17.1707477,19.6169922 C17.1540423,19.602375 17.1383289,19.5866616 17.1237117,19.5699562 L14.4948466,16.565539 C14.1758365,16.200956 14,15.7329761 14,15.2485298 L14,5 C14,3.8954305 14.8954305,3 16,3 Z" fill="#000000"></path>
+        </g>
+    </svg>-->
+        <!--end::Svg Icon-->
+        <!--</span>
+    </a>-->
+        @Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+
+    </div>
+
+
+
+
+
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    var isRecordPressed = false;
+    var isStop = false;
+    var BufferVoiceMessage;
+    var BufferVoiceMessageForRemark;
+    var IsModalClosePressed = false;
+    var myFileRemarks;
+    var myFileCurrentComplaint;
+    var MyFileRiskAssessment;
+    var MyFileCaseSummary;
+
+    var PressedRecordButton="";
+
+    //var myblob;
+    $("#TelMHClinicalStoryFormId").on("submit", function (e) {
+        debugger;
+            e.preventDefault();
+        var formData = new FormData();
+        formData.append("remarksVoice", myFileRemarks);
+        formData.append("CurrentComplaintVoice", myFileCurrentComplaint);
+        formData.append("RiskAssessmentVoice", MyFileRiskAssessment);
+        formData.append("CaseSummaryVoice", MyFileCaseSummary);
+
+        let container = new DataTransfer();
+        var formdataSerialize = $(this).serializeArray();
+        for (var i = 0; i < formdataSerialize.length; i++) {
+
+            formData.append(formdataSerialize[i].name, formdataSerialize[i].value);
+        }
+
+
+       // console.log(formdata11);
+            $.ajax({
+                url: "@(Url.Action("UpdateClinicalStory", "TeleMentalHealth"))",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetClinicalStory", "TeleMentalHealth", new { mentalHealthId = HashIdsManager.Encrypt(Model.TeleMentalHealthId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "TeleMentalHealth", new { mentalHealthId = HashIdsManager.Encrypt(Model.TeleMentalHealthId) })', function () {
+                            onmenueload();
+                            $("#ClinicalStoryBtn").addClass("active");
+                        });
+                    } else {
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+        $("#save").on("click", function (e) {
+
+          //  $('#voice').val(formData);
+        $('#TelMHClinicalStoryFormId').validate();
+        if ($("#TelMHClinicalStoryFormId").valid()) {
+
+            var DiagnosisItems = $("#Diagnosis").data("kendoGrid")._data;
+
+            for (var i = 0; i < DiagnosisItems.length; i++) {
+                if (DiagnosisItems[i].TelMHDiagnosisCategoryId == 0 || DiagnosisItems[i].TelMHDiagnosisSubCategoryId == 0) {
+                    onJSError("Diagnosis not valid");
+                    return;
+                }
+            }
+
+            $("#save").attr("disabled", "disabled");
+
+
+
+            $("#TelMHClinicalStoryFormId").submit();
+        }
+        });
+
+
+    $('#RecordModal').on('hidden.bs.modal', function () {
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        $(".recordButtonClass").removeClass("Rec");
+        $(".recordButtonClass").addClass("notRec");
+        $(".recordReplyButtonClass").removeClass("Rec");
+        $(".recordReplyButtonClass").addClass("notRec");
+      //  BufferVoiceMessage = null;
+        if (IsModalClosePressed) {
+            stopRecordingForClose();
+        }
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        seconds.text("00");
+        minutes.text("00");
+    });
+    $('#RecordModal').on('shown.bs.modal', function () {
+        IsModalClosePressed = false;
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        BufferVoiceMessage = null;
+        IsStop = false;
+        var minuts = $("#secondsrecord");
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        //   seconds.text("00");
+        // minutes.text("00");
+    });
+
+    $("#RemarksVoiceRecorder").on("click", function () {
+        PressedRecordButton = "Remarks";
+    });
+
+    $("#CurrentComplaintRecorder").on("click", function () {
+        PressedRecordButton = "CurrentComplaint";
+    });
+    $("#RiskAssessmentRecorder").on("click", function () {
+        PressedRecordButton = "RiskAssessment";
+    });
+    $("#CaseSummaryRecorder").on("click", function () {
+        PressedRecordButton = "CaseSummary";
+    });
+    $('#RemarkrecordTrash').on("click", function () {
+
+        $('#RemarksVoiceRecorder').show();
+        $('#Remarkrecord').html('');
+        $('#RemarkrecordTrash').hide();
+        myFileRemarks = null;
+        $('#IsRemarksVoiceDeleted').val(true);
+    });
+    $('#CurrentComplaintTrash').on("click", function () {
+
+        $('#CurrentComplaintRecorder').show();
+        $('#CurrentComplaintVoicerecord').html('');
+        $('#CurrentComplaintTrash').hide();
+        myFileCurrentComplaint = null;
+        $('#IsCurrentComplaintVoiceDeleted').val(true);
+    });
+    $('#RiskAssessmentTrash').on("click", function () {
+
+        $('#RiskAssessmentRecorder').show();
+        $('#RiskAssessmentVoicerecord').html('');
+        $('#RiskAssessmentTrash').hide();
+        MyFileRiskAssessment = null;
+        $('#IsRiskAssessmentVoiceDeleted').val(true);
+    });
+    $('#CaseSummaryTrash').on("click", function () {
+
+        $('#CaseSummaryRecorder').show();
+        $('#CaseSummaryVoicerecord').html('');
+        $('#CaseSummaryTrash').hide();
+        MyFileCaseSummary = null;
+        $('#IsCaseSummaryVoiceDeleted').val(true);
+    });
+
+
+
+    function GetCurrentDiagnosisCategoryId() {
+        debugger;
+        var diagnosisCategoryId = $("#TelMHDiagnosisCategoryId").data("kendoDropDownList").value();
+        var text = $("[name='TelMHDiagnosisCategoryId']").data("kendoDropDownList").filterInput.val();
+        return { text: text, currentId: diagnosisCategoryId }
+    }
+
+
+
+    function myOnReqEnd(e) {
+
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = ``;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+    function GetClinicalStoryId() {
+        var text = $("[name='TelMHDiagnosisCategoryId']").data("kendoDropDownList").filterInput.val();
+        return { text: text, clinicalStoryId: '@Model.Id' };
+    }
+
+
+
+    function GetDataForMLSubDiagnosis() {
+        var textInput = $("[name='TelMHMostLikelySubDiagnosesIds']").data("kendoMultiSelect")._prev;
+       // var textInput = "";
+        var rowInEditMode = $("#MostLikelyDiagnosis").find("tr.k-grid-edit-row");
+        var itemBeingEdited = $("#MostLikelyDiagnosis").data("kendoGrid").dataSource.getByUid(rowInEditMode.data("uid"));
+
+        var diagnosisCategoryId = itemBeingEdited.TelMHDiagnosisCategoryId;
+        
+
+        return {
+            text: textInput, diagnosisCategoryId: diagnosisCategoryId};
+    }
+
+
+
+    function DiagnosisCategoryFMLDDDLChange() {
+        debugger;
+        var dropdownlist = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect");
+        dropdownlist.dataSource.read();
+        dropdownlist.refresh();
+    }
+
+</script>
+<script src="~/assets/js/WebAudioRecorder.min.js" type="text/javascript"></script>
+<script src="~/assets/js/app.js" type="text/javascript"></script>

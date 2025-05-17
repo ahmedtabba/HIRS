@@ -1,0 +1,29 @@
+﻿@using BoulevardManagement.WebApplication.Resources;
+
+
+
+@model  List<int>
+@(Html.Kendo().MultiSelectFor(x=>x)
+                                      //.Name("TelMHMostLikelySubDiagnosesIds")
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .TagMode(TagMode.Multiple)
+                                    .ValuePrimitive(true)
+                                    .Placeholder(CommonResource.Select)
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("GetDiagnosisSubCategorys", "TeleMentalHealth").Data("GetDataForMLSubDiagnosis");
+
+                                        })
+                                       .ServerFiltering(true);
+                                    }).Filter("contains")
+                                       // .AutoBind(false)
+                                    //.Value(Model)
+                                    //.Enable(!viewMode)
+                                    .Events(c=>c.DataBound("dataBound"))
+
+                                    // .BindTo(p => p.Name == PropertyNames.TreadOn).Options)
+                                    .HtmlAttributes(new { @class = "form-control custom-style", @style = "height:auto;min-height:35px",@id= "TelMHMostLikelySubDiagnosesIds" })
+                                                    )

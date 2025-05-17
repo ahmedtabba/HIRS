@@ -1,0 +1,170 @@
+﻿@using BoulevardManagement.WebApplication.Models;
+@using System.Configuration;
+@using BoulevardManagement.WebApplication.Resources;
+@using BoulevardManagement.DTO;
+
+@model UserGroupVM
+@if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+{
+    <style>
+        .k-checkbox:indeterminate + .k-checkbox-label:after {
+            left: 29px !important;
+        }
+    </style>
+}
+<!--begin::Container-->
+<div class="container">
+
+    <div class="card card-custom   card-sticky ">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">
+               
+                    @UserGroupViewResource.PermissionGroups
+                    <i class="mr-2"></i>
+                    @* <small class="">try to scroll the page</small>*@
+                </h3>
+            </div>
+            <div class="card-toolbar">
+                <a href="@(Url.Action("Index","UserGroup"))" class="btn btn-light-primary font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+                </a>
+                <div class="btn-group">
+                    <button type="button" id="EditUserGroupBtn" class="btn btn-primary font-weight-bolder">
+                        <i class="ki ki-check icon-sm"></i>@UserGroupViewResource.SaveGroup
+                    </button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                        <ul class="nav nav-hover flex-column">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="SaveAndContinue">
+                                    <i class="nav-icon flaticon2-reload"></i>
+                                    <span class="nav-text">@CommonResource.Save &amp; @CommonResource.Continue</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="SaveAndNew">
+                                    <i class="nav-icon flaticon2-add-1"></i>
+                                    <span class="nav-text">@CommonResource.Save &amp; @CommonResource.AddNew</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--begin::Form-->
+        @using (Html.BeginForm("Edit", "UserGroup", FormMethod.Post, new { @id = "UserGroupFormId" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+
+            @Html.AntiForgeryToken()
+            <div class="card-body">
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            @Html.Label(UserGroupViewResource.Name, new { @class = "form-label" })
+                            @Html.EditorFor(c => c.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = UserGroupViewResource.GroupName } })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+                </div>
+
+                @{
+                    var customeClass = "";
+                    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                    {
+                        customeClass = "k-rtl";
+                    }
+                }
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group required">
+                            @Html.Label(UserGroupViewResource.Permissions, new { @class = "form-label required" })
+                            <div class="@customeClass">
+
+                                @( Html.Kendo().TreeView()
+                                                                                                    .Name("Roles")
+                                                                                                    .BindTo(Model.Roles)
+
+                                                                                                    .Checkboxes(checkboxes => checkboxes
+                                                                                                            .Name("FinalSelectedRoles")
+                                                                                                            .CheckChildren(true)
+                                                                                                            )
+                                )
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.Hidden("FormType", SubmitFormType.SaveAndExist, new { @id = "FormType" })
+        }
+
+        @Html.Partial("Modals/ConfirmWithProgressModal", new ConfirmModel() { ModelId = "AddModal", Title = UserGroupViewResource.ConfirmOperationTitle, ButtonId = "AddBtn", ButtonTextCancel = CommonResource.No, ButtonTextOk = CommonResource.Yes, Content = UserGroupViewResource.AddConfirmOperationContent })
+        @Html.Partial("Modals/ConfirmWithProgressModal", new ConfirmModel() { ModelId = "EditModal", Title = UserGroupViewResource.ConfirmOperationTitle, ButtonId = "EditBtn", ButtonTextCancel = CommonResource.No, ButtonTextOk = CommonResource.Yes, Content = UserGroupViewResource.EditConfirmOperationContent })
+    </div>
+</div>
+<script type="text/javascript">
+    var FormType = "";
+    $(document).ready(function () {
+        $('.k-listbox').width("300px").height("400px");
+
+        $('#AddBtn').click(SubmitForm);
+        $('#EditBtn').click(SubmitForm);
+
+
+
+        if ($('#NewUserGroupBtn'))
+            $("#NewUserGroupBtn").click(function (e) {
+                e.preventDefault();
+                if ($('#UserGroupFormId').valid())
+                    $('#AddModal').modal('show');
+
+            });
+        if ($('#EditUserGroupBtn'))
+            $("#EditUserGroupBtn").click(function (e) {
+              $('#FormType').val('@SubmitFormType.SaveAndExist');
+                e.preventDefault();
+                if ($('#UserGroupFormId').valid())
+                    $('#EditModal').modal('show');
+
+            });
+    });
+    $('#SaveAndContinue').click(function (e) {
+        $('#FormType').val('@SubmitFormType.SaveAndContinue');
+
+        e.preventDefault();
+        if ($('#UserGroupFormId').valid())
+            $('#AddModal').modal('show');
+    });
+    $('#SaveAndNew').click(function (e) {
+                $('#FormType').val('@SubmitFormType.SaveAndAddNew');
+        e.preventDefault();
+        if ($('#UserGroupFormId').valid())
+            $('#AddModal').modal('show');
+    });
+    function SubmitForm() {
+
+        $('.showAddModal').show();
+        $('.hideAddModal').hide();
+
+        $('.showEditPurchasedItemModal').show();
+        $('.hideEditPurchasedItemModal').hide();
+        $("#UserGroupFormId").submit();
+    }
+
+</script>
+
+<style>
+    #userGroup .k-listbox .k-item {
+        cursor: move;
+    }
+</style>
+
+
+

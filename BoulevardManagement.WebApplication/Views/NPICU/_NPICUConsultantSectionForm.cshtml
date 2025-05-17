@@ -1,0 +1,329 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Models;
+@model NPICUConsultantSectionDTO
+
+<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.NPICU.EditNPICUConsultantSection) || Model.CaseStatus == CaseStatus.Closed;
+    if (Model.Id > 0)
+    {
+        viewMode = true;
+    }
+
+}
+
+@if (Model.CaseStatus == CaseStatus.Closed)
+{
+    <style>
+
+        .k-grid-NPICUConsultantSectionDestroy {
+            display: none !important;
+        }
+    </style>
+}
+@if (Model.Id > 0 && Model.CaseStatus != CaseStatus.Closed && User.IsInRole(RoleConsistent.NPICU.EditNPICUConsultantSection))
+{
+    <button type="button" id="AddFollowUpBtn" class="btn btn-primary">@NPICUConsultantSectionResource.AddConsultantSection</button>
+}
+
+<!--begin::Form-->
+@using (Html.BeginForm("SaveNPICUConsultantSection", "NPICU", FormMethod.Post, new { @id = "NPICUConsultantSectionFormId" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.NPICUId)
+
+    @Html.HiddenFor(model => model.ConsultationNoteAttachmentId)
+    @Html.HiddenFor(model => model.HasConsultationNoteAttachment)
+    @Html.HiddenFor(model => model.ConsultationNoteFilename)
+    @Html.HiddenFor(model => model.ConsultationNoteFilePath)
+
+    <input type="hidden" id="ConsultationNoteVoiceAttachPath" name="ConsultationNoteVoiceAttachPath" value="@Model.ConsultationNoteVoiceAttachPath" />
+    <input type="hidden" id="IsConsultationNoteVoiceDeleted" name="IsConsultationNoteVoiceDeleted" value="@Model.IsConsultationNoteVoiceDeleted" />
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+
+                @NPICUConsultantSectionResource.ConsultantSections
+
+
+            </h3>
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NPICUConsultantSectionResource.ConsultationNote:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.ConsultationNote, new { @class = "form-control", @rows = "10", @placeholder = NPICUConsultantSectionResource.ConsultationNote, @id = "ConsultationNote", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.ConsultationNote, new { @class = "form-control", @rows = "10", @placeholder = NPICUConsultantSectionResource.ConsultationNote, @id = "ConsultationNote" })
+                    @Html.ValidationMessageFor(x => x.ConsultationNote)
+                    <span class="form-text text-muted">@NPICUConsultantSectionResource.ConsultationNoteInfoSpan</span>
+                }
+                @if (!viewMode)
+                {
+                    <button type="button" id="ConsultationNoteVoiceRecorder" class="recordButtonClass recbutton-sm" style="@(Model.ConsultationNoteVoiceAttachPath!=null?"display:none":"")"></button>
+
+                }
+                @if (Model.ConsultationNoteVoiceAttachPath != null)
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            <ul id="ConsultationNoterecord" class="recordsection">
+                                <li>
+                                    <audio controls="" src="@(Model.ConsultationNoteVoiceAttachPath)"></audio>
+                                </li>
+                            </ul>
+                        </div>
+                        @if (!viewMode)
+                        {
+                            <div class="col-md-2" style="padding:20px">
+                                <span class="fa fa-trash recycler" id="ConsultationNoterecordTrash" style="font-size:20px"></span>
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+
+                            <ul id="ConsultationNoterecord" class="recordsection">
+                            </ul>
+                        </div>
+                        <div class="col-md-2" style="padding:20px">
+                            <span class="fa fa-trash recycler" id="ConsultationNoterecordTrash" style="font-size:20px;display:none"></span>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="errorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="errorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("ConsultationNotefiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddConsultationNoteFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFile")
+                    .Success("onSuccessUploadConsultationNoteFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.ConsultationNoteAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.ConsultationNoteFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.ConsultationNoteAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+
+        @if (!viewMode)
+        {
+            <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+            <button type="button" id="cancel" class="btn btn-default">@CommonResource.Cancel</button>
+
+        }
+
+
+
+    </div>
+
+
+
+
+}
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+
+    var isRecordPressed = false;
+    var isStop = false;
+    var BufferVoiceMessage;
+    var BufferVoiceMessageForNote;
+    var IsModalClosePressed = false;
+    var myFileConsultationNote;
+    var PressedRecordButton = "";
+
+    $("#NPICUConsultantSectionFormId").on("submit", function (e) {
+        debugger;
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append("ConsultantNoteVoice", myFileConsultationNote);
+
+        var formdataSerialize = $(this).serializeArray();
+        for (var i = 0; i < formdataSerialize.length; i++) {
+
+            formData.append(formdataSerialize[i].name, formdataSerialize[i].value);
+        }
+
+       // console.log(formdata11);
+            $.ajax({
+                 url: "@(Url.Action("SaveNPICUConsultantSection", "NPICU"))",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetNPICUConsultantSection", "NPICU", new { ConsultantSectionId = "", telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "NPICU", new { telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {
+                            onmenueload();
+                            $("#NPICUConsultantSectionBtn").addClass("active");
+                        });
+                        refreshollowUPGrid();
+                    } else {
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+    $("#save").on("click", function (e) {
+
+        //  $('#voice').val(formData);
+        $('#NPICUConsultantSectionFormId').validate();
+        if ($("#NPICUConsultantSectionFormId").valid()) {
+
+
+            $("#save").attr("disabled", "disabled");
+
+
+
+            $("#NPICUConsultantSectionFormId").submit();
+        }
+    });
+
+    $("#cancel").on("click", function (e) {
+       $('#main-content').load('@Url.Action("GetNPICUConsultantSection", "NPICU", new { ConsultantSectionId = "", telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () { });
+    });
+
+    $("#AddFollowUpBtn").on("click", function () {
+         $('#main-content').load('@Url.Action("GetNPICUConsultantSectionForAdd", "NPICU", new { telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {});
+
+    });
+
+    $("input[type=number]").on("keypress", function (evt) {
+
+        //if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+        //    evt.preventDefault();
+        //}
+
+        if (evt.which == 101) {
+            evt.preventDefault();
+        }
+    });
+
+    $(".int").on("keypress", function (evt) {
+
+        //if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+        //    evt.preventDefault();
+        //}
+
+        if (evt.which == 46 || evt.which == 101) {
+            evt.preventDefault();
+        }
+    });
+
+
+    $('#RecordModal').on('hidden.bs.modal', function () {
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        $(".recordButtonClass").removeClass("Rec");
+        $(".recordButtonClass").addClass("notRec");
+        $(".recordReplyButtonClass").removeClass("Rec");
+        $(".recordReplyButtonClass").addClass("notRec");
+        //  BufferVoiceMessage = null;
+        if (IsModalClosePressed) {
+            stopRecordingForClose();
+        }
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        seconds.text("00");
+        minutes.text("00");
+    });
+    $('#RecordModal').on('shown.bs.modal', function () {
+        IsModalClosePressed = false;
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        BufferVoiceMessage = null;
+        IsStop = false;
+        var minuts = $("#secondsrecord");
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        //   seconds.text("00");
+        // minutes.text("00");
+    });
+
+    $("#ConsultationNoteVoiceRecorder").on("click", function () {
+        PressedRecordButton = "ConsultationNote";
+    });
+    $('#ConsultationNoterecordTrash').on("click", function () {
+
+        $('#ConsultationNoteVoiceRecorder').show();
+        $('#ConsultationNoterecord').html('');
+        $('#ConsultationNoterecordTrash').hide();
+        myFileConsultationNote = null;
+        $('#IsConsultationNoteVoiceDeleted').val(true);
+    });
+
+</script>
+
+
+<script src="~/assets/js/WebAudioRecorder.min.js" type="text/javascript"></script>
+<script src="~/assets/js/app.js" type="text/javascript"></script>

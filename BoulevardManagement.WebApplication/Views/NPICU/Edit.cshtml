@@ -1,0 +1,1214 @@
+﻿
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.DTO.Utilities;
+@model NPICUDTO
+<style>
+    .recbutton {
+        width: 35px;
+        height: 35px;
+        //background-color: red;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+    .recbutton-sm {
+        width: 20px;
+        height: 20px;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+
+    .notRec {
+        // background-color: darkred;
+    }
+
+    .Rec {
+        animation-name: pulse;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    .recordsection {
+        list-style-type: none;
+        text-align: left;
+        padding: 0px;
+        margin-top: 10px;
+    }
+
+        .recordsection li audio {
+            width: 100%;
+            height: 40px;
+        }
+
+    .recycler {
+        color: red;
+    }
+
+    .martialstatusClass {
+        display: none;
+    }
+</style>
+@if (Model.Status == CaseStatus.Closed)
+{
+    <style>
+        .ChatReplySection, .ChatSendSection {
+            display: none !important;
+        }
+    </style>
+}
+<div id="sticky-menu" class="" style="">
+</div>
+
+
+<!--begin::Container-->
+<div class="container">
+    <div class="card-toolbar" style="display:flex; flex-direction:row-reverse; margin-bottom:20px;">
+        @if (User.IsInRole(RoleConsistent.NPICU.EditSettings))
+        {
+            <a href="javascript:void(0);" onclick="openUpdateNPICUModal()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-cog" style="margin:0; padding:0;"></i>
+            </a>
+        }
+        <a href="javascript:void(0);" onclick="openNewZoomModal()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+            <i class="fas fa-video" style="margin:0; padding:0;"></i>
+        </a>
+        @if (Model.Status == CaseStatus.Open && User.IsInRole(RoleConsistent.NPICU.Close))
+        {
+            <button id="close-case-btn" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-lock" style="margin:0; padding:0;"></i> @CommonResource.Close
+            </button>
+        }
+        @if (Model.Status == CaseStatus.Closed && User.IsInRole(RoleConsistent.NPICU.ReOpen))
+        {
+            <button id="reopen-case-btn" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-list" style="margin:0; padding:0;"></i> @CommonResource.ShowClosures
+            </button>
+        }
+        <a href="javascript:void(0)" onclick="backBtnClick()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+            <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+        </a>
+
+    </div>
+    <!--Patient Info Start-->
+    @{Html.RenderAction("RenderPatientInfoPartial", "Patient", new { patientId = (string)ViewBag.PatientId }); }
+    <!--Patient Info End-->
+    <!--Begin Grid Section-->
+    <div id="grid-section">
+
+
+
+    </div>
+    <!--End Grid Section-->
+
+
+    <div class="card card-custom" id="main-content">
+
+
+    </div>
+</div>
+<!--end::Container-->
+@Html.Partial("Modals/_AuduioModal")
+<div style="max-width: 28em;">
+    <select id="encodingTypeSelect" style="display:none">
+        <option value="mp3">MP3 (MPEG-1 Audio Layer III) (.mp3)</option>
+        <option value="wav">Waveform Audio (.wav)</option>
+        <option value="ogg">Ogg Vorbis (.ogg)</option>
+    </select>
+    <div id="controls">
+
+
+    </div>
+    <div id="formats" style="display:none"></div>
+    <pre id="log" style="display:none"></pre>
+
+
+</div>
+
+@Html.Partial("_UpdateNPICUModal", Model)
+@Html.Partial("_AddZoomMeetingModal")
+
+<script>
+    $(function () {
+        if ('@User.IsInRole(RoleConsistent.NPICU.ViewNICUConsultationForm)' == "True" && '@(Model.NPICUType)'=='@(NPICUType.NICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationForm))'=='True') {
+            $('#main-content').load('@Url.Action("GetNICUConsultationForm", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () { });
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewPICUConsultationForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.PICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationForm))'=='True') {
+            $('#main-content').load('@Url.Action("GetPICUConsultationForm", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () { });
+        }
+        else if ('@User.IsInRole(RoleConsistent.NPICU.ViewNICUConsultationFollowUpForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.NICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationFollowUpForm))'=='True') {
+           $('#main-content').load('@Url.Action("GetNICUConsultationFollowUpForm", "NPICU", new {followUpId="", telenicuId = (string)ViewBag.TeleNPICUId })', function () {});
+            $('#grid-section').load('@Url.Action("GetNICUConsultationFollowUpGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetNICUConsultationFollowUpGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                    //refreshollowUPGrid();
+                });
+            });
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewPICUConsultationFollowUpForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.PICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationFollowUpForm))'=='True') {
+           $('#main-content').load('@Url.Action("GetPICUConsultationFollowUpForm", "NPICU", new {followUpId="", telePICUId = (string)ViewBag.TeleNPICUId })', function () {});
+            $('#grid-section').load('@Url.Action("GetPICUConsultationFollowUpGrid", "NPICU", new { telePICUId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetPICUConsultationFollowUpGrid", "NPICU", new { telePICUId = (string)ViewBag.TeleNPICUId })', function () {
+                    //refreshollowUPGrid();
+                });
+            });
+        }
+        else if ('@User.IsInRole(RoleConsistent.NPICU.ViewNPICUInvestigation)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.Investigation))'=='True') {
+           $('#main-content').load('@Url.Action("GetNPICUInvestigation", "NPICU", new { investigationId = "", telenicuId = (string)ViewBag.TeleNPICUId })', function () {});
+            $('#grid-section').load('@Url.Action("GetNPICUInvestigationGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetNPICUInvestigationGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                    // refreshInvestigationGrid();
+                });
+            });
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewNPICUConsultantSection)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultantSection))'=='True') {
+           $('#main-content').load('@Url.Action("GetNPICUConsultantSection", "NPICU", new { ConsultantSectionId = "", telenicuId = (string)ViewBag.TeleNPICUId })', function () {});
+            $('#grid-section').load('@Url.Action("GetNPICUConsultantSectionGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetNPICUConsultantSectionGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                    //refreshollowUPGrid();
+                });
+            });
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewChat)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.Chat))'=='True') {
+            $("#main-content").load('@Url.Action("LoadStickyNote", "StickyNote")' + "?objectType="
+                + '@typeof(BoulevardManagement.Model.Entities.NPICU).Name'
+                + "&objectId=" + '@((string)ViewBag.TeleNPICUId)' + "&objectTag=" + '@((string)ViewBag.TeleNPICUId)' + "&Channel=" + '@((int)ChannelEnum.General)', function (response, status, xhr) {              //HERE
+                    StickyNotesload('@typeof(BoulevardManagement.Model.Entities.NPICU).Name', '@((string)ViewBag.TeleNPICUId)', '@((string)ViewBag.TeleMHId)',@((int)ChannelEnum.General));
+                    debugger;
+            });
+        }
+        @**@
+
+        $("#sticky-menu").addClass("hidden");
+        $("#sticky-menu").addClass("sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4");
+        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+            $("#sticky-menu").removeClass("hidden");
+
+             if ('@User.IsInRole(RoleConsistent.NPICU.ViewNICUConsultationForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.NICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationForm))'=='True') {
+                 $("#ConsultationFormBtn").addClass("active");
+        }else  if ('@User.IsInRole(RoleConsistent.NPICU.ViewPICUConsultationForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.PICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationForm))'=='True') {
+                 $("#PICUConsultationFormBtn").addClass("active");
+        } else if ('@User.IsInRole(RoleConsistent.NPICU.ViewNICUConsultationFollowUpForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.NICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationFollowUpForm))'=='True') {
+                 $("#ConsultationFollowUpFormBtn").addClass("active");
+             }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewPICUConsultationFollowUpForm)' == "True"&& '@(Model.NPICUType)'=='@(NPICUType.PICU)'&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultationFollowUpForm))'=='True') {
+                 $("#PICUConsultationFollowUpFormBtn").addClass("active");
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewNPICUInvestigation)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.Investigation))'=='True') {
+                 $("#NPICUInvestigationBtn").addClass("active");
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewNPICUConsultantSection)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.ConsultantSection))'=='True') {
+                 $("#NPICUConsultantSectionBtn").addClass("active");
+        }else if ('@User.IsInRole(RoleConsistent.NPICU.ViewChat)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.NPICU.Chat))'=='True') {
+                 $("#StickyNoteBtn").addClass("active");
+        }
+           
+
+
+
+            onmenueload();
+
+        });
+
+        //$("#saveBtn").click(function () {
+        //    $("#TeleNPICUFormId").submit();
+        //});
+    });
+
+    function ActiveButton(btnId) {
+        $(".sticky-menu-button").removeClass("active");
+        if (btnId) {
+            $(`#${btnId}`).addClass("active");
+        }
+    }
+
+
+
+    function onmenueload() {
+
+        $("#ConsultationFormBtn").on("click", function () {
+            ActiveButton("ConsultationFormBtn");
+            $('#main-content').hide();
+            $('#grid-section').hide();
+
+            $('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetNICUConsultationForm", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                }
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+        });
+
+          $("#PICUConsultationFormBtn").on("click", function () {
+            ActiveButton("PICUConsultationFormBtn");
+            $('#main-content').hide();
+            $('#grid-section').hide();
+
+            //$('#grid-section').html('');
+
+              $('#main-content').load('@Url.Action("GetPICUConsultationForm", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function (response, status, xhr) {
+                  debugger;
+                  if (xhr["status"] == 401) {
+                      window.location.href = "/Account/LogOffBySys";
+                  }
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+        });
+
+        $("#ConsultationFollowUpFormBtn").on("click", function () {
+            debugger;
+            ActiveButton("ConsultationFollowUpFormBtn");
+            $('#main-content').hide();
+            $('#grid-section').hide();
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetNICUConsultationFollowUpForm", "NPICU", new {followUpId="", telenicuId = (string)ViewBag.TeleNPICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                }
+                $('#main-content').show();
+                $('#grid-section').show();
+
+            });
+            $('#grid-section').load('@Url.Action("GetNICUConsultationFollowUpGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                //refreshollowUPGrid();
+                $('#grid-section').load('@Url.Action("GetNICUConsultationFollowUpGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                    //refreshollowUPGrid();
+                });
+            });
+
+        });
+
+        $("#PICUConsultationFollowUpFormBtn").on("click", function () {
+            debugger;
+            ActiveButton("PICUConsultationFollowUpFormBtn");
+            $('#main-content').hide();
+            $('#grid-section').hide();
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetPICUConsultationFollowUpForm", "NPICU", new {followUpId="", telePICUId = (string)ViewBag.TeleNPICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                }
+                 $('#main-content').show();
+                 $('#grid-section').show();
+
+             });
+
+            $('#grid-section').load('@Url.Action("GetPICUConsultationFollowUpGrid", "NPICU", new { telePICUId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetPICUConsultationFollowUpGrid", "NPICU", new { telePICUId = (string)ViewBag.TeleNPICUId })', function () {
+                    //refresPICUFollowUPGrid();
+                });
+            });
+
+        });
+
+
+        $("#NPICUInvestigationBtn").on("click", function () {
+            ActiveButton("NPICUInvestigationBtn");
+            $('#main-content').hide();
+            $('#grid-section').hide();
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetNPICUInvestigation", "NPICU", new {followUpId="", telenicuId = (string)ViewBag.TeleNPICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                }
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+            $('#grid-section').load('@Url.Action("GetNPICUInvestigationGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetNPICUInvestigationGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                    //refreshInvestigationGrid();
+                });
+            });
+        });
+
+          $("#NPICUConsultantSectionBtn").on("click", function () {
+            ActiveButton("NPICUConsultantSectionBtn");
+            $('#main-content').hide();
+            $('#grid-section').hide();
+
+            //$('#grid-section').html('');
+
+              $('#main-content').load('@Url.Action("GetNPICUConsultantSection", "NPICU", new {followUpId="", telenicuId = (string)ViewBag.TeleNPICUId })', function (response, status, xhr) {
+                  debugger;
+                  if (xhr["status"] == 401) {
+                      window.location.href = "/Account/LogOffBySys";
+                  }
+
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetNPICUConsultantSectionGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                  $('#grid-section').load('@Url.Action("GetNPICUConsultantSectionGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+
+        });
+        $("#StickyNoteBtn").on("click", function () {
+            ActiveButton("StickyNoteBtn");
+            $("#main-content").load('@Url.Action("LoadStickyNote", "StickyNote")' + "?objectType="
+                    + '@typeof(BoulevardManagement.Model.Entities.NPICU).Name'
+                + "&objectId=" + '@((string)ViewBag.TeleNPICUId)' + "&objectTag=" + '@((string)ViewBag.TeleNPICUId)' + "&Channel=" + '@((int)ChannelEnum.General)', function (response, status, xhr) {
+                    debugger;
+                    if (xhr["status"] == 401) {
+                        window.location.href = "/Account/LogOffBySys";
+                    }            //HERE
+                    StickyNotesload('@typeof(BoulevardManagement.Model.Entities.NPICU).Name','@((string)ViewBag.TeleNPICUId)','@((string)ViewBag.TeleNPICUId)',@((int)ChannelEnum.General));
+                });
+            $('#grid-section').hide();
+        });
+
+
+    }
+
+
+    function datePicker(args) {
+        args.element.kendoDateTimePicker({
+            format: "dd/MM/yyyy hh:mm tt"
+        });
+    }
+
+
+        function openNewZoomModal() {
+            $("#caseId").val('@(Model.EncrptedId)');
+        $("#caseType").val('NPICU');
+        $("#create-zoom-meet-modal").modal("show");
+    }
+
+
+
+
+    function GetNICUId() {
+
+        return { NICUId:@(Model.Id)};
+    }
+
+
+     function GetCaseId() {
+
+        return { caseId:@(Model.Id)};
+    }
+
+
+
+
+    function GetPICUId() {
+        debugger;
+
+        return { PICUId:@(Model.Id)};
+    }
+
+
+
+    function openUpdateNPICUModal() {
+        $("#update-npicu-modal").modal("show");
+    }
+
+
+    function ShowFollowUP(id) {
+        $('#main-content').load(`/NPICU/GetNICUConsultationFollowUpForm?followUpId=${id}&telenicuId=@((string)ViewBag.TeleNPICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+     function ShowPICUFollowUP(id) {
+        $('#main-content').load(`/NPICU/GetPICUConsultationFollowUpForm?followUpId=${id}&telePICUId=@((string)ViewBag.TeleNPICUId )`, function () {
+            ShowSuccessfllyMsg("@(PICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+
+    function refreshollowUPGrid() {
+        $('#NICUConsultationFollowUpFormGrid').data('kendoGrid').dataSource.read();
+        $('#NICUConsultationFollowUpFormGrid').data('kendoGrid').refresh();
+    }
+
+
+    function refresPICUFollowUPGrid() {
+        $('#PICUConsultationFollowUpFormGrid').data('kendoGrid').dataSource.read();
+        $('#PICUConsultationFollowUpFormGrid').data('kendoGrid').refresh();
+    }
+
+
+    function ShowInvestigation(id) {
+        $('#main-content').load(`/NPICU/GetNPICUInvestigation?investigationId=${id}&telenicuId=@((string)ViewBag.TeleNPICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+    function refreshInvestigationGrid() {
+        $('#NPICUInvestigationGrid').data('kendoGrid').dataSource.read();
+        $('#NPICUInvestigationGrid').data('kendoGrid').refresh();
+    }
+
+      function ShowConsultantSection(id) {
+        $('#main-content').load(`/NPICU/GetNPICUConsultantSection?ConsultantSectionId=${id}&telenicuId=@((string)ViewBag.TeleNPICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+    function refreshConsultantSectionGrid() {
+        $('#NPICUConsultantSectionGrid').data('kendoGrid').dataSource.read();
+        $('#NPICUConsultantSectionGrid').data('kendoGrid').refresh();
+    }
+</script>
+
+@if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+{
+
+
+    <script>
+        var followUp = 'نموذج متابعة';
+        var Investigation = 'استقصاء';
+        var ConsultantSection = 'استشارة';
+    </script>
+}
+else
+{
+    <script>
+        var followUp = 'Follow Up';
+        var Investigation = 'Investigation';
+        var ConsultantSection = 'Consultant';
+
+    </script>
+}
+
+
+<!--FollowUp Grid Scripts-->
+<script>
+    var NICUConsultationFollowUpFormUrl = '@Url.Action("Show", "NICUConsultationFollowUpForm", new { followUpId = "MyCode"})';
+
+    var deletedNICUConsultationFollowUpForm;
+    function myOnReqEnd(e) {
+        debugger;
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = followUp;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowNICUConsultationFollowUpFormGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#NICUConsultationFollowUpFormGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedNICUConsultationFollowUpForm = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptionsNICU(id, ob) {
+
+
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.NPICU.EditNICUConsultationFollowUpForm)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowNICUConsultationFollowUpFormGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-NICUConsultationFollowUpFormDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+
+           }
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if ('@this.User.IsInRole(RoleConsistent.NPICU.ViewNICUConsultationFollowUpForm)'=='True') {
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowFollowUP("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+        }
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+    function refresh(e) {
+        $('#NICUConsultationFollowUpFormGrid').data('kendoGrid').dataSource.read();
+        $('#NICUConsultationFollowUpFormGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+
+</script>
+<!--End of FollowUp Grid Scripts-->
+<!--PICU FollowUp Grid Scripts-->
+<script>
+    var PICUConsultationFollowUpFormUrl = '@Url.Action("Show", "PICUConsultationFollowUpForm", new { followUpId = "MyCode"})';
+
+    var deletedPICUConsultationFollowUpForm;
+    function myOnReqEnd(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = followUp;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+
+    function templateOptions(id, ob) {
+
+
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.NPICU.EditPICUConsultationFollowUpForm)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowPICUConsultationFollowUpFormGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-PICUConsultationFollowUpFormDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+
+           }
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+
+       if ('@this.User.IsInRole(RoleConsistent.NPICU.ViewPICUConsultationFollowUpForm)'=='True')
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowPICUFollowUP("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+    function DeleteRowPICUConsultationFollowUpFormGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#PICUConsultationFollowUpFormGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedPICUConsultationFollowUpForm = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+
+
+
+    function refresh(e) {
+        $('#PICUConsultationFollowUpFormGrid').data('kendoGrid').dataSource.read();
+        $('#PICUConsultationFollowUpFormGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+
+</script>
+<!--End of FollowUp Grid Scripts-->
+<!--Investigation Grid Scripts-->
+<script>
+
+    var deletedNPICUInvestigation;
+    function myOnReqEndInvestigation(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = Investigation;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowNPICUInvestigationGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#NPICUInvestigationGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedNPICUInvestigation = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptionsInvestigationGrid(id, ob) {
+
+
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.NPICU.EditNPICUInvestigation)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowNPICUInvestigationGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-NPICUInvestigationDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+
+           }
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if ('@this.User.IsInRole(RoleConsistent.NPICU.ViewNPICUInvestigation)'=='True') {
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowInvestigation("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+        }
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+    function refresh(e) {
+        $('#NPICUInvestigationGrid').data('kendoGrid').dataSource.read();
+        $('#NPICUInvestigationGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+
+</script>
+<!--End of Investigation Grid Scripts-->
+<!--ConsultantSection Grid Scripts-->
+<script>
+
+    var deletedNPICUConsultantSection;
+    function myOnReqEndConsultantSection(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = ConsultantSection;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowNPICUConsultantSectionGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#NPICUConsultantSectionGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedNPICUConsultantSection = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptionsConsultantSectionGrid(id, ob) {
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.NPICU.EditNPICUConsultantSection)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowNPICUConsultantSectionGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-NPICUConsultantSectionDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+           }
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if ('@this.User.IsInRole(RoleConsistent.NPICU.ViewNPICUConsultantSection)'=='True') {
+              result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowConsultantSection("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+            }
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+    function refresh(e) {
+        $('#NPICUConsultantSectionGrid').data('kendoGrid').dataSource.read();
+        $('#NPICUConsultantSectionGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+    function backBtnClick(){
+       debugger;
+        if (window.history.length > 1) {
+            window.history.go(-1);
+            return false;
+
+        } else {
+            window.location.href = "/NPICU";
+            return false;
+        }
+    }
+
+
+
+
+    function onSuccessUploadPhysicalExaminationFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasPhysicalExaminationAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PhysicalExaminationFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PhysicalExaminationFilePath').val(UploadedFilePath);
+
+    }
+
+    function onSuccessUploadPhysicalExaminationFollowUpFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasPhysicalExaminationAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PhysicalExaminationFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PhysicalExaminationFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadPICUPhysicalExaminationFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasPhysicalExaminationAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PhysicalExaminationFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PhysicalExaminationFilePath').val(UploadedFilePath);
+
+    }
+
+
+
+    function onSuccessUploadBloodGasesFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasBloodGasesAttachment').val(true);
+
+        if (UploadedFile)
+            $('#BloodGasesFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#BloodGasesFilePath').val(UploadedFilePath);
+
+    }
+
+    function onSuccessUploadCBCWithDifferentialFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCBCWithDifferentialAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CBCWithDifferentialFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CBCWithDifferentialFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadElectrolytesFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasElectrolytesAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ElectrolytesFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ElectrolytesFilePath').val(UploadedFilePath);
+
+    }
+
+    function onSuccessUploadBiochemistryFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasBiochemistryAttachment').val(true);
+
+        if (UploadedFile)
+            $('#BiochemistryFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#BiochemistryFilePath').val(UploadedFilePath);
+
+    }
+
+    function onSuccessUploadCSFStudyFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCSFStudyAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CSFStudyFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CSFStudyFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadChestAndAbdomenXrayFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasChestAndAbdomenXrayAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ChestAndAbdomenXrayFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ChestAndAbdomenXrayFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadOtherInvestigationsFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasOtherInvestigationsAttachment').val(true);
+
+        if (UploadedFile)
+            $('#OtherInvestigationsFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#OtherInvestigationsFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadConsultationNoteFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasConsultationNoteAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ConsultationNoteFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ConsultationNoteFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadNICUConsultationFormFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNICUConsultationFormAttachment').val(true);
+
+        if (UploadedFile)
+            $('#NICUConsultationFormFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#NICUConsultationFormFilePath').val(UploadedFilePath);
+
+    }
+
+    function onSuccessUploadPICUConsultationFormFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasPICUConsultationFormAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PICUConsultationFormFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PICUConsultationFormFilePath').val(UploadedFilePath);
+
+    }
+
+
+    function onSuccessUploadNICUConsultationFollowUpFormFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNICUConsultationFollowUpFormAttachment').val(true);
+
+        if (UploadedFile)
+            $('#NICUConsultationFollowUpFormFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#NICUConsultationFollowUpFormFilePath').val(UploadedFilePath);
+
+    }
+</script>
+<!--End of ConsultantSection Grid Scripts-->
+
+
+
+<script>
+    function onSuccessUploadCaseClosureFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCaseClosureAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CaseClosureFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CaseClosureFilePath').val(UploadedFilePath);
+
+    }
+
+    function DeleteRowCaseClosureGrid(e) {
+        debugger;
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#CaseClosureGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleMentalHealth = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+     function templateOptionsCaseClosureGrid(id, ob) {
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowCaseClosure("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+    function ShowCaseClosure(id) {
+        $('#main-content').load(`/NPICU/GetCaseClosureForm?closureId=${id}&telenicuId=@((string)ViewBag.TeleNPICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+
+     $("#close-case-btn").on("click", function () {
+
+
+              $('#main-content').hide();
+            $('#grid-section').hide();
+            ActiveButton("");
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetAddCaseClosureForm", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                  $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+     });
+
+
+
+
+      $("#reopen-case-btn").on("click", function () {
+
+
+              $('#main-content').hide();
+            $('#grid-section').hide();
+            ActiveButton("");
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetCaseClosureForm", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                  $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "NPICU", new { telenicuId = (string)ViewBag.TeleNPICUId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+        });
+</script>
+

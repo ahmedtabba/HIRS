@@ -1,0 +1,2 @@
+2019-02-23 21:33:30.1734|ERROR|Zest.FlavourManagement.WebApplication.Helper.ZLog|System.Exception: tttt
+   at Zest.FlavourManagement.WebApplication.Controllers.CustomerGroupController.Create(DataSourceRequest request, CustomerGroupDTO obDTO) in D:\Projects\Zest\Zest.FlavourManagement.WebApplication\Controllers\CustomerGroupController.cs:line 50

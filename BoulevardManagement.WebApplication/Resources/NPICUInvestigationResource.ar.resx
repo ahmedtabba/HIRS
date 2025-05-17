@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddInvestigation" xml:space="preserve">
+    <value>إضافة الاستقصاءات  </value>
+  </data>
+  <data name="AG" xml:space="preserve">
+    <value>AG</value>
+  </data>
+  <data name="AGInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل AG</value>
+  </data>
+  <data name="Albumin" xml:space="preserve">
+    <value>ألبومين (غرام/دسي ليتر)</value>
+  </data>
+  <data name="AlbuminInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل ألبومين</value>
+  </data>
+  <data name="AlkalinePhosphatase" xml:space="preserve">
+    <value>الفوسفاتيز القلوية</value>
+  </data>
+  <data name="AlkalinePhosphataseInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الفوسفاتيز القلوية</value>
+  </data>
+  <data name="ALT" xml:space="preserve">
+    <value>ALT</value>
+  </data>
+  <data name="ALTInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل ALT</value>
+  </data>
+  <data name="Ammonia" xml:space="preserve">
+    <value>أمونيا</value>
+  </data>
+  <data name="AmmoniaInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل أمونيا</value>
+  </data>
+  <data name="AST" xml:space="preserve">
+    <value>AST</value>
+  </data>
+  <data name="ASTInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل  AST</value>
+  </data>
+  <data name="Basophils" xml:space="preserve">
+    <value>محبَّات الأساس</value>
+  </data>
+  <data name="BasophilsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل محبَّات الأساس</value>
+  </data>
+  <data name="BE" xml:space="preserve">
+    <value>BE</value>
+  </data>
+  <data name="BEInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل BE</value>
+  </data>
+  <data name="Biochemistry" xml:space="preserve">
+    <value>كيمياء المصل</value>
+  </data>
+  <data name="BloodCulture" xml:space="preserve">
+    <value>زرع الدَّم </value>
+  </data>
+  <data name="BloodCultureInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال زرع الدَّم </value>
+  </data>
+  <data name="BloodGases" xml:space="preserve">
+    <value>غازات الدم </value>
+  </data>
+  <data name="BloodGasesInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل غازات الدم </value>
+  </data>
+  <data name="Calcium" xml:space="preserve">
+    <value>كالسيوم</value>
+  </data>
+  <data name="CalciumInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل كالسيوم</value>
+  </data>
+  <data name="CBCWithDifferential" xml:space="preserve">
+    <value>تعداد الدَّم الكامل  </value>
+  </data>
+  <data name="ChestAndAbdomenXray" xml:space="preserve">
+    <value>صورة الصَّدر والبطن الشُّعاعيَّة البسيطة </value>
+  </data>
+  <data name="ChestAndAbdomenXrayInfoSpan" xml:space="preserve">
+    <value>يرجى إرفاق صورة الصَّدر والبطن الشُّعاعيَّة البسيطة أو  شرحها </value>
+  </data>
+  <data name="Chloride" xml:space="preserve">
+    <value>كلور</value>
+  </data>
+  <data name="ChlorideInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل كلور</value>
+  </data>
+  <data name="Creatinine" xml:space="preserve">
+    <value>كرياتينين</value>
+  </data>
+  <data name="CreatinineInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل كرياتينين</value>
+  </data>
+  <data name="CRP" xml:space="preserve">
+    <value>بروتين سي  التفاعلي CRP</value>
+  </data>
+  <data name="CRPInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل CRP </value>
+  </data>
+  <data name="CSFCulture" xml:space="preserve">
+    <value>زرع السائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="CSFCultureInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل زرع السائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="CSFGlucose" xml:space="preserve">
+    <value>سكر السائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="CSFGlucoseInfoSpan" xml:space="preserve">
+    <value>يرجى  إدخال حقل سكر السائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="CSFGramStain" xml:space="preserve">
+    <value>تلوين غرام</value>
+  </data>
+  <data name="CSFGramStainInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال تلوين غرام</value>
+  </data>
+  <data name="CSFLatexAgglutination" xml:space="preserve">
+    <value> فحص اللاتكس</value>
+  </data>
+  <data name="CSFLatexAgglutinationInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل فحص اللاتكس</value>
+  </data>
+  <data name="CSFProtein" xml:space="preserve">
+    <value>بروتين السَّائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="CSFProteinInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل بروتين السَّائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="CSFStudy" xml:space="preserve">
+    <value>فحص السَّائل الدِّماغي الشَّوكي</value>
+  </data>
+  <data name="DirectBilirubin" xml:space="preserve">
+    <value>بيليروبين مباشر</value>
+  </data>
+  <data name="DirectBilirubinInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل بيليروبين مباشر</value>
+  </data>
+  <data name="Echocardiography" xml:space="preserve">
+    <value>إيكو القلب </value>
+  </data>
+  <data name="EchocardiographyInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل إيكو القلب </value>
+  </data>
+  <data name="Electrolytes" xml:space="preserve">
+    <value>شوارد المصل </value>
+  </data>
+  <data name="Eosinophils" xml:space="preserve">
+    <value>محبَّات الحمض</value>
+  </data>
+  <data name="EosinophilsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل محبَّات الحمض</value>
+  </data>
+  <data name="HCO3" xml:space="preserve">
+    <value>HCO3</value>
+  </data>
+  <data name="HCO3InfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل HCO3</value>
+  </data>
+  <data name="Hematocrit" xml:space="preserve">
+    <value>هيماتوكريت % </value>
+  </data>
+  <data name="HematocritInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل هيماتوكريت </value>
+  </data>
+  <data name="Hemoglobin" xml:space="preserve">
+    <value>هيموغلوبين غ/دل </value>
+  </data>
+  <data name="HemoglobinInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل هيموغلوبين</value>
+  </data>
+  <data name="Investigations" xml:space="preserve">
+    <value>الاستقصاءات</value>
+  </data>
+  <data name="Lactate" xml:space="preserve">
+    <value>لاكتات ملي مول/ليتر</value>
+  </data>
+  <data name="LactateInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل لاكتات</value>
+  </data>
+  <data name="Lymphocytes" xml:space="preserve">
+    <value>لمفاويَّات %</value>
+  </data>
+  <data name="LymphocytesInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال لمفاويَّات</value>
+  </data>
+  <data name="Magnesium" xml:space="preserve">
+    <value>مغنيزيوم</value>
+  </data>
+  <data name="MagnesiumInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل مغنيزيوم</value>
+  </data>
+  <data name="MCV" xml:space="preserve">
+    <value>MCV</value>
+  </data>
+  <data name="MCVInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل MCV</value>
+  </data>
+  <data name="Neutrophils" xml:space="preserve">
+    <value>عدلات</value>
+  </data>
+  <data name="NeutrophilsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل عدلات</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>أخرى</value>
+  </data>
+  <data name="OthersInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل أخرى</value>
+  </data>
+  <data name="PCO2" xml:space="preserve">
+    <value>PCO3</value>
+  </data>
+  <data name="PCO2InfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل PCO2</value>
+  </data>
+  <data name="PH" xml:space="preserve">
+    <value>PH</value>
+  </data>
+  <data name="PHInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل PH</value>
+  </data>
+  <data name="Phosphorous" xml:space="preserve">
+    <value>فوسفور</value>
+  </data>
+  <data name="PhosphorousInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل فوسفور</value>
+  </data>
+  <data name="Platelets" xml:space="preserve">
+    <value>صفيحات</value>
+  </data>
+  <data name="PlateletsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل صفيحات</value>
+  </data>
+  <data name="PO2" xml:space="preserve">
+    <value>PO2</value>
+  </data>
+  <data name="PO2InfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل PO2</value>
+  </data>
+  <data name="Potassium" xml:space="preserve">
+    <value>بوتاسيوم </value>
+  </data>
+  <data name="PotassiumInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل بوتاسيوم</value>
+  </data>
+  <data name="RBCs" xml:space="preserve">
+    <value>كريَّات حمراء</value>
+  </data>
+  <data name="RBCsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال كريَّات حمراء</value>
+  </data>
+  <data name="RBSAtLumbarPuncture" xml:space="preserve">
+    <value>سكَّر الدَّم العشوائي عند البزل القطني</value>
+  </data>
+  <data name="RBSAtLumbarPunctureInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل سكَّر الدَّم العشوائي عند البزل القطني </value>
+  </data>
+  <data name="RDW" xml:space="preserve">
+    <value>RDW %</value>
+  </data>
+  <data name="RDWInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل RDW</value>
+  </data>
+  <data name="Reticulocytes" xml:space="preserve">
+    <value>شبكيَّات %</value>
+  </data>
+  <data name="ReticulocytesInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل شبكيَّات</value>
+  </data>
+  <data name="SerumGlucose" xml:space="preserve">
+    <value>سكَّر المصل</value>
+  </data>
+  <data name="SerumGlucoseInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل سكَّر المصل</value>
+  </data>
+  <data name="Sodium" xml:space="preserve">
+    <value>الصوديوم</value>
+  </data>
+  <data name="SodiumInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الصوديوم</value>
+  </data>
+  <data name="TotalBilirubin" xml:space="preserve">
+    <value>بيليروبين كلِّي</value>
+  </data>
+  <data name="TotalBilirubinInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل بيليروبين كلِّي</value>
+  </data>
+  <data name="TotalProtein" xml:space="preserve">
+    <value>بروتين كلِّي</value>
+  </data>
+  <data name="TotalProteinInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل بروتين كلِّي</value>
+  </data>
+  <data name="Urea" xml:space="preserve">
+    <value>بولة</value>
+  </data>
+  <data name="UreaInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل بولة</value>
+  </data>
+  <data name="UrineAnalysisAndCulture" xml:space="preserve">
+    <value>فحص و زرع البول </value>
+  </data>
+  <data name="UrineAnalysisAndCultureInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل فحص و زرع البول </value>
+  </data>
+  <data name="WBCs" xml:space="preserve">
+    <value>كريَّات بيضاء</value>
+  </data>
+  <data name="WBCsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل كريَّات بيضاء</value>
+  </data>
+</root>

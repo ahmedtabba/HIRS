@@ -1,0 +1,367 @@
+﻿@using BoulevardManagement.Utilities;
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+@{ var types = new[] {
+new { name =NotificationObjectTypes.User.GetDescription(), value = 0 },
+new { name =NotificationObjectTypes.NotificationGroup.GetDescription(), value = 1 },
+new { name =NotificationObjectTypes.PermitionGroup.GetDescription(), value = 2 },
+new { name =NotificationObjectTypes.Attachment.GetDescription(), value = 3 },
+new { name =NotificationObjectTypes.TeleMentalHealth.GetDescription(), value = 4 },
+new { name =NotificationObjectTypes.Patient.GetDescription(), value = 5 },
+new { name =NotificationObjectTypes.NPICU.GetDescription(), value = 6 },
+new { name =NotificationObjectTypes.Zoom.GetDescription(), value = 7 },
+new { name =NotificationObjectTypes.TeleICU.GetDescription(), value = 8 },
+
+new { name =NotificationObjectTypes.TeleMentalHealth_ClinicalStory.GetDescription(), value = 9 },
+new { name =NotificationObjectTypes.TeleMentalHealth_WrittenPledge.GetDescription(), value = 10 },
+new { name =NotificationObjectTypes.TeleMentalHealth_PhysicalExaminationReport.GetDescription(), value = 11 },
+new { name =NotificationObjectTypes.TeleMentalHealth_TherapeuticPlan.GetDescription(), value = 12},
+new { name =NotificationObjectTypes.TeleMentalHealth_VitalSign.GetDescription(), value = 14 },
+new { name =NotificationObjectTypes.TeleMentalHealth_Chat.GetDescription(), value = 14 },
+new { name =NotificationObjectTypes.NPICU_ConsultationForm.GetDescription(), value = 15 },
+new { name =NotificationObjectTypes.NPICU_ConsultationFollowUpForm.GetDescription(), value = 16 },
+new { name =NotificationObjectTypes.NPICU_Investigation.GetDescription(), value = 17},
+new { name =NotificationObjectTypes.NPICU_ConsultantSection.GetDescription(), value = 18},
+new { name =NotificationObjectTypes.NPICU_Chat.GetDescription(), value = 19 },
+new { name =NotificationObjectTypes.TeleICU_ClinicalStory.GetDescription(), value = 20 },
+new { name =NotificationObjectTypes.TeleICU_MedicationDailyScheduleTable.GetDescription(), value = 21 },
+new { name =NotificationObjectTypes.TeleICU_LabUnit.GetDescription(), value = 22 },
+new { name =NotificationObjectTypes.TeleICU_InternalConsultationForm.GetDescription(), value = 23 },
+new { name =NotificationObjectTypes.TeleICU_ConsultationForm.GetDescription(), value = 24 },
+new { name =NotificationObjectTypes.TeleICU_PatientExitStatusReport.GetDescription(), value = 25 },
+new { name =NotificationObjectTypes.TeleICU_Chat.GetDescription(), value = 26 },
+
+
+};
+
+    string radioMargin = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "margin-left:15px;" : "margin-right:15px;";
+}
+
+
+
+
+
+
+
+
+
+
+<div class="card card-custom" data-card="true" id="kt_card_3">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">@CommonResource.Notifications</h3>
+        </div>
+        <div class="card-toolbar">
+
+            <a href="javascript:void(0);" onclick="$('.k-i-refresh').trigger('click');" data-toggle="tooltip" title="@CommonResource.RefreshTooltip" class="btn btn-icon btn-circle btn-sm btn-light-google mr-1" data-card-tool="reload">
+                <i class="ki ki-reload icon-nm"></i>
+            </a>
+            <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                <i class="ki ki-arrow-down icon-nm"></i>
+            </a>
+
+        </div>
+    </div>
+    <div class="card-body @customeClass" kt-hidden-height="471" style="">
+        <!--Grid Here-->
+        <div class="row">
+            <div class="col-md-2" style="padding-right: 0!important;">
+                @Html.Label(NotificationResource.Status, new { @class = "form-label" })
+            </div>
+            <div class="col-md-4">
+                <div class="form-group  filters" id="filters">
+                    @Html.RadioButton("NotificationStatus", "-1", ViewBag.Category == "ALL" ? true : false, new { onclick = "RefreshNotificationGrid(this);", @style = "height:11px" })
+                    @Html.Label(NotificationResource.All, new { @class = "form-label", @style = "font-size:14px;" + radioMargin + "font-weight: 400;" })
+                    @Html.RadioButton("NotificationStatus", "0", ViewBag.Category == "READ" ? true : false, new { onclick = "RefreshNotificationGrid(this);", @style = "height:11px" })
+                    @Html.Label(NotificationResource.Read, new { @class = "form-label", @style = "font-size:14px;" + radioMargin + ";font-weight: 400;" })
+                    @Html.RadioButton("NotificationStatus", "1", ViewBag.Category == "UNREAD" ? true : false, new { onclick = "RefreshNotificationGrid(this);", @style = "height:11px" })
+                    @Html.Label(NotificationResource.UnRead, new { @class = "form-label", @style = "font-size:14px;font-weight: 400;" })
+                </div>
+            </div>
+            <div class="col-md-6 pull-right">
+                <button id="btn-markAsRead" class="btn btn-outline-primary btn-sm pull-right" onclick="MarkSelectedAsRead()">@NotificationResource.MarkAsRead</button>
+            </div>
+        </div>
+        @(Html.KendoGrid<BoulevardManagement.DTO.UserNotificationDTO>()
+.Name("UserNotificationGrid")
+.Columns(columns =>
+{
+columns.Bound(c => c.CreationDate).Title(NotificationResource.Date).Format(@"{0:dd/MM/yyyy hh:mm}").Width(150);
+// columns.Bound(c => c.CreationTime).Title("Time").Format("{0:hh:mm}").Hidden().Filterable(false);
+//columns.Bound(c => c.NotificationName).Title("NotificationName").Width(100);
+//columns.Bound(c => c.ObjectType).Title("ObjectType").Width(75).ClientTemplate("#if (ObjectType == 0) {# " + "<span class='label label-danger' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>CF</span>" + "#}else if (ObjectType == 1){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>SR</span>" + "#}else if (ObjectType== 2){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>ZF</span>" + "#}else if (ObjectType == 3){#" + " <span class='label label-primary' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>CS</span>" + "#}else if (ObjectType== 4){#" + " <span class='label label-warning' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>Cu</span>" + "#}else if (ObjectType== 5){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>PC</span>" + "#}else if (ObjectType== 6){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>FC</span>" + "#}else if (ObjectType== 7){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>CW</span>" + "#}else if (ObjectType== 8){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>AG</span>" + "#}else if (ObjectType== 9){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>FT</span>" + "#}else if (ObjectType== 10){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>PO</span>" + "#}else if (ObjectType== 11){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>Usr</span>" + "#}else if (ObjectType== 12){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>WC</span>" + "#}else if (ObjectType== 13){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>ZI</span>" + "#}else if (ObjectType== 14){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>NG</span>" + "#}else if (ObjectType== 15){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>TS</span>" + "#}else if (ObjectType== 16){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>SP</span>" + "#}else if (ObjectType== 17){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>PF</span>" + "#}else if (ObjectType== 18){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>Or</span>" + "#}else if (ObjectType== 19){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>CPG</span>" + "#}else if (ObjectType== 20){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>CG</span>" + "#}else if (ObjectType== 21){#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>PG</span>" + "#}else{#" + " <span class='label label-success' style='float:left; vertical-align:middle; margin: 2px 2px 5px 0px'>CS</span>" + "#}#" + "#=GetObjectTypeText(ObjectType)#");
+columns.ForeignKey(p => p.ObjectType, types, "value", "name").Title(NotificationResource.ObjectType)
+.ClientTemplate("#=ObjectTypeBadge#").Width(150);
+columns.Bound(c => c.CreatorFullName).Title(NotificationResource.User).ClientTemplate("#=getUserLink(UserId,CreatorFullName)#").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false))).Hidden().Width(250);
+columns.Bound(c => c.NotificationString).Width(400).MinScreenWidth(600).MinResizableWidth(600).Title(NotificationResource.Message).ClientTemplate("#= getViewLink(Id,NotificationURL,NotificationString) #");
+
+columns.Select().Width(100).HtmlAttributes(new { @style = "padding-top:10px!important" });
+
+
+
+columns.Bound(x => x.Id).Sortable(false).Filterable(false).Template(@<text></text>).ClientTemplate(@"#=GetTemplate(Id,IsUnRead)#").Title("").IncludeInMenu(false).Width(140);
+
+
+
+
+
+})
+.Editable(editable => { editable.Mode(GridEditMode.InCell); })
+.Events(e => e.ColumnShow("AutoFitColumn").ColumnHide("AutoFitColumn").DataBound("AutoFitColumn").Change("onChange").DataBound("DataBinding"))
+.ColumnMenu(c => c.Columns(true))
+.HtmlAttributes(new { style = "height:1036px", @id = "UserNotificationGrid" })
+//.Scrollable(scrollable => scrollable.Virtual(true))
+.PersistSelection()
+.DataSource(dataSource => dataSource
+.Ajax()
+.Sort(sort => sort.Add(x => x.CreationDate).Descending())
+.Model(model =>
+{
+model.Id(c => c.Id);
+model.Field(x => x.MarkAsRead).Editable(true);
+model.Field(x => x.Id).Editable(false);
+model.Field(x => x.CreationDate).Editable(false);
+model.Field(x => x.ObjectType).Editable(false);
+model.Field(x => x.NotificationString).Editable(false);
+model.Field(x => x.CreatorFullName).Editable(false);
+})
+.Read(read => read.Action("ReadUserNotifications", "Home").Data("GetNotificationsFilterCriterias"))
+.ServerOperation(true)
+.Events(events => events.Error("function(args){KendoGrid_ErrorHandler(args,'UserNotificationGrid');}"))
+.PageSize(50))
+)
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+
+    function DataBinding(e) {
+        $("#UserNotificationGrid").data("kendoGrid").clearSelection();
+
+    }
+
+
+
+    function getUserLink(id, name) {
+        if (name == null) {
+            name = '';
+        }
+
+        var urlEdit = '@Url.RouteUrl("Default", new { controller = "Account", action = "Register" })' + '?Id=' + id;
+                @if (User.IsInRoles(RoleConsistent.UserManagement.Edit))
+                    {
+                    <text>
+        return '<a target="_blank" style="margin-left:24px" target="_blank" href="' + urlEdit + '"> ' + name + '</a>';
+                    </text>
+                }else
+                {
+                    <text>
+        return "<span style='margin-left:24px'>" + name + "</span>";
+                    </text>
+                }
+
+    }
+    function GetNotificationsFilterCriterias() {
+
+        var NotificationStatus = $('input[name="NotificationStatus"]:checked').val();
+
+        return { notificationStatus: NotificationStatus, isFavorate: false }
+    }
+
+    function RefreshNotificationGrid() {
+        isMarkAllPressed = false;
+        $('#UserNotificationGrid').data('kendoGrid').dataSource.read();
+        $('#UserNotificationGrid').data('kendoGrid').refresh();
+
+        var val = $('input[name="NotificationStatus"]:checked').val();
+        if (val == "1") {
+            $("#btn-markAsRead").show();
+            var grid = $("#UserNotificationGrid").data("kendoGrid");
+            grid.hideColumn("Id");
+            grid.showColumn(5);
+            $("#UserNotificationGrid").data("kendoGrid").clearSelection();
+        }
+        else {
+            $("#btn-markAsRead").hide();
+            var grid = $("#UserNotificationGrid").data("kendoGrid");
+            grid.hideColumn(5);
+            grid.showColumn("Id");
+            $("#UserNotificationGrid").data("kendoGrid").clearSelection();
+        }
+
+
+    }
+
+
+    function AutoFitColumn() {
+
+        //var grid = $("#UserNotificationGrid").data("kendoGrid");
+        //for (var i = 0; i < grid.columns.length; i++) {
+        //    grid.autoFitColumn(i);
+        //}
+
+        //var grid = $("#UserNotificationGrid").data("kendoGrid");
+        //grid.autoFitColumn(grid.columns[2]);
+    }
+
+    function GetObjectTypeText(objType) {
+        var res = "";
+        if (objType == 0) {
+            res = "@(NotificationObjectTypes.User.GetDescription())";
+        }
+        if (objType == 1) {
+            res = "@(NotificationObjectTypes.NotificationGroup.GetDescription())";
+        }
+        if (objType == 2) {
+            res = "@(NotificationObjectTypes.PermitionGroup.GetDescription())";
+        }
+        if (objType == 3) {
+            res = "@(NotificationObjectTypes.Attachment.GetDescription())";
+        }
+        if (objType == 4) {
+            res = "@(NotificationObjectTypes.TeleMentalHealth.GetDescription())";
+        }
+        if (objType == 5) {
+            res = "@(NotificationObjectTypes.Patient.GetDescription())";
+        }
+        if (objType == 6) {
+            res = "@(NotificationObjectTypes.NPICU.GetDescription())";
+        }
+        if (objType == 7) {
+            res = "@(NotificationObjectTypes.Zoom.GetDescription())";
+        }
+
+          if (objType == 8) {
+            res = "@(NotificationObjectTypes.TeleICU.GetDescription())";
+        }
+        return res;
+    }
+    $('#selectAllProducts').click(function () {
+
+
+
+
+        var data = $("#UserNotificationGrid").data('kendoGrid').dataSource._view;
+        for (var i = 0; i < data.length; i++) {
+            // data[i].MarkAsRead = this.checked;
+            data[i].set("MarkAsRead", this.checked);
+
+        }
+        $('#UserNotificationGrid').data('kendoGrid').refresh();
+    });
+    var notificationIds = [];
+
+    function MarkSelectedAsRead() {
+
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("MarkAsRead", "Home", new { @Area = "" })",
+            data: { notificationIds: notificationIds, isFavorate: false, isMarkAllPressed: isMarkAllPressed},
+            success: function (d) {
+
+                 $("#UserNotificationGrid").data("kendoGrid").dataSource.read();
+                $('#UserNotificationGrid').data('kendoGrid').refresh();
+              //  document.getElementById("selectAllProducts").checked = false;
+
+             }
+
+         });
+
+    }
+
+    function inptChange(Id, checked) {
+
+        var data = $("#UserNotificationGrid").data('kendoGrid').dataSource._view;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].Id == Id) {
+                // data[i].MarkAsRead = this.checked;
+                if (checked == "True")
+                    data[i].set("MarkAsRead", true);
+                else
+                    data[i].set("MarkAsRead", false);
+                return;
+            }
+
+        }
+    }
+    var isMarkAllPressed = false;
+    $('#selectAllProducts').click(function () {
+        isMarkAllPressed = !isMarkAllPressed;
+    });
+    function getViewLink(id, actionURL, message) {
+        return '<a href="' + actionURL + '" class="permalink_section" onclick=" notifcationClick(' + id + ') ">' + message + '</a>';
+    }
+
+    function GetMarkAsReadStatusText(MakeAsRead, Id) {
+
+        if (MakeAsRead)
+            return `<input id="markAsRead-${Id}" type="checkbox" checked  onclick="inptChange(${Id},'False')"/>`;
+        return `<input id="markAsRead-${Id}" type="checkbox"   onclick="inptChange(${Id},'True')"/>`;
+    }
+
+    function GetTemplate(Id, IsUnRead) {
+        if (IsUnRead)
+            return "";
+        else
+            return '<a href="javascript:void(0);" class="btn btn-link" onclick="markAsUnRead(' + Id + ')" style="cursor: pointer; outline:none;" > Mark as UnRead</a >';
+    }
+
+    $(function () {
+        RefreshNotificationGrid();
+    });
+    function GetCustomerTemplate(CustomerName, ColorName, ColorDescreption) {
+
+
+        if (CustomerName == null) {
+            CustomerName = '';
+        }
+        if (ColorName != null) {
+            return "<span data-toggle='kt-tooltip' title='" + ColorDescreption + "' data-placement='top' style='vertical-align: middle;display: inline-block;width: 20px;height: 20px;border-radius: 50%;background-color:" + ColorName + "'></span><div style='display:inline;margin-left: 4px;vertical-align: middle;'  data-toggle='kt-tooltip' title='" + ColorDescreption + "' data-placement='top'>" + CustomerName + "</div>";
+        }
+        return "<span style='margin-left:24px'>" + CustomerName + "</span>";
+
+    }
+
+
+    function onChange(arg) {
+
+        notificationIds = this.selectedKeyNames();
+        console.log(notificationIds);
+    }
+
+     function markAsUnRead(Id) {
+
+        data = { notificationId: Id }
+
+        $.ajax({
+                type: 'POST',
+                url: "@Url.Action("MarkUnRead", "Home", new { @Area = "" })",
+                data: data,
+            dataType: 'json',
+            success: function (data) {
+                $('#UserNotificationGrid').data('kendoGrid').dataSource.read();
+                $('#UserNotificationGrid').data('kendoGrid').refresh();
+            }
+        });
+    }
+
+</script>

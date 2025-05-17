@@ -1,0 +1,124 @@
+﻿<style>
+    #tasksmenu>li>a{
+        width:90%;
+    }
+
+    .active-lang{
+        background-color:cornflowerblue;
+    }
+
+    /*#en-lang, #ar-lang {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }*/
+</style>
+
+<header class="main-header hideprint">
+
+
+    @*<a href="index2.html" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>A</b>LT</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img src="dist/img/logo.png" width="88" height="40"></span>
+    </a>*@
+
+
+    <!-- Logo -->
+    <a href="@Url.Action("Index", "Home", new { Area = "" })" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>Z</b>S</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><img src="~/Content/img/logo.png" width="88" height="40"></span>
+        @*<span class="logo-lg"><b>Zest</b> Sales</span>*@
+    </a>
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- Messages: style can be found in dropdown.less-->
+                @*<li class="dropdown messages-menu">
+            <!-- Menu toggle button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-envelope-o"></i>
+                <span class="label label-success">0</span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="header">You have 0 messages</li>
+                <li>
+                    <!-- inner menu: contains the messages -->
+                    <ul class="menu">
+
+                        <!-- end message -->
+                    </ul>
+                    <!-- /.menu -->
+                </li>
+                <li class="footer"><a href="#">See All Messages</a></li>
+            </ul>
+        </li>*@
+                <!-- /.messages-menu -->
+                <!-- Notifications Menu -->
+                <li class="dropdown">
+            <!-- Menu toggle button -->
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-globe"></i>
+               @* <span class="label label-warning">0</span>*@
+            </a>
+            <ul class="dropdown-menu">
+                <li id="en-lang" class="active-lang" on>
+                    <a href="@Url.Action("ChangeLanguage", "Home", new { lang = "en-US" })"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAOCAMAAADt5EdyAAAASFBMVEXho6nipKrkrbK/LTlub5dsbpblo6dmZ5JQUYOyuMxXV4dTVIW3vdDNl6Nsa5NlZZG1us7NlaK5vc/apq7Pn6tISn6wMEPBLTe9TbpEAAAAXklEQVQY03XNSQ6AMAgF0N/J0sFa5/vf1MYYU5rwICwgACgmipQixes2PZD9lEMzSNa6FtaVFRy17pt+Vkw/AdNdG3dO75cWrY5/Qq4hh5rDtoObfoqDTEkg0xIYyQO3awQ0UNgZAQAAAABJRU5ErkJggg==" class="mr-10" width="25" height="16" alt="lang-icon" /> English</a>
+                </li>
+
+                <li id="ar-lang">
+                    <a href="@Url.Action("ChangeLanguage", "Home", new { lang = "ar-SA" })"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAQCAMAAADUOCSZAAAAb1BMVEUAfUUAe0EAeT6BuZ9HnXabx7KUw6yLvqZjqopWpIBEnHQwlGgfjV+518l0spZPoXxKnnlBmnIlj2Ku0cCqzr6YxbA+mXA4l23I39S01MWnzrumzLqGu6N3tJhtr5BsrpBlq4tdpoUqkWQAhFEAgkxddrykAAAAgElEQVQY07XORw7EIAxAUcDUUEPa9H7/M45nlAUkyyh/YSE9CZvsEmMUw4GPCt7mYZO5hjjdtCuJ8oPXFyFOEs59YqW4wUtQRyWC6mMlWXQgOw+g5KAred2fUdvJ8ZQN7imJYXSuhNn+d5NlljdNO47GriTzH7UBPmT9G4aTbOgLMgME8QAUwvYAAAAASUVORK5CYII=" class="mr-10" width="25" height="16" alt="lang-icon"> عربي</a>
+                </li>
+
+            </ul>
+        </li>
+
+               
+                
+                <!-- User Account Menu -->
+                <li class="dropdown user user-menu" style="margin-right:30px">
+
+                    @Html.Partial("_LoginPartial")
+
+                </li>
+                @*<li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Page 1
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Page 1-1</a></li>
+                        <li><a href="#">Page 1-2</a></li>
+                        <li><a href="#">Page 1-3</a></li>
+                    </ul>
+                </li>*@
+                <!-- Control Sidebar Toggle Button -->
+                @*<li>
+                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                </li>*@
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<script>
+    var isRTL = '@System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft';
+    if (isRTL == 'True')
+    {
+        $("#ar-lang").addClass("active-lang");
+        $("#en-lang").removeClass("active-lang");
+    }
+    else {
+        $("#en-lang").addClass("active-lang");
+        $("#ar-lang").removeClass("active-lang");
+    }
+
+</script>

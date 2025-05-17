@@ -1,0 +1,37 @@
+﻿@model BoulevardManagement.WebApplication.Models.ConfirmModel
+
+<div class="modal modal-warning fade" id="@Model.ModelId" tabindex="-1" role="dialog"  data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close hide@(Model.ModelId)" data-dismiss="modal" aria-label="Close" id="Close@(Model.ButtonId)"  >
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title"><i class="fa fa-warning"></i>&nbsp;@Model.Title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row hide@(Model.ModelId)">
+                    <div class="col-md-12"  id="Content@(Model.ModelId)">
+
+                        @Html.Raw(Model.Content)
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <div class="row show@(Model.ModelId)" style="display:none;padding :10px">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer hide@(Model.ModelId)">
+                <button type="button" id="@Model.ButtonId" class="btn btn btn-outline">@Model.ButtonTextOk</button>
+                <button type="button" id="Cancle@(Model.ButtonId)" class="btn btn btn-outline pull-right" data-dismiss="modal">@Model.ButtonTextCancel</button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+

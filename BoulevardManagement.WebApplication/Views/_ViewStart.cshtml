@@ -1,0 +1,9 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    var stickyNoteLoadNotesURL = '@Url.Action("LoadNotes", "StickyNote")';
+    var stickyNoteAddNoteURL ='@Url.Action("AddNote", "StickyNote", new { @Area = "" })'
+</script>

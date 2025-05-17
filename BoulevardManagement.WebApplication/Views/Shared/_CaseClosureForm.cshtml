@@ -1,0 +1,238 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Models;
+@model CaseClosureDTO
+
+<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    bool viewMode = false;
+
+    if (Model.Id > 0)
+    {
+        viewMode = true;
+    }
+    string radioMargin = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft ? "margin-right:15px;" : "margin-left:15px;";
+
+}
+
+
+@if (Model.CanReOpenCase)
+{
+    <a href="@(Model.ReOpenUrl)?caseId=@Model.CaseId" id="ReOpen" class="btn btn-primary">@CommonResource.ReOpenCase</a>
+}
+
+<!--begin::Form-->
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "CloseCaseFormId" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.CaseId)
+    @Html.HiddenFor(x => x.CaseDepartment)
+
+    @Html.HiddenFor(model => model.CaseClosureAttachmentId)
+    @Html.HiddenFor(model => model.HasCaseClosureAttachment)
+    @Html.HiddenFor(model => model.CaseClosureFilename)
+    @Html.HiddenFor(model => model.CaseClosureFilePath)
+
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                @CommonResource.CaseClosure
+            </h3>
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <div class="form-group required" aria-required="true">
+                    @Html.Label(CommonResource.CaseClosureReason + ":", new { @class = "control-label required" }) <span style="color:red">*</span>
+                    @if (viewMode)
+                    {
+                        <div class="form-group">
+                            @Model.CaseCloseReason.GetDescription()
+                        </div>
+                    }
+                    else
+                    {
+                       
+                        <div class="form-group">
+                            @Html.RadioButtonFor(c => c.CaseCloseReason, CaseCloseReason.NormalExit, new { @class = "", @style = "height:10px;"+radioMargin }) <span style="font-weight:400">@CaseCloseReason.NormalExit.GetDescription()</span>
+                            @Html.RadioButtonFor(c => c.CaseCloseReason, CaseCloseReason.Referral, new { @class = "", @style = "height:10px;"+radioMargin }) <span style="font-weight:400">@CaseCloseReason.Referral.GetDescription()</span>
+                            @Html.RadioButtonFor(c => c.CaseCloseReason, CaseCloseReason.Death, new { @class = "", @style = "height:10px;"+radioMargin }) <span style="font-weight:400">@CaseCloseReason.Death.GetDescription()</span>
+                            @Html.RadioButtonFor(c => c.CaseCloseReason, CaseCloseReason.PersonalResponsibilityExit, new { @class = "", @style = "height:10px;" }) <span style="font-weight:400">@CaseCloseReason.PersonalResponsibilityExit.GetDescription()</span>
+                            @Html.ValidationMessageFor(model => model.CaseCloseReason)
+                            <span class="form-text text-muted">@CommonResource.CaseClosureReasonInfoSpan</span>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@CommonResource.ClosureNote:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", @rows = "10", @placeholder = CommonResource.ClosureNote, @id = "Notes", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", @rows = "10", @placeholder = CommonResource.ClosureNote, @id = "Notes" })
+                    @Html.ValidationMessageFor(x => x.Notes)
+                    <span class="form-text text-muted">@CommonResource.ClosureNoteInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="errorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="errorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+    .Name("CaseClosurefiles")
+    .ShowFileList(true)
+    .Multiple(false)
+    .Async(a => a
+    .Save("AddCaseClosureFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+    .AutoUpload(true)
+    ).Events(c => c
+    .Select("onSelectFile")
+        .Success("onSuccessUploadCaseClosureFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.CaseClosureAttachmentId.HasValue)
+                    {
+                        <div style="margin-bottom:20px;">
+                            @Model.CaseClosureFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.CaseClosureAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+
+        @if (!viewMode)
+        {
+            <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+            <button type="button" id="cancel" class="btn btn-default">@CommonResource.Cancel</button>
+
+        }
+
+
+
+    </div>
+
+
+
+
+}
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+
+
+    $("#CloseCaseFormId").on("submit", function (e) {
+        debugger;
+    e.preventDefault();
+            $.ajax({
+    url: '@(Model.CloseUrl)',
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (data) {
+            if (data.Success) {
+                //ShowSuccessfllyMsg(data.Message);
+                debugger;
+                //$("#TelMHVitalSignGrid").data("kendoGrid").dataSource.read();
+                //$("#TelMHVitalSignGrid").data("kendoGrid").refresh();
+                @{
+                    var url = "";
+                }
+                @if (Model.CaseDepartment == DepartmentEnum.MH) {
+                    url = Url.Action("Edit", "TeleMentalHealth", new { mentalHealthId = HashIdsManager.Encrypt(Model.CaseId) });
+                }
+                @if (Model.CaseDepartment == DepartmentEnum.NPICU) {
+                    url = Url.Action("Edit", "NPICU", new { NPICUId = HashIdsManager.Encrypt(Model.CaseId) });
+                }
+                    @if (Model.CaseDepartment == DepartmentEnum.ICU) {
+                    url = Url.Action("Edit", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.CaseId) });
+                }
+
+               
+                window.location.href ='@url' ;
+
+
+                    } else {
+                debugger;
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+    $("#save").on("click", function (e) {
+        debugger;
+            $('#CloseCaseFormId').validate();
+
+            if ($("#CloseCaseFormId").valid()) {
+
+
+
+            $("#save").attr("disabled", "disabled");
+
+
+
+                $("#CloseCaseFormId").submit();
+        }
+        });
+
+    
+
+
+
+
+
+
+
+</script>
+
+

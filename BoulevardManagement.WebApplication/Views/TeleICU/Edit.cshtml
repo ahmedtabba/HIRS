@@ -1,0 +1,1138 @@
+﻿
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using BoulevardManagement.DTO.Utilities;
+@model TeleICUDTO
+<style>
+    .recbutton {
+        width: 35px;
+        height: 35px;
+        //background-color: red;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+    .recbutton-sm {
+        width: 20px;
+        height: 20px;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+
+    .notRec {
+        // background-color: darkred;
+    }
+
+    .Rec {
+        animation-name: pulse;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    .recordsection {
+        list-style-type: none;
+        text-align: left;
+        padding: 0px;
+        margin-top: 10px;
+    }
+
+        .recordsection li audio {
+            width: 100%;
+            height: 40px;
+        }
+
+    .recycler {
+        color: red;
+    }
+</style>
+@if (Model.Status == CaseStatus.Closed)
+{
+    <style>
+        .ChatReplySection, .ChatSendSection {
+            display: none !important;
+        }
+    </style>
+}
+<div id="sticky-menu" class="" style="">
+</div>
+
+<!--begin::Container-->
+<div class="container">
+    <div class="card-toolbar" style="display:flex; flex-direction:row-reverse; margin-bottom:20px;">
+        @if (User.IsInRole(RoleConsistent.TeleICU.EditSettings))
+        {
+            <a href="javascript:void(0);" onclick="openUpdateICUModal()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-cog" style="margin:0; padding:0;"></i>
+            </a>
+        }
+
+        <a href="javascript:void(0);" onclick="openNewZoomModal()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+            <i class="fas fa-video" style="margin:0; padding:0;"></i>
+        </a>
+        @if (Model.Status == CaseStatus.Open && User.IsInRole(RoleConsistent.TeleICU.Close))
+        {
+            <button id="close-case-btn" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-lock" style="margin:0; padding:0;"></i> @CommonResource.Close
+            </button>
+        }
+        @if (Model.Status == CaseStatus.Closed && User.IsInRole(RoleConsistent.TeleICU.ReOpen))
+        {
+            <button id="reopen-case-btn" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-list" style="margin:0; padding:0;"></i> @CommonResource.ShowClosures
+            </button>
+        }
+        <a href="javascript:void(0)" onclick="backBtnClick()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+            <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+        </a>
+
+    </div>
+    <!--Patient Info Start-->
+    @{Html.RenderAction("RenderPatientInfoPartial", "Patient", new { patientId = (string)ViewBag.PatientId }); }
+    <!--Patient Info End-->
+    <div id="grid-section">
+
+
+
+    </div>
+    <div class="card card-custom" id="main-content">
+
+
+    </div>
+</div>
+<!--end::Container-->
+@Html.Partial("Modals/_AuduioModal")
+<div style="max-width: 28em;">
+    <select id="encodingTypeSelect" style="display:none">
+        <option value="mp3">MP3 (MPEG-1 Audio Layer III) (.mp3)</option>
+        <option value="wav">Waveform Audio (.wav)</option>
+        <option value="ogg">Ogg Vorbis (.ogg)</option>
+    </select>
+    <div id="controls">
+
+
+    </div>
+    <div id="formats" style="display:none"></div>
+    <pre id="log" style="display:none"></pre>
+
+    @Html.Partial("_UpdateICUModal", Model)
+    @Html.Partial("_AddZoomMeetingModal")
+</div>
+<script>
+    var deletedTelICULabUnit;
+    var deletedTelICUConsultationForm;
+
+    $(function () {
+        if ('@User.IsInRole(RoleConsistent.TelIcuClinicalStory.ViewClinicalStory)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.ClinicalStory))'=='True') {
+            $('#main-content').load('@Url.Action("GetClinicalStory", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () { });
+        }
+        else
+            if ('@User.IsInRole(RoleConsistent.TelIcuMedicationDailyScheduleTable.ViewMedicationDailyScheduleTable)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.MedicationDailyScheduleTable))'=='True') {
+                $('#main-content').load('@Url.Action("GetTelICUMedicationScheduleTable", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () { });
+            }
+            else
+                if ('@User.IsInRole(RoleConsistent.TelIcuLabUnit.ViewLabUnit)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.LabUnit))'=='True') {
+            $('#main-content').load('@Url.Action("GetLabUnit", "TeleICU", new { labUnitId = "", ICUId = (string)ViewBag.TeleICUId })', function () { });
+                    $('#grid-section').load('@Url.Action("GetLabUnitGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                        $('#grid-section').load('@Url.Action("GetLabUnitGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                            //refreshLabUnitGrid();
+                        });
+                    });
+        } else if ('@User.IsInRole(RoleConsistent.TelIcuInternalConsultationForm.ViewInternalConsultationForm)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.InternalConsultationForm))'=='True') {
+          $('#main-content').load('@Url.Action("GetInternalConsultationForm", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () { });
+
+                }
+                     else if ('@User.IsInRole(RoleConsistent.TelIcuConsultationForm.ViewConsultationForm)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.ConsultationForm))'=='True') {
+                    $('#main-content').load('@Url.Action("GetConsultationForm", "TeleICU", new { ConsultationFormId = "", ICUId = (string)ViewBag.TeleICUId })', function () { });
+
+    $('#grid-section').load('@Url.Action("GetConsultationFormGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                        $('#grid-section').load('@Url.Action("GetConsultationFormGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                            //refreshLabUnitGrid();
+                        });
+                    });
+        }
+                else if ('@User.IsInRole(RoleConsistent.TelIcuPatientExitStatusReport.ViewPatientExitStatusReport)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.PatientExitStatusReport))'=='True') {
+                $('#main-content').load('@Url.Action("GetExit", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () { });
+
+        } else if ('@User.IsInRole(RoleConsistent.TeleICU.ViewChat)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.Chat))'=='True') {
+  $("#main-content").load('@Url.Action("LoadStickyNote", "StickyNote")' + "?objectType="
+                    + '@typeof(BoulevardManagement.Model.Entities.TeleICU).Name'
+                    + "&objectId=" + '@((string)ViewBag.TeleICUId)'+ "&objectTag="+ '@((string)ViewBag.TeleICUId)'+ "&Channel=" + '@((int)ChannelEnum.General)', function (response, status, xhr) {              //HERE
+                    StickyNotesload('@typeof(BoulevardManagement.Model.Entities.TeleICU).Name','@((string)ViewBag.TeleICUId)','@((string)ViewBag.TeleICUId)',@((int)ChannelEnum.General));
+                });
+        }
+
+
+
+        $("#sticky-menu").addClass("hidden");
+        $("#sticky-menu").addClass("sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4");
+        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+            $("#sticky-menu").removeClass("hidden");
+
+
+            if ('@User.IsInRole(RoleConsistent.TelIcuClinicalStory.ViewClinicalStory)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.ClinicalStory))' == 'True') {
+                $("#ClinicalStoryBtn").addClass("active");
+            }
+            else if ('@User.IsInRole(RoleConsistent.TelIcuMedicationDailyScheduleTable.ViewMedicationDailyScheduleTable)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.MedicationDailyScheduleTable))' == 'True') {
+                $("#MedicationDailyScheduleTableBtn").addClass("active");
+            }
+            else if ('@User.IsInRole(RoleConsistent.TelIcuLabUnit.ViewLabUnit)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.LabUnit))' == 'True') {
+                $("#LabUnitBtn").addClass("active");
+            } else if ('@User.IsInRole(RoleConsistent.TelIcuInternalConsultationForm.ViewInternalConsultationForm)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.InternalConsultationForm))' == 'True') {
+                $("#InternalConsultationFormBtn").addClass("active");
+            }
+            else if ('@User.IsInRole(RoleConsistent.TelIcuConsultationForm.ViewConsultationForm)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.ConsultationForm))' == 'True') {
+                $("#ConsultationFormBtn").addClass("active");
+            }
+            else if ('@User.IsInRole(RoleConsistent.TelIcuPatientExitStatusReport.ViewPatientExitStatusReport)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.PatientExitStatusReport))' == 'True') {
+                $("#ExitBtn").addClass("active");
+
+            }
+            else if ('@User.IsInRole(RoleConsistent.TeleICU.ViewChat)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleICU.Chat))' == 'True') {
+                $("#StickyNoteBtn").addClass("active");
+            }
+
+            onmenueload();
+
+        });
+
+        $("#saveBtn").click(function () {
+            $("#TeleICUFormId").submit();
+        });
+    });
+
+    function ActiveButton(btnId) {
+        $(".sticky-menu-button").removeClass("active");
+        if (btnId) {
+            $(`#${btnId}`).addClass("active");
+        }
+    }
+
+    function onSuccessUploadPledgeDocumentFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNewPledgeDocumentAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PledgeDocumentFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PledgeDocumentFilePath').val(UploadedFilePath);
+    }
+
+    function onSuccessUploadPatientIDCardFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNewPatientIDCardAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PatientIDCardFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PatientIDCardFilePath').val(UploadedFilePath);
+    }
+
+    function onSuccessUploadReportOfThePhysicalExaminationFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNewReportOfThePhysicalExaminationAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ReportOfThePhysicalExaminationFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ReportOfThePhysicalExaminationFilePath').val(UploadedFilePath);
+    }
+
+    function onmenueload() {
+
+        $("#ClinicalStoryBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("ClinicalStoryBtn");
+            $("#section").val('dd');
+            $('#main-content').load('@Url.Action("GetClinicalStory", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+            });
+
+        $("#MedicationDailyScheduleTableBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("MedicationDailyScheduleTableBtn");
+            $('#main-content').load('@Url.Action("GetTelICUMedicationScheduleTable", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+
+            });
+        $("#LabUnitBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("LabUnitBtn");
+
+            $('#main-content').load('@Url.Action("GetLabUnit", "TeleICU", new { labUnitId = "", ICUId = (string)ViewBag.TeleICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                }
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+
+            $('#grid-section').load('@Url.Action("GetLabUnitGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetLabUnitGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                    // refreshLabUnitGrid();
+                });
+            });
+         });
+        $("#InternalConsultationFormBtn").on("click", function () {
+            $('#grid-section').hide();
+             ActiveButton("InternalConsultationFormBtn");
+            $('#main-content').load('@Url.Action("GetInternalConsultationForm", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+
+        });
+              $("#ConsultationFormBtn").on("click", function () {
+            $('#grid-section').show();
+             ActiveButton("ConsultationFormBtn");
+                  $('#main-content').load('@Url.Action("GetConsultationForm", "TeleICU", new { ConsultationFormId = "", ICUId = (string)ViewBag.TeleICUId })', function (response, status, xhr) {
+                      debugger;
+                      if (xhr["status"] == 401) {
+                          window.location.href = "/Account/LogOffBySys";
+                      }
+                      $('#main-content').show();
+                      $('#grid-section').show();
+                  });
+                  $('#grid-section').load('@Url.Action("GetConsultationFormGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                $('#grid-section').load('@Url.Action("GetConsultationFormGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                    // refreshLabUnitGrid();
+                });
+
+                  });
+              });
+        $("#ExitBtn").on("click", function () {
+            $('#grid-section').hide();
+             ActiveButton("ExitBtn");
+            $('#main-content').load('@Url.Action("GetExit", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+         });
+        $("#StickyNoteBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("StickyNoteBtn");
+            $("#main-content").load('@Url.Action("LoadStickyNote", "StickyNote")' + "?objectType="
+                    + '@typeof(BoulevardManagement.Model.Entities.TeleICU).Name'
+                + "&objectId=" + '@((string)ViewBag.TeleICUId)' + "&objectTag=" + '@((string)ViewBag.TeleICUId)' + "&Channel=" + '@((int)ChannelEnum.General)', function (response, status, xhr) {
+                    debugger;
+                    if (xhr["status"] == 401) {
+                        window.location.href = "/Account/LogOffBySys";
+                    }             //HERE
+                    StickyNotesload('@typeof(BoulevardManagement.Model.Entities.TeleICU).Name','@((string)ViewBag.TeleICUId)','@((string)ViewBag.TeleICUId)',@((int)ChannelEnum.General));
+                });
+
+        });
+
+    }
+
+
+    function datePicker(args) {
+        args.element.kendoDateTimePicker({
+            format: "dd/MM/yyyy hh:mm tt"
+        });
+    }
+
+
+    function myOnReqEnd(e) {
+        debugger;
+        if (e.response) {
+            onRequestEnd(e);
+        }
+    }
+
+    function DeleteRowTelICUMedicationSchedulerGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelICUMedicationSchedulerGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleICU = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+
+    function EditRowTelICUMedicationSchedulerGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#AddMedicationSchedulerModal').modal('show');
+        $('#midecation-scheduler-content').load(`/TeleICU/GetMedicationSchedulerForm?MedicationSchedulerId=${data.EncrptedId}&ICUId=${data.EncrptedTeleICUId}`, function () {
+
+    });
+    }
+
+    $("#addModal").on("click", function () {
+        $('#myModal').modal('show')
+    });
+
+
+    function DeleteRowTelICUDiabetesControlGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelICUDiabetesControlGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleICU = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+
+    function EditRowTelICUDiabetesControlGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#AddDiabetesControlModal').modal('show');
+        $('#diabetes-control-content').load(`/TeleICU/GetDiabetesControlForm?DiabetesControlId=${data.EncrptedId}&ICUId=${data.EncrptedTeleICUId}`, function () {
+
+        });
+    }
+
+
+
+    function DeleteRowTelICUVitalSignGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelICUVitalSignGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleICU = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+
+    function EditRowTelICUVitalSignGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#AddVitalSignModal').modal('show');
+        $('#vital-sign-content').load(`/TeleICU/GetVitalSignForm?VitalSignId=${data.EncrptedId}&ICUId=${data.EncrptedTeleICUId}`, function () {
+
+        });
+    }
+
+
+
+
+    function DeleteRowTelICUPumpGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelICUPumpGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleICU = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+
+    function EditRowTelICUPumpGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#AddPumpModal').modal('show');
+        $('#pump-content').load(`/TeleICU/GetPumpForm?PumpId=${data.EncrptedId}&ICUId=${data.EncrptedTeleICUId}`, function () {
+
+        });
+    }
+
+
+    function openUpdateICUModal() {
+        $("#update-ICU-modal").modal("show");
+    }
+
+     function openNewZoomModal() {
+         $("#caseId").val('@(Model.EncrptedId)');
+         $("#caseType").val('ICU');
+        $("#create-zoom-meet-modal").modal("show");
+    }
+    function refreshLabUnitGrid() {
+        $('#TelIcuLabUnitGrid').data('kendoGrid').dataSource.read();
+        $('#TelIcuLabUnitGrid').data('kendoGrid').refresh();
+    }
+    function refreshConsultationFormGrid() {
+        $('#TelIcuConsultationFormGrid').data('kendoGrid').dataSource.read();
+        $('#TelIcuConsultationFormGrid').data('kendoGrid').refresh();
+    }
+    function GetTelIcuId() {
+
+        return { telIcuId:@(Model.Id)};
+    }
+
+    function ShowLabUnit(id) {
+        $('#main-content').load(`/TeleICU/GetLabUnit?labUnitId=${id}&ICUId=@((string)ViewBag.TeleICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+    function ShowConsultationForm(id) {
+        $('#main-content').load(`/TeleICU/GetConsultationForm?ConsultationFormId=${id}&ICUId=@((string)ViewBag.TeleICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+    function DeleteRowTelIcuLabUnitGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelIcuLabUnitGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTelICULabUnit = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+    function DeleteRowTelIcuConsultationFormGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelIcuConsultationFormGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTelICUConsultationForm = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptionsLabUnitGrid(id, ob) {
+
+
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TelIcuLabUnit.EditLabUnit)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelIcuLabUnitGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TelIcuLabUnitDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+
+           }
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if ('@this.User.IsInRole(RoleConsistent.TelIcuLabUnit.ViewLabUnit)'=='True') {
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowLabUnit("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+        }
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+    function templateOptionsConsultationFormGrid(id, ob) {
+
+
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TelIcuConsultationForm.EditConsultationForm)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelIcuConsultationFormGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TelIcuConsultationFormDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+
+           }
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if ('@this.User.IsInRole(RoleConsistent.TelIcuConsultationForm.ViewConsultationForm)'=='True') {
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowConsultationForm("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+        }
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+    function backBtnClick() {
+        debugger;
+        if (window.history.length > 1) {
+            window.history.go(-1);
+            return false;
+
+        } else {
+            window.location.href = "/TeleICU";
+            return false;
+        }
+    }
+    function onSuccessUploadECGFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasECGAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ECGFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ECGFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadCxrFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCxrAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CxrFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CxrFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadBloodGasesFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasBloodGasesAttachment').val(true);
+
+        if (UploadedFile)
+            $('#BloodGasesFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#BloodGasesFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadChemistryFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasChemistryAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ChemistryFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ChemistryFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadCBCFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCBCAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CBCFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CBCFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadElectrolytesFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasElectrolytesAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ElectrolytesFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ElectrolytesFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadCoagulationTestFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCoagulationTestAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CoagulationTestFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CoagulationTestFilePath').val(UploadedFilePath);
+
+    }
+
+    function onSuccessUploadSerologyFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasSerologyAttachment').val(true);
+
+        if (UploadedFile)
+            $('#SerologyFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#SerologyFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadUrineTestFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasUrineTestAttachment').val(true);
+
+        if (UploadedFile)
+            $('#UrineTestFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#UrineTestFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadNotesFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNotesAttachment').val(true);
+
+        if (UploadedFile)
+            $('#NotesFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#NotesFilePath').val(UploadedFilePath);
+
+    }
+    function onSuccessUploadLabUnitGeneralFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasLabUnitGeneralAttachment').val(true);
+
+        if (UploadedFile)
+            $('#LabUnitGeneralFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#LabUnitGeneralFilePath').val(UploadedFilePath);
+
+    }
+</script>
+
+
+<script>
+    function onSuccessUploadCaseClosureFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCaseClosureAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CaseClosureFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CaseClosureFilePath').val(UploadedFilePath);
+
+    }
+
+    function DeleteRowCaseClosureGrid(e) {
+        debugger;
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#CaseClosureGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleMentalHealth = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+     function templateOptionsCaseClosureGrid(id, ob) {
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowCaseClosure("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+    function ShowCaseClosure(id) {
+        $('#main-content').load(`/TeleICU/GetCaseClosureForm?closureId=${id}&ICUId=@((string)ViewBag.TeleICUId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+
+     $("#close-case-btn").on("click", function () {
+
+
+              $('#main-content').hide();
+            $('#grid-section').hide();
+            ActiveButton("");
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetAddCaseClosureForm", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                  $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+     });
+
+
+
+
+      $("#reopen-case-btn").on("click", function () {
+
+
+              $('#main-content').hide();
+            $('#grid-section').hide();
+            ActiveButton("");
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetCaseClosureForm", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                  $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleICU", new { ICUId = (string)ViewBag.TeleICUId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+      });
+
+      function GetCaseId() {
+
+        return { caseId:@(Model.Id)};
+    }
+
+
+    function templateOptions(id, ob) {
+
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TeleICU.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelICUMedicationSchedulerGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TeleICUDestroyMedicationScheduler'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+               EditLi = "<li class='navi-item'>" + "<a onClick=" + "\"EditRowTelICUMedicationSchedulerGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-MedicationSchedulerEdit'><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+           }
+           @*if ('@this.User.IsInRole(RoleConsistent.TeleICU.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "TeleICU", action = "Edit" })' + "?ICUId=" + id;
+          }*@
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditLi != "") {
+            result = result + EditLi;
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+        function diabetesTemplateOptions(id, ob) {
+
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TeleICU.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelICUDiabetesControlGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TeleICUDestroyDiabetesControl'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+               EditLi = "<li class='navi-item'>" + "<a onClick=" + "\"EditRowTelICUDiabetesControlGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-DiabetesControlEdit'><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+           }
+           @*if ('@this.User.IsInRole(RoleConsistent.TeleICU.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "TeleICU", action = "Edit" })' + "?ICUId=" + id;
+          }*@
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditLi != "") {
+            result = result + EditLi;
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+    function vitalTemplateOptions(id, ob) {
+
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TeleICU.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelICUVitalSignGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TeleICUDestroyVitalSign'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+               EditLi = "<li class='navi-item'>" + "<a onClick=" + "\"EditRowTelICUVitalSignGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-VitalSignEdit'><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+           }
+           @*if ('@this.User.IsInRole(RoleConsistent.TeleICU.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "TeleICU", action = "Edit" })' + "?ICUId=" + id;
+          }*@
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditLi != "") {
+            result = result + EditLi;
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+
+
+
+    function pumpTemplateOptions(id, ob) {
+
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TeleICU.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelICUPumpGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TeleICUDestroyPump'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+               EditLi = "<li class='navi-item'>" + "<a onClick=" + "\"EditRowTelICUPumpGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-PumpEdit'><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+           }
+           @*if ('@this.User.IsInRole(RoleConsistent.TeleICU.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "TeleICU", action = "Edit" })' + "?ICUId=" + id;
+          }*@
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditLi != "") {
+            result = result + EditLi;
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+</script>
+
+

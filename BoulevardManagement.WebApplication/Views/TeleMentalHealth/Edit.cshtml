@@ -1,0 +1,956 @@
+﻿
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using BoulevardManagement.DTO.Utilities;
+@model TeleMentalHealthDTO
+<style>
+    .recbutton {
+        width: 35px;
+        height: 35px;
+        //background-color: red;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+    .recbutton-sm {
+        width: 20px;
+        height: 20px;
+        border: 0;
+        border-radius: 35px;
+        background-image: url('/assets/media//icons/record-btn.png');
+        background-size: contain;
+        outline: none;
+    }
+
+
+    .notRec {
+        // background-color: darkred;
+    }
+
+    .Rec {
+        animation-name: pulse;
+        animation-duration: 1.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+
+    .recordsection {
+        list-style-type: none;
+        text-align: left;
+        padding: 0px;
+        margin-top: 10px;
+    }
+
+        .recordsection li audio {
+            width: 100%;
+            height: 40px;
+        }
+
+    .recycler {
+        color: red;
+    }
+</style>
+@if (Model.Status == CaseStatus.Closed)
+{
+    <style>
+        .ChatReplySection, .ChatSendSection {
+            display: none !important;
+        }
+    </style>
+}
+<div id="sticky-menu" class="" style="">
+</div>
+
+<!--begin::Container-->
+<div class="container">
+    <div class="card-toolbar" style="display:flex; flex-direction:row-reverse; margin-bottom:20px;">
+        @if (User.IsInRole(RoleConsistent.TeleMentalHealth.EditSettings))
+        {
+            <a href="javascript:void(0);" onclick="openUpdateMentalHealthModal()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-cog" style="margin:0; padding:0;"></i>
+            </a>
+        }
+
+        <a href="javascript:void(0);" onclick="openNewZoomModal()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+            <i class="fas fa-video" style="margin:0; padding:0;"></i>
+        </a>
+        @if (Model.Status == CaseStatus.Open && User.IsInRole(RoleConsistent.TeleMentalHealth.Close))
+        {
+            <button id="close-case-btn" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-lock" style="margin:0; padding:0;"></i> @CommonResource.Close
+            </button>
+        }
+        @if (Model.Status == CaseStatus.Closed && User.IsInRole(RoleConsistent.TeleMentalHealth.ReOpen))
+        {
+            <button id="reopen-case-btn" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+                <i class="fas fa-list" style="margin:0; padding:0;"></i> @CommonResource.ShowClosures
+            </button>
+        }
+        <a href="javascript:void(0)" onclick="backBtnClick()" class="btn btn-light-primary font-weight-bolder mr-2 pull-right">
+            <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+        </a>
+
+    </div>
+    <!--Patient Info Start-->
+    @{Html.RenderAction("RenderPatientInfoPartial", "Patient", new { patientId = (string)ViewBag.PatientId }); }
+    <!--Patient Info End-->
+    <!--Begin Grid Section-->
+    <div id="grid-section">
+
+
+
+    </div>
+    <!--End Grid Section-->
+
+    <div class="card card-custom" id="main-content">
+
+
+    </div>
+</div>
+<!--end::Container-->
+@Html.Partial("Modals/_AuduioModal")
+<div style="max-width: 28em;">
+    <select id="encodingTypeSelect" style="display:none">
+        <option value="mp3">MP3 (MPEG-1 Audio Layer III) (.mp3)</option>
+        <option value="wav">Waveform Audio (.wav)</option>
+        <option value="ogg">Ogg Vorbis (.ogg)</option>
+    </select>
+    <div id="controls">
+
+
+    </div>
+    <div id="formats" style="display:none"></div>
+    <pre id="log" style="display:none"></pre>
+
+
+</div>
+
+@Html.Partial("_UpdateMentalHealthModal", Model)
+@Html.Partial("_AddZoomMeetingModal")
+
+
+<script>
+    $(function () {
+        if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewClinicalStory)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.ClinicalStory))'=='True') {
+            $('#main-content').load('@Url.Action("GetClinicalStory", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () { });
+        } else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewWrittenPledge)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.WrittenPledge))'=='True') {
+            $('#main-content').load('@Url.Action("GetWrittenPledge", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () { });
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewPhysicalExaminationReport)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.PhysicalExaminationReport))'=='True') {
+            $('#main-content').load('@Url.Action("GetPhysicalExaminationReport", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () { });
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewTherapeuticPlan)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.TherapeuticPlan))'=='True') {
+            $('#main-content').load('@Url.Action("GetTelMHTherapeuticPlan", "TeleMentalHealth", new { planId = "", mentalHealthId = (string)ViewBag.TeleMHId })', function () { });
+            $('#grid-section').load('@Url.Action("GetTelMHTherapeuticPlanGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                $('#grid-section').load('@Url.Action("GetTelMHTherapeuticPlanGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                });
+            });
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewMonitoringTheVitalSigns)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.VitalSign))'=='True') {
+            $('#main-content').load('@Url.Action("GetTMonitoringTheVitalSigns", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () { });
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewChat)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.Chat))'=='True') {
+            $("#main-content").load('@Url.Action("LoadStickyNote", "StickyNote")' + "?objectType="
+                + '@typeof(BoulevardManagement.Model.Entities.TeleMentalHealth).Name'
+                + "&objectId=" + '@((string)ViewBag.TeleMHId)' + "&objectTag=" + '@((string)ViewBag.TeleMHId)' + "&Channel=" + '@((int)ChannelEnum.General)', function (response, status, xhr) {              //HERE
+                    StickyNotesload('@typeof(BoulevardManagement.Model.Entities.TeleMentalHealth).Name', '@((string)ViewBag.TeleMHId)', '@((string)ViewBag.TeleMHId)',@((int)ChannelEnum.General));
+                });
+        }
+
+        $("#sticky-menu").addClass("hidden");
+        $("#sticky-menu").addClass("sticky-toolbar nav flex-column pl-2 pr-2 pt-3 pb-3 mt-4");
+        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+            $("#sticky-menu").removeClass("hidden");
+
+             if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewClinicalStory)' == "True"&& '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.ClinicalStory))'=='True') {
+              $("#ClinicalStoryBtn").addClass("active");
+        } else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewWrittenPledge)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.WrittenPledge))'=='True') {
+                 $("#WrittenPledgeBtn").addClass("active");
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewPhysicalExaminationReport)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.PhysicalExaminationReport))'=='True') {
+                 $("#PhysicalExaminationReportBtn").addClass("active");
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewTherapeuticPlan)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.TherapeuticPlan))'=='True') {
+                 $("#TherapeuticPlanBtn").addClass("active");
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewMonitoringTheVitalSigns)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.VitalSign))'=='True') {
+                 $("#MonitoringTheVitalSignsBtn").addClass("active");
+        }
+        else if ('@User.IsInRole(RoleConsistent.TeleMentalHealth.ViewChat)' == "True" && '@(TempData["Section"]==null||((string)TempData["Section"]== Consistents.TeleMentalHealth.Chat))'=='True') {
+                 $("#StickyNoteBtn").addClass("active");
+        }
+
+
+
+            onmenueload();
+
+        });
+
+        $("#saveBtn").click(function () {
+            $("#TeleMentalHealthFormId").submit();
+        });
+    });
+
+    function ActiveButton(btnId) {
+        $(".sticky-menu-button").removeClass("active");
+        if (btnId) {
+            $(`#${btnId}`).addClass("active");
+        }
+    }
+
+    function onSuccessUploadPledgeDocumentFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNewPledgeDocumentAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PledgeDocumentFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PledgeDocumentFilePath').val(UploadedFilePath);
+
+        hasPledgeDocumentAttachment = true;
+        SetSaveBtnState();
+    }
+
+    function onSuccessUploadPatientIDCardFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNewPatientIDCardAttachment').val(true);
+
+        if (UploadedFile)
+            $('#PatientIDCardFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#PatientIDCardFilePath').val(UploadedFilePath);
+
+        hasPatientIDCardAttachment = true;
+        SetSaveBtnState();
+    }
+
+    function onSuccessUploadReportOfThePhysicalExaminationFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNewReportOfThePhysicalExaminationAttachment').val(true);
+
+        if (UploadedFile)
+            $('#ReportOfThePhysicalExaminationFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#ReportOfThePhysicalExaminationFilePath').val(UploadedFilePath);
+    }
+
+    function onmenueload() {
+
+        $("#ClinicalStoryBtn").on("click", function () {
+            $('#grid-section').hide();
+                ActiveButton("ClinicalStoryBtn");
+            $('#main-content').load('@Url.Action("GetClinicalStory", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+            });
+
+        $("#WrittenPledgeBtn").on("click", function () {
+            $('#grid-section').hide();
+                ActiveButton("WrittenPledgeBtn");
+            $('#main-content').load('@Url.Action("GetWrittenPledge", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+
+            });
+
+        $("#PhysicalExaminationReportBtn").on("click", function () {
+            $('#grid-section').hide();
+                ActiveButton("PhysicalExaminationReportBtn");
+            $('#main-content').load('@Url.Action("GetPhysicalExaminationReport", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+
+            });
+
+        $("#TherapeuticPlanBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("TherapeuticPlanBtn");
+            $('#main-content').load('@Url.Action("GetTelMHTherapeuticPlan", "TeleMentalHealth", new { planId = "", mentalHealthId = (string)ViewBag.TeleMHId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                }
+                $('#grid-section').show();
+            });
+            $('#grid-section').load('@Url.Action("GetTelMHTherapeuticPlanGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                $('#grid-section').load('@Url.Action("GetTelMHTherapeuticPlanGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                });
+            });
+        });
+        $("#MonitoringTheVitalSignsBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("MonitoringTheVitalSignsBtn");
+            $('#main-content').load('@Url.Action("GetTMonitoringTheVitalSigns", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function (response, status, xhr) {
+                debugger;
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Account/LogOffBySys";
+                } });
+
+        });
+
+        $("#StickyNoteBtn").on("click", function () {
+            $('#grid-section').hide();
+            ActiveButton("StickyNoteBtn");
+            $("#main-content").load('@Url.Action("LoadStickyNote", "StickyNote")' + "?objectType="
+                    + '@typeof(BoulevardManagement.Model.Entities.TeleMentalHealth).Name'
+                + "&objectId=" + '@((string)ViewBag.TeleMHId)' + "&objectTag=" + '@((string)ViewBag.TeleMHId)' + "&Channel=" + '@((int)ChannelEnum.General)', function (response, status, xhr) {
+                    debugger;
+                    if (xhr["status"] == 401) {
+                        window.location.href = "/Account/LogOffBySys";
+                    }              //HERE
+                    StickyNotesload('@typeof(BoulevardManagement.Model.Entities.TeleMentalHealth).Name','@((string)ViewBag.TeleMHId)','@((string)ViewBag.TeleMHId)',@((int)ChannelEnum.General));
+                });
+            @*$('#main-content').load('@Url.Action("GetTMonitoringTheVitalSigns", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () { });*@
+
+            debugger;
+
+        });
+
+
+
+    }
+
+    function DeleteRowTelMHVitalSignGrid(e) {
+        debugger;
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelMHVitalSignGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleMentalHealth = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function datePicker(args) {
+        args.element.kendoDateTimePicker({
+            format: "dd/MM/yyyy hh:mm tt"
+        });
+    }
+
+
+    function myOnReqEnd(e) {
+        if (e.response) {
+            onRequestEnd(e,'');
+        }
+    }
+
+
+
+
+    function EditRowTelMHVitalSignGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#AddVitalSignModal').modal('show');
+        $('#vital-sign-content').load(`/TeleMentalHealth/GetVitalSignForm?vitalSignId=${data.EncrptedId}&mentalHealthId=${data.EncrptedTeleMentalHealthId}`, function () {
+
+    });
+    }
+
+    $("#addModal").on("click", function () {
+        $('#myModal').modal('show')
+    });
+
+
+
+    function DiagnosisGridIndex(dataItem) {
+        var data = $("#Diagnosis").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onGridChanges(e) {
+
+        var grid = $("#Diagnosis").data("kendoGrid");
+
+
+
+
+        var item = e.items[0];
+
+        if (item !== undefined) {
+            selectedDiagnosisCategoryId = item.TelMHDiagnosisCategoryId;
+        }
+
+        /// needed to bind
+
+        if (e.action === "itemchange" && e.field === "TelMHDiagnosisCategoryId") {
+            var itemName = $("#TelMHDiagnosisCategoryId").data("kendoDropDownList").text();
+            item.set("TelMHDiagnosisCategoryName", itemName);
+            item.set("TelMHDiagnosisCategoryArabicName", itemName);
+        }
+
+        if (e.action === "itemchange" && e.field === "TelMHDiagnosisSubCategoryId") {
+            var itemName = $("#TelMHDiagnosisSubCategoryName").data("kendoDropDownList").text();
+            item.set("TelMHDiagnosisSubCategoryName", itemName);
+        }
+
+
+
+    }
+
+    function onDeleteItem(e) {
+
+    }
+
+    var currentDiagnosisGridRowUid;
+    var IDArray = [];
+    function onEvent(e) {
+        debugger;
+        IDArray = [];
+        currentDiagnosisGridRowUid = e.model.uid;
+
+        var multiselect = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect");
+
+
+
+        $(e.model.TelMHMostLikelySubDiagnosesIds).each(function (index) {
+            debugger;
+            var ID = e.model.TelMHMostLikelySubDiagnosesIds[index];
+            IDArray.push(ID);
+        });
+        debugger;
+        if (multiselect!=null) {
+            multiselect.value(IDArray);
+        }
+    }
+
+
+    function onMostLikelySubDiagnosesEvent(e) {
+        debugger;
+        IDArray = [];
+        currentDiagnosisGridRowUid = e.model.uid;
+
+        var multiselect = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect");
+
+
+
+        $(e.model.TelMHMostLikelySubDiagnosesIds).each(function (index) {
+            debugger;
+            var ID = e.model.TelMHMostLikelySubDiagnosesIds[index];
+            IDArray.push(ID);
+        });
+        debugger;
+        multiselect.value(IDArray);
+    }
+
+
+    function TelMHMostLikelySubDiagnosesMSChange() {
+        debugger;
+             if (currentDiagnosisGridRowUid) {
+                 var index = getRowIndexMostLikelyDiagnosis(currentDiagnosisGridRowUid);
+                 var grid = $('#MostLikelyDiagnosis').data('kendoGrid');
+            //var grid = $('#CustomerPriceException').data('kendoGrid');
+            var items = grid.dataSource._data;
+                 items[index - 1].TelMHMostLikelySubDiagnosesIds = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect").value();
+               //  items[index - 1].TelMHMostLikelySubDiagnosesNames = $("[name='TelMHMostLikelySubDiagnosesIds']").data("kendoMultiSelect").text();
+
+          //  selectedDiagnosisCategoryId = $("[name='TelMHDiagnosisCategoryName']").data("kendoDropDownList").value();
+        }
+    }
+
+    //function DiagnosisCategoryDDLChange(e) {
+    //    if (currentDiagnosisGridRowUid) {
+    //        var index = getRowIndex(currentDiagnosisGridRowUid);
+    //        var grid = $('#Diagnosis').data('kendoGrid');
+    //        //var grid = $('#CustomerPriceException').data('kendoGrid');
+    //        var items = grid.dataSource._data;
+    //        items[index - 1].TelMHDiagnosisCategoryId = $("[name='TelMHDiagnosisCategoryName']").data("kendoDropDownList").value();
+    //        items[index - 1].TelMHDiagnosisCategoryName = $("[name='TelMHDiagnosisCategoryName']").data("kendoDropDownList").text();
+
+    //        selectedDiagnosisCategoryId = $("[name='TelMHDiagnosisCategoryName']").data("kendoDropDownList").value();
+    //    }
+    //}
+
+    //function DiagnosisCategoryDDLChange_ar(e) {
+    //    if (currentDiagnosisGridRowUid) {
+    //        var index = getRowIndex(currentDiagnosisGridRowUid);
+    //        var grid = $('#Diagnosis').data('kendoGrid');
+    //        //var grid = $('#CustomerPriceException').data('kendoGrid');
+    //        var items = grid.dataSource._data;
+    //        items[index - 1].TelMHDiagnosisCategoryId = $("[name='TelMHDiagnosisCategoryArabicName']").data("kendoDropDownList").value();
+    //        items[index - 1].TelMHDiagnosisCategoryArabicName = $("[name='TelMHDiagnosisCategoryArabicName']").data("kendoDropDownList").text();
+    //        selectedDiagnosisCategoryId = $("[name='TelMHDiagnosisCategoryArabicName']").data("kendoDropDownList").value();
+
+
+    //    }
+    //}
+
+    function DiagnosisSubCategoryDDLChange(e) {
+        if (currentDiagnosisGridRowUid) {
+            var index = getRowIndex(currentDiagnosisGridRowUid);
+            var grid = $('#Diagnosis').data('kendoGrid');
+            //var grid = $('#CustomerPriceException').data('kendoGrid');
+            var items = grid.dataSource._data;
+            items[index - 1].TelMHDiagnosisSubCategoryId = $("[name='TelMHDiagnosisSubCategoryName']").data("kendoDropDownList").value();
+            items[index - 1].TelMHDiagnosisSubCategoryName = $("[name='TelMHDiagnosisSubCategoryName']").data("kendoDropDownList").text();
+
+
+        }
+    }
+
+    function DiagnosisSubCategoryDDLChange_ar(e) {
+        if (currentDiagnosisGridRowUid) {
+            var index = getRowIndex(currentDiagnosisGridRowUid);
+            var grid = $('#Diagnosis').data('kendoGrid');
+            //var grid = $('#CustomerPriceException').data('kendoGrid');
+            var items = grid.dataSource._data;
+            items[index - 1].TelMHDiagnosisSubCategoryId = $("[name='TelMHDiagnosisSubCategoryArabicName']").data("kendoDropDownList").value();
+            items[index - 1].TelMHDiagnosisSubCategoryArabicName = $("[name='TelMHDiagnosisSubCategoryArabicName']").data("kendoDropDownList").text();
+
+
+        }
+    }
+
+
+    function getRowIndex(uid) {
+        var grid = $('#Diagnosis').data('kendoGrid');
+        var items = grid.dataSource.view();
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].uid == uid) {
+
+                return i + 1;
+                break;
+            }
+        }
+
+    }
+
+    function getRowIndexMostLikelyDiagnosis(uid) {
+        var grid = $('#MostLikelyDiagnosis').data('kendoGrid');
+        var items = grid.dataSource.view();
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].uid == uid) {
+
+                return i + 1;
+                break;
+            }
+        }
+
+    }
+
+
+
+    function onGridSave(e) {
+        debugger;
+        e.preventDefault();
+        var grid = $('#MostLikelyDiagnosis').data('kendoGrid');
+        var Items = grid.dataSource.data();
+        var items = grid.dataSource.data();
+
+
+        var TelMHDiagnosisCategoryMLDId = $("#TelMHDiagnosisCategoryMLDId").data("kendoDropDownList").value();
+
+        for (var i = 0; i < items.length; i++) {
+            if (items[i].uid != e.model.uid && items[i].TelMHDiagnosisCategoryId == TelMHDiagnosisCategoryMLDId) {
+                onJSError('@CommonResource.CannotChooseSameDiagnosis');
+                return;
+            }
+        }
+
+        var TelMHMostLikelySubDiagnosesIds = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect").value();
+
+        if (TelMHMostLikelySubDiagnosesIds.length == 0) {
+            onJSError('@CommonResource.ChooseSubDiagnoses');
+            return;
+        }
+
+        e.model.TelMHMostLikelySubDiagnosesIds = TelMHMostLikelySubDiagnosesIds;
+        $("#MostLikelyDiagnosis").data("kendoGrid").saveChanges();
+    }
+
+
+    function GetCategoryId_ar() {
+        //var dd = $("[naModele='TelMHDiagnosisSubCategoryArabicName']").data('kendoDropDownList');
+
+        //var filterText = dd.input.text();
+
+        return { /*text: filterText,*/ diagnosisCategoryId: selectedDiagnosisCategoryId };
+    }
+
+    function GetCategoryId() {
+        //var dd = $("[name='TelMHDiagnosisSubCategoryName']").data('kendoDropDownList');
+
+        //var filterText = dd.input.text();
+
+        return {/* text: filterText, */diagnosisCategoryId: selectedDiagnosisCategoryId };
+    }
+
+
+
+    function openUpdateMentalHealthModal() {
+        $("#update-mentalhealth-modal").modal("show");
+    }
+
+
+
+
+    function openNewZoomModal() {
+        $("#caseId").val('@(Model.EncrptedId)');
+        $("#caseType").val('MH');
+        $("#create-zoom-meet-modal").modal("show");
+    }
+
+    function GetTeleMentalHealthId() {
+        debugger;
+        return { mHealthId:@(Model.Id)};
+    }
+
+       function GetCaseId() {
+
+        return { caseId:@(Model.Id)};
+    }
+
+
+    function ShowTherapeuticPlan(id) {
+        $('#main-content').load(`/TeleMentalHealth/GetTelMHTherapeuticPlan?planId=${id}&mentalHealthId=@((string)ViewBag.TeleMHId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+    function refreshTherapeuticPlanGrid() {
+        $('#TelMHTherapeuticPlanGrid').data('kendoGrid').dataSource.read();
+        $('#TelMHTherapeuticPlanGrid').data('kendoGrid').refresh();
+    }
+</script>
+
+@if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+{
+
+
+    <script>
+        var Investigation = 'استقصاء';
+    </script>
+}
+else
+{
+    <script>
+        var Investigation = 'Investigation';
+
+    </script>
+}
+
+<!--Investigation Grid Scripts-->
+<script>
+
+    var deletedTelMHTherapeuticPlan;
+    function myOnReqEndInvestigation(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = Investigation;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowTelMHTherapeuticPlanGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#TelMHTherapeuticPlanGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTelMHTherapeuticPlan = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptionsTherapeuticPlanGrid(id, ob) {
+
+
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.TeleMentalHealth.EditTherapeuticPlan)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowTelMHTherapeuticPlanGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-TelMHTherapeuticPlanDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@(CommonResource.Delete)</span></a></li>";
+           }
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if ('@this.User.IsInRole(RoleConsistent.TeleMentalHealth.ViewTherapeuticPlan)'=='True') {
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowTherapeuticPlan("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+        }
+
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+    function refresh(e) {
+        $('#TelMHTherapeuticPlanGrid').data('kendoGrid').dataSource.read();
+        $('#TelMHTherapeuticPlanGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+
+    function refreshollowUPGrid() {
+        $('#NICUConsultationFollowUpFormGrid').data('kendoGrid').dataSource.read();
+        $('#NICUConsultationFollowUpFormGrid').data('kendoGrid').refresh();
+    }
+    function backBtnClick() {
+        debugger;
+        if (window.history.length > 1) {
+            window.history.go(-1);
+            return false;
+
+        } else {
+            window.location.href = "/TeleMentalHealth";
+            return false;
+        }
+    }
+
+
+
+    function DeleteRowDiagnosisGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#Diagnosis").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            debugger;
+            deletedPatient = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+    function onEditMedication(e) {
+        e.container.find("input").bind("focus", function () {
+
+            if (this.style.display != "none") {
+                var element = this;
+                setTimeout(function () {
+                    element.select();
+                })
+            }
+        });
+    }
+    function onMedicationGridChange(e) {
+        debugger;
+        if (e.action == "itemchange" && e.field == "MedicationId") {
+            var MedicationName = $("#MedicationId").data("kendoDropDownList").text();
+            e.items[0].set("MedicationName", MedicationName);
+        }
+    }
+
+    function onSuccessUploadMHTherapeuticPlanNotesFile(e) {
+        debugger;
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasNotesAttachment').val(true);
+
+        if (UploadedFile)
+            $('#NotesFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#NotesFilePath').val(UploadedFilePath);
+
+    }
+
+
+    //var rf = true;
+
+    function dataBound() {
+        debugger;
+        var multiselect = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect");
+        debugger;
+        multiselect.value(IDArray);
+    }
+</script>
+<!--End of Investigation Grid Scripts-->
+@*if (currentDiagnosisGridRowUid) {
+         var index = getRowIndexMostLikelyDiagnosis(currentDiagnosisGridRowUid);
+         var grid = $('#MostLikelyDiagnosis').data('kendoGrid');
+    //var grid = $('#CustomerPriceException').data('kendoGrid');
+    var items = grid.dataSource._data;
+         items[index - 1].TelMHMostLikelySubDiagnosesIds = $("#TelMHMostLikelySubDiagnosesIds").data("kendoMultiSelect").value();*@
+
+
+
+<script>
+    function onSuccessUploadCaseClosureFile(e) {
+
+        UploadedFile = getFileInfo(e);
+        UploadedFilePath = e.response.filePath;
+        if (UploadedFile)
+            $('#HasCaseClosureAttachment').val(true);
+
+        if (UploadedFile)
+            $('#CaseClosureFilename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#CaseClosureFilePath').val(UploadedFilePath);
+
+    }
+
+    function DeleteRowCaseClosureGrid(e) {
+        debugger;
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#CaseClosureGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedTeleMentalHealth = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+     function templateOptionsCaseClosureGrid(id, ob) {
+
+
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+
+        result = result + `<li class='navi-item'><a href='javascript:void(0);' onclick='ShowCaseClosure("${id}")' class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@(CommonResource.Show)</span></a></li>`;
+
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+    function ShowCaseClosure(id) {
+        $('#main-content').load(`/TeleMentalHealth/GetCaseClosureForm?closureId=${id}&mentalHealthId=@((string)ViewBag.TeleMHId )`, function () {
+            ShowSuccessfllyMsg("@(NICUConsultationFormFollowUPResource.ShowLoadedSuccessfully)");
+        });
+    }
+
+
+     $("#close-case-btn").on("click", function () {
+
+
+              $('#main-content').hide();
+            $('#grid-section').hide();
+            ActiveButton("");
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetAddCaseClosureForm", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                  $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+     });
+
+
+
+
+      $("#reopen-case-btn").on("click", function () {
+
+
+              $('#main-content').hide();
+            $('#grid-section').hide();
+            ActiveButton("");
+
+            //$('#grid-section').html('');
+
+            $('#main-content').load('@Url.Action("GetCaseClosureForm", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                $('#main-content').show();
+                $('#grid-section').show();
+            });
+              $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                  $('#grid-section').load('@Url.Action("GetCaseClosureGrid", "TeleMentalHealth", new { mentalHealthId = (string)ViewBag.TeleMHId })', function () {
+                      //refreshConsultantSectionGrid();
+                  });
+              });
+        });
+</script>

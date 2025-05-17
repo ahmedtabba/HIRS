@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{690E355A-54BD-4B43-BD44-4BFD6433307F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BoulevardManagement.Model</RootNamespace>
+    <AssemblyName>BoulevardManagement.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\NotificationConsistent.cs" />
+    <Compile Include="Entities\CaseClosure.cs" />
+    <Compile Include="Entities\Department.cs" />
+    <Compile Include="Entities\Location.cs" />
+    <Compile Include="Entities\Medication_MHTherapeuticPlan.cs" />
+    <Compile Include="Entities\Medication.cs" />
+    <Compile Include="Entities\NICUConsultationFollowUpForm.cs" />
+    <Compile Include="Entities\NICUConsultationForm.cs" />
+    <Compile Include="Entities\Notification.cs" />
+    <Compile Include="Entities\NotificationGroup.cs" />
+    <Compile Include="Entities\NPICU.cs" />
+    <Compile Include="Entities\NPICUConsultantSection.cs" />
+    <Compile Include="Entities\NPICUInvestigation.cs" />
+    <Compile Include="Entities\NPICUUser.cs" />
+    <Compile Include="Entities\OperationLog.cs" />
+    <Compile Include="Entities\Patient.cs" />
+    <Compile Include="Entities\PICUConsultationFollowUpForm.cs" />
+    <Compile Include="Entities\PICUConsultationForm.cs" />
+    <Compile Include="Entities\Project.cs" />
+    <Compile Include="Entities\ErrorLog.cs" />
+    <Compile Include="Entities\BoulevardManagementContext.cs" />
+    <Compile Include="Entities\BoulevardAttachment.cs" />
+    <Compile Include="Entities\StickyNote.cs" />
+    <Compile Include="Entities\TeleICU.cs" />
+    <Compile Include="Entities\TeleMentalHealth.cs" />
+    <Compile Include="Entities\TeleICUUser.cs" />
+    <Compile Include="Entities\TeleMentalHealthUser.cs" />
+    <Compile Include="Entities\TelICUExit.cs" />
+    <Compile Include="Entities\TelICUConsultationForm.cs" />
+    <Compile Include="Entities\TelICUInternalConsultationForm.cs" />
+    <Compile Include="Entities\TelICULabUnit.cs" />
+    <Compile Include="Entities\TelICUMedicationDailySchedule.cs" />
+    <Compile Include="Entities\TelICUClinicalStory.cs" />
+    <Compile Include="Entities\TelICUPump.cs" />
+    <Compile Include="Entities\TelICUDiabetesControl.cs" />
+    <Compile Include="Entities\TelMHClinicalStory.cs" />
+    <Compile Include="Entities\TelMHDiagnosis.cs" />
+    <Compile Include="Entities\TelMHDiagnosisCategory.cs" />
+    <Compile Include="Entities\TelMHMostLikelyDiagnosis.cs" />
+    <Compile Include="Entities\TelMHMostLikelySubDiagnosis.cs" />
+    <Compile Include="Entities\TelMHPhysicalExaminationReport.cs" />
+    <Compile Include="Entities\TelMHDiagnosisSubCategory.cs" />
+    <Compile Include="Entities\TelMHTherapeuticPlan.cs" />
+    <Compile Include="Entities\TelICUMedicationScheduler.cs" />
+    <Compile Include="Entities\TelICUVitalSign.cs" />
+    <Compile Include="Entities\TelMHVitalSign.cs" />
+    <Compile Include="Entities\TelMHWrittenPledge.cs" />
+    <Compile Include="Entities\UserNotification.cs" />
+    <Compile Include="Entities\UserNotificationGroups.cs" />
+    <Compile Include="Entities\UserQuickAction.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TripleA.Utilities\TripleA.Utilities.csproj">
+      <Project>{69831372-69E0-46B0-89A3-4E14493B1A68}</Project>
+      <Name>TripleA.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\URF.Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\URF.Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CleanDataScript.sql" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

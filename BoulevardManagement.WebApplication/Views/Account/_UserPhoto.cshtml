@@ -1,0 +1,89 @@
+﻿@using BoulevardManagement.WebApplication.Resources
+
+@{
+    var TempAttchmentFolder = BoulevardManagement.Utilities.Configurations.TempAttachmentsPhysicalPath.ToString();
+
+}
+
+<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>
+
+@using (Html.BeginForm("ChangeUserPhoto", "Account", FormMethod.Post, new { @id = "ChangeUserPhotoForm" }))
+{
+<div class="modal" id="UserPhotoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="Close">
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title"><i class="fa fa-user-circle"></i>&nbsp;Change User Photo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        @Html.Hidden("PhotoUserId", "", new { @id = "PhotoUserId" })
+
+
+                        @Html.Label("Photo", new { @class = "form-label" })
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                        .Name("files")
+                          .ShowFileList(true)
+                          .Multiple(false)
+                          .Async(a => a
+                          .Save("AddFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                           .AutoUpload(true)
+                                ).Events(c => c
+                                .Select("onSelectFile")
+                                   .Success("onSuccessUploadFile"))
+                                .Validation(validation => validation.AllowedExtensions(new string[] { ".jpg" })))
+
+
+
+                        @Html.Hidden("filename", "", new { id = "filename" })
+                        @Html.Hidden("filePath", "", new { id = "filePath" })
+
+                        <div id="errorMessage" class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; ">
+                            <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="errorMsgTxt">test</label>
+                        </div>
+
+                        <div>You can only upload <strong>jpg</strong> files.</div>
+
+
+                       
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" id="SaveUserPhoto" class="btn btn btn-gold">Save</button>
+                <button type="button" id="CancleUserPhoto" class="btn btn btn-gold pull-right" data-dismiss="modal">Cancel </button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<script type="text/javascript">
+    function SetFileUploadInfo() {
+        if (UploadedFile)
+            $('#filename').val(UploadedFile);
+
+        if (UploadedFilePath)
+            $('#filePath').val(UploadedFilePath);
+        
+    }
+
+
+    function getResource(name) {
+        if (name == 'FileUploadPath')
+            return '@TempAttchmentFolder.Replace("\\","\\\\")';
+
+        return '';
+    }
+</script>
+}
+

@@ -1,0 +1,59 @@
+﻿@{
+
+    var cultureName = System.Globalization.CultureInfo.CurrentCulture.TextInfo.CultureName;
+    string flag = "226-united-states.svg";
+    string Lang = "EN";
+
+    if (cultureName.Contains("en"))
+    {
+        flag = "226-united-states.svg";
+         Lang = "EN";
+
+    }
+    else if(cultureName.Contains("ar"))
+    {
+        flag = "008-saudi-arabia.svg";
+         Lang = "AR";
+
+    }
+}
+
+<div class="dropdown mr-1 mr-lg-3">
+    <!--begin::Toggle-->
+    <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px" aria-expanded="false">
+        <div class="btn btn-icon btn-clean btn-dropdown btn-lg">
+            @*<img class="h-20px w-20px rounded-sm" src="~/assets/media/svg/flags/@flag" alt="">*@
+            <span class="navi-text" style="font-weight:bold">@Lang</span>
+        </div>
+    </div>
+    <!--end::Toggle-->
+    <!--begin::Dropdown-->
+    <div class="dropdown-menu p-0 m-0 dropdown-menu-anim-up dropdown-menu-sm dropdown-menu-right" style="">
+        <!--begin::Nav-->
+        <ul class="navi navi-hover py-4">
+            <!--begin::Item-->
+            <li class="navi-item">
+                <a href="@Url.Action("ChangeLanguage", "Home", new { lang = "en-US" })" class="navi-link">
+                    @*<span class="symbol symbol-20 mr-3">
+                        <img src="" alt="">
+                    </span>*@
+                    <span class="navi-text" style="font-weight:bold">EN</span>
+                </a>
+            </li>
+            <!--end::Item-->
+            <!--begin::Item-->
+            <li class="navi-item active">
+                <a href="@Url.Action("ChangeLanguage", "Home", new { lang = "ar-SY" })" class="navi-link">
+                    @*<span class="symbol symbol-20 mr-3">
+                        <img src="" alt="">
+                    </span>*@
+                    <span class="navi-text" style="font-weight:bold">AR</span>
+                </a>
+            </li>
+            <!--end::Item-->
+
+        </ul>
+        <!--end::Nav-->
+    </div>
+    <!--end::Dropdown-->
+</div>

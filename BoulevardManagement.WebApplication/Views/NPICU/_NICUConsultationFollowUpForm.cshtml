@@ -1,0 +1,769 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.WebApplication.Models;
+@model NICUConsultationFollowUpFormDTO
+
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.NPICU.EditNICUConsultationFollowUpForm) || Model.CaseStatus == CaseStatus.Closed;
+    if (Model.Id > 0)
+    {
+        viewMode = true;
+    }
+
+}
+@if (Model.CaseStatus == CaseStatus.Closed)
+{
+    <style>
+
+        .k-grid-NICUConsultationFollowUpFormDestroy {
+            display: none !important;
+        }
+    </style>
+}
+@if (viewMode)
+{
+    <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+    </style>
+}
+@if (Model.Id > 0 && Model.CaseStatus != CaseStatus.Closed && User.IsInRole(RoleConsistent.NPICU.EditNICUConsultationFollowUpForm))
+{
+    <button type="button" id="AddFollowUpBtn" class="btn btn-primary">@NICUConsultationFormFollowUPResource.AddFollowUp</button>
+}
+
+<!--begin::Form-->
+@using (Html.BeginForm("SaveNICUConsultationFollowUpForm", "NPICU", FormMethod.Post, new { @id = "NICUConsultationFollowUpFormId" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.NPICUId)
+
+
+
+    @Html.HiddenFor(model => model.NICUConsultationFollowUpFormAttachmentId)
+    @Html.HiddenFor(model => model.HasNICUConsultationFollowUpFormAttachment)
+    @Html.HiddenFor(model => model.NICUConsultationFollowUpFormFilename)
+    @Html.HiddenFor(model => model.NICUConsultationFollowUpFormFilePath)
+
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+
+                @NICUConsultationFormFollowUPResource.OnlineNICUConsultationFollowUpForm
+
+
+            </h3>
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-3">
+                <label @*style="margin-bottom: 25px;"*@>@NICUConsultationFormFollowUPResource.GestationalAge:</label>
+
+                @Html.EditorFor(m => m.GestationalAge, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.GestationalAge, @id = "GestationalAge", @readonly = "readonly" } })
+
+
+            </div>
+
+            <div class="col-lg-3">
+                <label style="font-size:0.96rem">@NICUConsultationFormFollowUPResource.ChronologicalAge:</label>
+
+                @Html.EditorFor(m => m.ChronologicalAge, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.ChronologicalAge, @id = "ChronologicalAge", @readonly = "readonly" } })
+
+            </div>
+
+
+
+            <div class="col-lg-3">
+                <label @*style="margin-bottom: 25px;"*@>@NICUConsultationFormFollowUPResource.BirthWeight:</label>
+                @Html.EditorFor(m => m.BirthWeight, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.BirthWeight, @id = "BirthWeight", @readonly = "readonly" } })
+            </div>
+
+
+
+            <div class="col-lg-3">
+                <label @*style="margin-bottom: 25px;"*@>@NICUConsultationFormFollowUPResource.CurrentWeight:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.CurrentWeight, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.CurrentWeight, @id = "CurrentWeight", @readonly = "readonly" } })
+
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.CurrentWeight, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.CurrentWeight, @id = "CurrentWeight" } })
+                    @Html.ValidationMessageFor(x => x.CurrentWeight)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.CurrentWeightInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.ProblemList:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.ProblemList, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.ProblemList, @id = "ProblemList", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.ProblemList, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.ProblemList, @id = "ProblemList" })
+                    @Html.ValidationMessageFor(x => x.ProblemList)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.ProblemListInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.MajorEventsInTheLast24Hours:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.MajorEventsInTheLast24Hours, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.MajorEventsInTheLast24Hours, @id = "MajorEventsInTheLast24Hours", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.MajorEventsInTheLast24Hours, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.MajorEventsInTheLast24Hours, @id = "MajorEventsInTheLast24Hours" })
+                    @Html.ValidationMessageFor(x => x.MajorEventsInTheLast24Hours)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.MajorEventsInTheLast24HoursInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+
+
+        <h6>
+            @NICUConsultationFormFollowUPResource.VitalSigns
+        </h6>
+        <hr />
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-2" style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"padding-left: 15px;padding-right: 15px;":"")">
+                <label>@NICUConsultationFormFollowUPResource.Temp:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.Temp, new { htmlAttributes = new { @class = "form-control", style = "width:100%!importamnt;", @placeholder = NICUConsultationFormFollowUPResource.Temp, @id = "Temp", @readonly = "readonly" }, style = "width:100%!importamnt;" })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.Temp, new { htmlAttributes = new { @class = "form-control", style = "width:100%!importamnt;", @placeholder = NICUConsultationFormFollowUPResource.Temp, @id = "Temp", @type = "number", min = "0", step = "0.1", onclick = "$(this).select();" }, style = "width:100%!importamnt;" })
+                    @Html.ValidationMessageFor(x => x.Temp)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.TempInfoSpan</span>
+                }
+
+            </div>
+
+
+            <div class="col-lg-2" style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"padding-left: 15px;padding-right: 15px;":"")">
+                <label>@NICUConsultationFormFollowUPResource.HR:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.HR, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.HR, @id = "HR", @readonly = "readonly" } })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.HR, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.HR, @id = "HR", @type = "number", min = "0", step = "1", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.HR)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.HRInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-2" style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"padding-left: 15px;padding-right: 15px;":"")">
+                <label>@NICUConsultationFormFollowUPResource.RR:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.RR, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.RR, @id = "RR", @readonly = "readonly" } })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.RR, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.RR, @id = "RR", @type = "number", min = "0", step = "1", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.RR)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.RRInfoSpan</span>
+                }
+
+            </div>
+
+            @if (viewMode)
+            {
+                <div class="col-lg-3" style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"padding-left: 15px;padding-right: 15px;":"")">
+                    <label>@NICUConsultationFormFollowUPResource.BP:</label>
+                    <div>
+                        @if (viewMode)
+                        {
+                            @Html.EditorFor(m => m.BPFirstPart, new { htmlAttributes = new { @class = "form-control", @style = "display:inline-block;width:45%;", @placeholder = NICUConsultationFormFollowUPResource.BP, @id = "BPFirstPart", @readonly = "readonly" } })
+                            if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                            {
+                                <span style="display:inline-block">\</span>
+
+                            }
+                            else
+                            {
+                                <span style="display:inline-block">/</span>
+                            }
+                            @Html.EditorFor(m => m.BPSecondPart, new { htmlAttributes = new { @class = "form-control", @style = "display:inline-block;width:45%;", @placeholder = NICUConsultationFormFollowUPResource.BP, @id = "BPSecondPart", @readonly = "readonly" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.BPFirstPart, new { htmlAttributes = new { @class = "form-control num-box", @id = "BPFirstPart", Style = "width:40%; display:inline-block;", @type = "number", @min = "0" } })
+                            if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                            {
+                                <span style="display:inline-block">\</span>
+
+                            }
+                            else
+                            {
+                                <span style="display:inline-block">/</span>
+                            }
+                            @Html.EditorFor(m => m.BPSecondPart, new { htmlAttributes = new { @class = "form-control num-box", @id = "BPSecondPart", Style = "width:40%; display:inline-block;", @type = "number", @min = "0" } })
+                            <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.BPInfoSpan</span>
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(x => x.BPFirstPart)
+                    @Html.ValidationMessageFor(x => x.BPSecondPart)
+
+
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-3" style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"padding-left: 15px;padding-right: 15px;":"")">
+                    <label>@NICUConsultationFormFollowUPResource.BP:</label>
+                    <div>
+                        @if (viewMode)
+                        {
+                            @Html.EditorFor(m => m.BPFirstPart, new { htmlAttributes = new { @class = "form-control", @style = "display:inline-block;width:45%;", @placeholder = NICUConsultationFormFollowUPResource.BP, @id = "BPFirstPart", @readonly = "readonly" } })
+                            if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                            {
+                                <span style="display:inline-block">\</span>
+
+                            }
+                            else
+                            {
+                                <span style="display:inline-block">/</span>
+                            }
+                            @Html.EditorFor(m => m.BPSecondPart, new { htmlAttributes = new { @class = "form-control", @style = "display:inline-block;width:45%;", @placeholder = NICUConsultationFormFollowUPResource.BP, @id = "BPSecondPart", @readonly = "readonly" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.BPFirstPart, new { htmlAttributes = new { @class = "form-control num-box", @id = "BPFirstPart", Style = "width:40%; display:inline-block;", @type = "number", @min = "0" } })
+                            if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                            {
+                                <span style="display:inline-block">\</span>
+
+                            }
+                            else
+                            {
+                                <span style="display:inline-block">/</span>
+                            }
+                            @Html.EditorFor(m => m.BPSecondPart, new { htmlAttributes = new { @class = "form-control num-box", @id = "BPSecondPart", Style = "width:40%; display:inline-block;", @type = "number", @min = "0" } })
+                            <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.BPInfoSpan</span>
+                        }
+                    </div>
+                    @Html.ValidationMessageFor(x => x.BPFirstPart)
+                    @Html.ValidationMessageFor(x => x.BPSecondPart)
+
+
+                </div>
+            }
+
+
+        <div class="col-lg-2" style="@(System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft?"padding-left: 15px;padding-right: 15px;":"")">
+            <label>@NICUConsultationFormFollowUPResource.Map:</label>
+            @Html.EditorFor(m => m.Map, new { htmlAttributes = new { @class = "form-control num-box", step = "0.001", @placeholder = NICUConsultationFormFollowUPResource.Map, @id = "Map", @type = "number", @min = "0", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(x => x.Map)
+            @if (!viewMode)
+            {
+                <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.Map</span>
+
+            }
+        </div>
+
+
+
+
+
+        </div>
+
+
+        <div class="row form-group">
+            <div class="col-lg-2">
+                <label>@NICUConsultationFormFollowUPResource.SpO2:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.SpO2, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.SpO2, @id = "SpO2", @readonly = "readonly" } })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.SpO2, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.SpO2, @id = "SpO2", @type = "number", min = "0", step = "1", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.SpO2)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.SpO2InfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-2">
+                <label>@NICUConsultationFormFollowUPResource.RBS:</label>
+                @if (viewMode)
+                {
+                    @Html.EditorFor(m => m.RBS, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.RBS, @id = "RBS", @readonly = "readonly" } })
+                }
+                else
+                {
+                    @Html.EditorFor(m => m.RBS, new { htmlAttributes = new { @class = "form-control", @placeholder = NICUConsultationFormFollowUPResource.RBS, @id = "RBS", @type = "number", min = "0", step = "1", onclick = "$(this).select();" } })
+                    @Html.ValidationMessageFor(x => x.RBS)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.RBSInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+
+        <h6>
+            @NICUConsultationFormFollowUPResource.General
+        </h6>
+        <hr />
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-6">
+                <label>@NICUConsultationFormFollowUPResource.Color:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Color, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Color, @id = "Color", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Color, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Color, @id = "Color" })
+                    @Html.ValidationMessageFor(x => x.Color)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.ColorInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-6">
+                <label>@NICUConsultationFormFollowUPResource.Posture:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Posture, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Posture, @id = "Posture", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Posture, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Posture, @id = "Posture" })
+                    @Html.ValidationMessageFor(x => x.Posture)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.PostureInfoSpan</span>
+                }
+
+            </div>
+
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-6">
+                <label>@NICUConsultationFormFollowUPResource.Skin:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Skin, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Skin, @id = "Skin", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Skin, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Skin, @id = "Skin" })
+                    @Html.ValidationMessageFor(x => x.Skin)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.SkinInfoSpan</span>
+                }
+
+            </div>
+
+            <div class="col-lg-6">
+                <label>@NICUConsultationFormFollowUPResource.Remarks:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Remarks, @id = "Remarks", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Remarks, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Remarks, @id = "Remarks" })
+                    @Html.ValidationMessageFor(x => x.Remarks)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.RemarksInfoSpan</span>
+                }
+
+            </div>
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.CentralNervousSystem:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.CentralNervousSystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.CentralNervousSystem, @id = "CentralNervousSystem", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.CentralNervousSystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.CentralNervousSystem, @id = "CentralNervousSystem" })
+                    @Html.ValidationMessageFor(x => x.CentralNervousSystem)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.CentralNervousSystemInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.CardiovascularSystem:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.CardiovascularSystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.CentralNervousSystem, @id = "CardiovascularSystem", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.CardiovascularSystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.CentralNervousSystem, @id = "CardiovascularSystem" })
+                    @Html.ValidationMessageFor(x => x.CardiovascularSystem)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.CardiovascularSystemInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.RespiratorySystem:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.RespiratorySystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.RespiratorySystem, @id = "RespiratorySystem", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.RespiratorySystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.RespiratorySystem, @id = "RespiratorySystem" })
+                    @Html.ValidationMessageFor(x => x.RespiratorySystem)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.RespiratorySystemInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.GastrointestinalTract:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.GastrointestinalTract, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.GastrointestinalTract, @id = "GastrointestinalTract", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.GastrointestinalTract, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.GastrointestinalTract, @id = "GastrointestinalTract" })
+                    @Html.ValidationMessageFor(x => x.GastrointestinalTract)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.GastrointestinalTract</span>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.GenitourinarySystem:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.GenitourinarySystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.GenitourinarySystem, @id = "GenitourinarySystem", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.GenitourinarySystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.GenitourinarySystem, @id = "GenitourinarySystem" })
+                    @Html.ValidationMessageFor(x => x.GenitourinarySystem)
+                    <span class="form-text text-muted">@PICUConsultationFormFollowUPResource.GenitourinarySystem</span>
+                }
+
+            </div>
+
+        </div>
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.HaematologicalSystem:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.HaematologicalSystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.HaematologicalSystem, @id = "HaematologicalSystem", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.HaematologicalSystem, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.HaematologicalSystem, @id = "HaematologicalSystem" })
+                    @Html.ValidationMessageFor(x => x.HaematologicalSystem)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.HaematologicalSystemInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.Others:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Others, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Others, @id = "Others", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Others, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Others, @id = "Others" })
+                    @Html.ValidationMessageFor(x => x.Others)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.OthersInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.Procedures:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.Procedures, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Procedures, @id = "Procedures", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.Procedures, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.Procedures, @id = "Procedures" })
+                    @Html.ValidationMessageFor(x => x.Procedures)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.ProceduresInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.PlanOfCare:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.PlanOfCare, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.PlanOfCare, @id = "PlanOfCare", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.PlanOfCare, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.PlanOfCare, @id = "PlanOfCare" })
+                    @Html.ValidationMessageFor(x => x.PlanOfCare)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.PlanOfCareInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+            <div class="col-lg-12">
+                <label>@NICUConsultationFormFollowUPResource.CommunicationWithFamily:</label>
+                @if (viewMode)
+                {
+                    @Html.TextAreaFor(m => m.CommunicationWithFamily, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.CommunicationWithFamily, @id = "CommunicationWithFamily", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(m => m.CommunicationWithFamily, new { @class = "form-control", @rows = "3", @placeholder = NICUConsultationFormFollowUPResource.CommunicationWithFamily, @id = "CommunicationWithFamily" })
+                    @Html.ValidationMessageFor(x => x.CommunicationWithFamily)
+                    <span class="form-text text-muted">@NICUConsultationFormFollowUPResource.CommunicationWithFamilyInfoSpan</span>
+                }
+
+            </div>
+
+        </div>
+
+        <div class="form-group row" style="margin-top:20px;">
+
+            <div class="col-lg-12">
+                <div class="required @customeClass">
+                    <div class="k-widget k-tooltip-validation k-invalid-msg field-validation-error" style="margin: 0.5em; display: none; " id="errorMessage">
+                        <span class="fa fa-times-circle" style="margin-top:5px; color:#d9534f;"> </span><label id="errorMsgTxt"></label>
+                    </div>
+                    @if (!viewMode)
+                    {
+                        @(Html.Kendo().Upload().Messages(m => m.Select(CommonResource.SelectFile))
+                .Name("NICUConsultationFollowUpFormfiles")
+                .ShowFileList(true)
+                .Multiple(false)
+                .Async(a => a
+                .Save("AddNICUConsultationFollowUpFormFile", "Attachment", new { fileGuid = Guid.NewGuid() })
+                .AutoUpload(true)
+                ).Events(c => c
+                .Select("onSelectFile")
+                    .Success("onSuccessUploadNICUConsultationFollowUpFormFile")))
+                    }
+
+
+
+                    <br />
+                    @if (Model.NICUConsultationFollowUpFormAttachmentId.HasValue)
+                    {
+                        @Model.NICUConsultationFollowUpFormFilename <a href='@Url.Action("Download", "Attachment")?attachmentId=@HashIdsManager.Encrypt(Model.NICUConsultationFollowUpFormAttachmentId.Value)'><i class='fa fa-download' style='color:black'></i></a>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+        @if (!viewMode)
+        {
+            <button type="button" id="save" class="btn btn-primary">@CommonResource.Save</button>
+            <button type="button" id="cancel" class="btn btn-default">@CommonResource.Cancel</button>
+
+        }
+
+
+
+    </div>
+
+
+
+
+}
+
+
+
+<!--end::Form-->
+
+
+
+
+<script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+
+    $("#NICUConsultationFollowUpFormId").on("submit", function (e) {
+
+            e.preventDefault();
+
+
+
+       // console.log(formdata11);
+            $.ajax({
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetNICUConsultationFollowUpForm", "NPICU", new {followUpId="", telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "NPICU", new { telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {
+                            onmenueload();
+                            $("#ConsultationFollowUpFormBtn").addClass("active");
+                        });
+                        refreshollowUPGrid();
+                    } else {
+                        onJSError(data.Message);
+                        $("#save").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+    $("#save").on("click", function (e) {
+
+        //  $('#voice').val(formData);
+        $('#NICUConsultationFollowUpFormId').validate();
+        if ($("#NICUConsultationFollowUpFormId").valid()) {
+
+
+            $("#save").attr("disabled", "disabled");
+
+
+
+            $("#NICUConsultationFollowUpFormId").submit();
+        }
+    });
+
+    $("#cancel").on("click", function (e) {
+       $('#main-content').load('@Url.Action("GetNICUConsultationFollowUpForm", "NPICU", new {followUpId="", telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () { });
+    });
+
+    $("#AddFollowUpBtn").on("click", function () {
+         $('#main-content').load('@Url.Action("GetNICUConsultationFollowUpFormForAdd", "NPICU", new { telenicuId = HashIdsManager.Encrypt(Model.NPICUId) })', function () {});
+
+    });
+
+    $("input[type=number]").on("keypress", function (evt) {
+
+        //if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+        //    evt.preventDefault();
+        //}
+
+        if (evt.which == 101) {
+            evt.preventDefault();
+        }
+    });
+
+    $(".int").on("keypress", function (evt) {
+
+        //if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+        //    evt.preventDefault();
+        //}
+
+        if (evt.which == 46 || evt.which == 101) {
+            evt.preventDefault();
+        }
+    });
+
+
+    $('#BPFirstPart').change(function () {
+        debugger;
+        var Firstvalue = $('#BPFirstPart').val();
+        var Secondvalue = $('#BPSecondPart').val();
+        var Result = (parseFloat(Firstvalue) + (2 * parseFloat(Secondvalue))) / 3;
+        if (Firstvalue == null || Firstvalue == "" || Secondvalue == null || Secondvalue == "") {
+            $('#Map').val('');
+        } else {
+            $('#Map').val(Result.toFixed(3));
+        }
+
+    });
+    $('#BPSecondPart').change(function () {
+        debugger;
+        var Firstvalue = $('#BPFirstPart').val();
+        var Secondvalue = $('#BPSecondPart').val();
+        var Result = (parseFloat(Firstvalue) + (2 * parseFloat(Secondvalue))) / 3;
+        if (Firstvalue == null || Firstvalue == "" || Secondvalue == null || Secondvalue == "") {
+            $('#Map').val('');
+        } else {
+            $('#Map').val(Result.toFixed(3));
+        }
+    });
+</script>
+

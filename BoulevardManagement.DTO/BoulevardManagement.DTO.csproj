@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F562B611-197C-44BC-831A-6DB0017115A6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BoulevardManagement.DTO</RootNamespace>
+    <AssemblyName>BoulevardManagement.DTO</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BornPlaceEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BornPlaceEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="BornPlaceEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BornPlaceEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="CaseClosureDTO.cs" />
+    <Compile Include="DepartmentDTO.cs" />
+    <Compile Include="ErrorLogDTO.cs" />
+    <Compile Include="LocationDTO.cs" />
+    <Compile Include="Medication_MHTherapeuticPlanDTO.cs" />
+    <Compile Include="MedicationDTO.cs" />
+    <Compile Include="NewsFeedCommentDTO.cs" />
+    <Compile Include="NICUConsultationFollowUpFormDTO.cs" />
+    <Compile Include="NICUConsultationFormDTO.cs" />
+    <Compile Include="NotificationDTO.cs" />
+    <Compile Include="NotificationGroupDTO.cs" />
+    <Compile Include="NPICUConsultantSectionDTO.cs" />
+    <Compile Include="NPICUInvestigationDTO.cs" />
+    <Compile Include="PICUConsultationFollowUpFormDTO.cs" />
+    <Compile Include="PICUConsultationFormDTO.cs" />
+    <Compile Include="Resources\AppearanceEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppearanceEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\BloodGasesEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BloodGasesEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\BloodGasesEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BloodGasesEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\BloodTypeEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BloodTypeEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\CaseCloseReasonEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CaseCloseReasonEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\CaseCloseReasonEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CaseCloseReasonEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\CaseStatusEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CaseStatusEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\CaseStatusEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CaseStatusEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ColorEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ColorEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\CommonResource.ar.Designer.cs">
+      <DependentUpon>CommonResource.ar.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\CommonResource.Designer.cs">
+      <DependentUpon>CommonResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\DiagnosisStatusEnumResource.Designer.cs">
+      <DependentUpon>DiagnosisStatusEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\DiagnosisStatusEnumResource.ar.Designer.cs">
+      <DependentUpon>DiagnosisStatusEnumResource.ar.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\GenderEnumsResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenderEnumsResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\GeneralAppearance1EnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralAppearance1EnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\GeneralAppearance1EnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralAppearance1EnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\JobRoleEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JobRoleEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LabourAndDeliveryEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabourAndDeliveryEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LocationResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocationResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\MaritalStatusEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaritalStatusEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\NICUResuscitationEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NICUResuscitationEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\NPICUTypeEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NPICUTypeEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PatientResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PatientResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PositiveNegativeEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PositiveNegativeEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\RiskFactorsEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RiskFactorsEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\RiskFactorsEnumResource.Designer.cs">
+      <DependentUpon>RiskFactorsEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\SignTypeEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SignTypeEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\UnderAnesthesiaEnumResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnderAnesthesiaEnumResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\UnderAnesthesiaEnumResource.Designer.cs">
+      <DependentUpon>UnderAnesthesiaEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\UserQuickActionEnumsResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserQuickActionEnumsResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\VitalSignResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VitalSignResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TeleICUUserDTO.cs" />
+    <Compile Include="TelICUExitDTO.cs" />
+    <Compile Include="TelICUConsultationFormDTO.cs" />
+    <Compile Include="TelICUInternalConsultationFormDTO.cs" />
+    <Compile Include="TelICULabUnitDTO.cs" />
+    <Compile Include="NPICUDTO.cs" />
+    <Compile Include="NPICUUserDTO.cs" />
+    <Compile Include="OperationLogDTO.cs" />
+    <Compile Include="PatientDTO.cs" />
+    <Compile Include="ProjectDTO.cs" />
+    <Compile Include="EntityDTO.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BoulevardAttachmentDTO.cs" />
+    <Compile Include="Resources\BloodTypeEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BloodTypeEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\GenderEnumsResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenderEnumsResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\JobRoleEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JobRoleEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LabourAndDeliveryEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LabourAndDeliveryEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LocationResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LocationResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\MaritalStatusEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MaritalStatusEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\NICUResuscitationEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NICUResuscitationEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\NPICUTypeEnumResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NPICUTypeEnumResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\OperationLogEnumsResource.ar.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OperationLogEnumsResource.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\OperationLogEnumsResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OperationLogEnumsResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PatientResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PatientResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppearanceEnumResource.Designer.cs">
+      <DependentUpon>AppearanceEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ColorEnumResource.Designer.cs">
+      <DependentUpon>ColorEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ProjectResource.ar.Designer.cs">
+      <DependentUpon>ProjectResource.ar.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ProjectResource.Designer.cs">
+      <DependentUpon>ProjectResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\PositiveNegativeEnumResource.Designer.cs">
+      <DependentUpon>PositiveNegativeEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\UserQuickActionEnumsResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UserQuickActionEnumsResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SignTypeEnumResource.Designer.cs">
+      <DependentUpon>SignTypeEnumResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\VitalSignResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VitalSignResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="StickyNoteDTO.cs" />
+    <Compile Include="StickyNoteGridDTO.cs" />
+    <Compile Include="TeleICUDTO.cs" />
+    <Compile Include="TeleMentalHealthDTO.cs" />
+    <Compile Include="TeleMentalHealthUserDTO.cs" />
+    <Compile Include="TelICUMedicationDailyScheduleDTO.cs" />
+    <Compile Include="TelICUPumpDTO.cs" />
+    <Compile Include="TelICUVitalSignDTO.cs" />
+    <Compile Include="TelICUClinicalStoryDTO.cs" />
+    <Compile Include="TelICUDiabetesControlDTO.cs" />
+    <Compile Include="TelICUMedicationSchedulerDTO.cs" />
+    <Compile Include="TelMHClinicalStoryDTO.cs" />
+    <Compile Include="TelMHDiagnosisCategoryDTO.cs" />
+    <Compile Include="TelMHDiagnosisDTO.cs" />
+    <Compile Include="TelMHMostLikelyDiagnosisDTO.cs" />
+    <Compile Include="TelMHMostLikelySubDiagnosisDTO.cs" />
+    <Compile Include="TelMHPhysicalExaminationReportDTO.cs" />
+    <Compile Include="TelMHDiagnosisSubCategoryDTO.cs" />
+    <Compile Include="TelMHTherapeuticPlanDTO.cs" />
+    <Compile Include="TelMHVitalSignDTO.cs" />
+    <Compile Include="TelMHWrittenPledgeDTO.cs" />
+    <Compile Include="UserNotificationDTO.cs" />
+    <Compile Include="UserNotificationGroupsDTO.cs" />
+    <Compile Include="UserQuickActionDTO.cs" />
+    <Compile Include="Utilities\Consistents.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TripleA.Utilities\TripleA.Utilities.csproj">
+      <Project>{69831372-69E0-46B0-89A3-4E14493B1A68}</Project>
+      <Name>TripleA.Utilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoulevardManagement.Model\BoulevardManagement.Model.csproj">
+      <Project>{690E355A-54BD-4B43-BD44-4BFD6433307F}</Project>
+      <Name>BoulevardManagement.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BornPlaceEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BornPlaceEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppearanceEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppearanceEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\BloodGasesEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BloodGasesEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\BloodTypeEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BloodTypeEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CaseCloseReasonEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaseCloseReasonEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CaseCloseReasonEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaseCloseReasonEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CaseStatusEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaseStatusEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CaseStatusEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaseStatusEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ColorEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ColorEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CommonResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\CommonResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommonResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DiagnosisStatusEnumResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DiagnosisStatusEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DiagnosisStatusEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DiagnosisStatusEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\GenderEnumsResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenderEnumsResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\GeneralAppearance1EnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralAppearance1EnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\JobRoleEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>JobRoleEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LabourAndDeliveryEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LabourAndDeliveryEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LocationResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocationResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MaritalStatusEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MaritalStatusEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NICUResuscitationEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NICUResuscitationEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NPICUTypeEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NPICUTypeEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PatientResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PatientResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PositiveNegativeEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PositiveNegativeEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\RiskFactorsEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RiskFactorsEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\RiskFactorsEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RiskFactorsEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BornPlaceEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BornPlaceEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\BloodGasesEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BloodGasesEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\BloodTypeEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BloodTypeEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\GenderEnumsResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GenderEnumsResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\GeneralAppearance1EnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>GeneralAppearance1EnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\JobRoleEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>JobRoleEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LabourAndDeliveryEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LabourAndDeliveryEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LocationResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocationResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SignTypeEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SignTypeEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderAnesthesiaEnumResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderAnesthesiaEnumResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderAnesthesiaEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderAnesthesiaEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\MaritalStatusEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MaritalStatusEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NICUResuscitationEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NICUResuscitationEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NPICUTypeEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NPICUTypeEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OperationLogEnumsResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OperationLogEnumsResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OperationLogEnumsResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OperationLogEnumsResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PatientResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PatientResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppearanceEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppearanceEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ColorEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ColorEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ProjectResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProjectResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ProjectResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ProjectResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PositiveNegativeEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PositiveNegativeEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserQuickActionEnumsResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserQuickActionEnumsResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserQuickActionEnumsResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserQuickActionEnumsResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SignTypeEnumResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SignTypeEnumResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\VitalSignResource.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VitalSignResource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\VitalSignResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>VitalSignResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

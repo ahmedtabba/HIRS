@@ -1,0 +1,485 @@
+﻿@using BoulevardManagement.WebApplication.Models;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities.HashidsNet;
+@using BoulevardManagement.DTO;
+
+@model TelICUMedicationDailyScheduleDTO
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+
+    var viewMode = !User.IsInRole(RoleConsistent.TelIcuMedicationDailyScheduleTable.EditMedicationDailyScheduleTable) || Model.CaseStatus == CaseStatus.Closed;
+}
+@if (viewMode)
+{
+    <style>
+        .viewMode {
+            display: none;
+        }
+    </style>
+
+
+}
+
+<style>
+    .k-rtl .k-grid td {
+        position: inherit !important;
+    }
+
+    .k-grid-content .btn-group {
+        position: absolute !important;
+    }
+ 
+</style>
+@if (!System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+{<style>
+    .k-filtercell > span {
+        padding-right: 0px !important;
+        position: relative;
+        min-height: 2em;
+        line-height: 2em;
+        width: 100%;
+    }
+</style>
+
+}
+else
+{
+    <style>
+        .k-rtl .k-filtercell > span {
+            padding-right: 0;
+            padding-left: 4.8em;
+            width: 61% !important;
+        }
+            .k-rtl .k-filtercell > span > .k-button {
+                right: auto;
+                left: 30px;
+            }
+    </style>
+}
+<div class="card-header">
+    <div class="card-title">
+        <h3 class="card-label">
+            @ICUMedicationDailyScheduleTableResource.Title
+        </h3>
+    </div>
+</div>
+
+
+
+
+<div class="card-body " kt-hidden-height="471" style="">
+    <div class="row" style="margin-bottom:20px;">
+        @if (!viewMode)
+        {
+            <div class="col-lg-12">
+                <a href="javascript:void(0);" onclick="setTime()" id="test" class="btn btn-primary" data-toggle="modal" data-target="#AddMedicationSchedulerModal">@MedicationSchedulersResource.AddMedicationScheduler</a>
+
+            </div>
+        }
+
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 @customeClass">
+            @(Html.KendoGrid<BoulevardManagement.DTO.TelICUMedicationSchedulerDTO>().Name("TelICUMedicationSchedulerGrid")
+.Columns(columns =>
+{
+//Text Field Template
+// columns.Bound(c => c.TextFiledName).Title("Title").Width(200);
+
+//Bool Field Template
+//columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+//Date Field Template
+//columns.Bound(c => c.DateFieldName).Title("Title").Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy}");
+columns.Bound(c => c.MedicationName).Title(MedicationSchedulersResource.MedicationName).Width(110);
+columns.Bound(c => c.Concentration).Title(MedicationSchedulersResource.Concentration).Width(110);
+columns.Bound(c => c.NumberOfTimes).Title(MedicationSchedulersResource.NumberOfTimes).Width(110);
+columns.Bound(c => c.RouteOfAdministratinOfDrug).Title(MedicationSchedulersResource.RouteOfAdministratinOfDrug).Width(110);
+columns.Bound(c => c.Morning_8).Title(MedicationSchedulersResource.Morning_8).ClientTemplate("#if (Morning_8) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Morning_10).Title(MedicationSchedulersResource.Morning_10).ClientTemplate("#if (Morning_10) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Afternoon_12).Title(MedicationSchedulersResource.Afternoon_12).ClientTemplate("#if (Afternoon_12) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Afternoon_2).Title(MedicationSchedulersResource.Afternoon_2).ClientTemplate("#if (Afternoon_2) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Afternoon_4).Title(MedicationSchedulersResource.Afternoon_4).ClientTemplate("#if (Afternoon_4) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Night_6).Title(MedicationSchedulersResource.Night_6).ClientTemplate("#if (Night_6) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Night_8).Title(MedicationSchedulersResource.Night_8).ClientTemplate("#if (Night_8) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Night_10).Title(MedicationSchedulersResource.Night_10).ClientTemplate("#if (Night_10) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Morning_12).Title(MedicationSchedulersResource.Morning_12).ClientTemplate("#if (Morning_12) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Morning_2).Title(MedicationSchedulersResource.Morning_2).ClientTemplate("#if (Morning_2) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+columns.Bound(c => c.Morning_4).Title(MedicationSchedulersResource.Morning_4).ClientTemplate("#if (Morning_4) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+
+columns.Bound(c => c.Morning_6).Title(MedicationSchedulersResource.Morning_6).ClientTemplate("#if (Morning_6) {# " + CommonResource.Yes + "#}else{#" + CommonResource.No + "#}#").Width(110); ;
+
+if (!viewMode)
+    columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=templateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(70);
+   columns.Command(command => { command.Custom("MedicationSchedulerEdit").Text("<span class='navi-icon flaticon2-contract'></span> Edit ").Click("EditRowTelICUMedicationSchedulerGrid"); }).Hidden();
+    if (!viewMode)
+        columns.Command(command => { command.Custom("TeleICUDestroyMedicationScheduler").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowTelICUMedicationSchedulerGrid"); }).Hidden();
+
+})
+            .HtmlAttributes(new { style = "height:600px", @id = "TelICUMedicationSchedulerGrid" })
+            .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+            .ColumnMenu(c => c.Columns(true))
+            .Pdf(exp => exp.FileName("TelICUMedicationScheduler.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+            .Excel(exp => exp.FileName("TelICUMedicationScheduler.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(c => c.Id))
+.Destroy(action => action.Action("Delete_MedicationScheduler", "TeleICU"))
+.Read(read => read.Action("Read_MedicationScheduler", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) }))
+            .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'TelICUMedicationSchedulerGrid');}").RequestEnd("myOnReqEnd"))
+            )
+            .ColumnMenu(c => c.Columns(false).Filterable(false))
+                                )
+        </div>
+    </div>
+    @using (Html.BeginForm("UpdateMedicationDailySchedule", "TeleICU", FormMethod.Post, new { @id = "TelICUMedicationDailyScheduleFormId", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.TeleICUId)
+        <div class="row" style="margin-top:20px">
+            <div class="col-lg-6">
+                <label>@ICUMedicationDailyScheduleResource.Epidemiology:</label>
+
+                @Html.EditorFor(m => m.Epidemiology, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUMedicationDailyScheduleResource.Epidemiology, @id = "Epidemiology" } })
+                @Html.ValidationMessageFor(x => x.Epidemiology)
+                <span class="form-text text-muted viewMode">@ICUMedicationDailyScheduleResource.EpidemiologyInfoSpan</span>
+
+
+            </div>
+            <div class="col-lg-6">
+                <label>@ICUMedicationDailyScheduleResource.ChronicDiseases:</label>
+
+                @Html.EditorFor(m => m.ChronicDiseases, new { htmlAttributes = new { @class = "form-control", @placeholder = ICUMedicationDailyScheduleResource.ChronicDiseases, @id = "ChronicDiseases" } })
+                @Html.ValidationMessageFor(x => x.ChronicDiseases)
+                <span class="form-text text-muted viewMode">@ICUMedicationDailyScheduleResource.ChronicDiseasesInfoSpan</span>
+
+
+            </div>
+        </div>
+    }
+
+    <div class="row" style="margin-top:20px;margin-bottom:20px;">
+        @if (!viewMode)
+        {
+            <div class="col-lg-12">
+                <a href="javascript:void(0);" onclick="setTime()" id="test" class="btn btn-primary" data-toggle="modal" data-target="#AddDiabetesControlModal">@DiabetesControlsResource.AddDiabetesControl</a>
+
+            </div>
+        }
+
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 @customeClass">
+            @(Html.KendoGrid<BoulevardManagement.DTO.TelICUDiabetesControlDTO>().Name("TelICUDiabetesControlGrid")
+.Columns(columns =>
+{
+//Text Field Template
+// columns.Bound(c => c.TextFiledName).Title("Title").Width(200);
+
+//Bool Field Template
+//columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+//Date Field Template
+//columns.Bound(c => c.DateFieldName).Title("Title").Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy}");
+columns.Bound(c => c.Date).Title(DiabetesControlsResource.Date).Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy hh:mm:tt}");
+columns.Bound(c => c.Diabetes).Title(DiabetesControlsResource.Diabetes).Width(110);
+columns.Bound(c => c.DoseOfMedication).Title(DiabetesControlsResource.DoseOfMedication).Width(110);
+columns.Bound(c => c.MedicationMethod).Title(DiabetesControlsResource.MedicationMethod).Width(110);
+columns.Bound(c => c.Notes).Title(DiabetesControlsResource.Notes).Width(110);
+columns.Bound(c => c.RecommendationByDoctor).Title(DiabetesControlsResource.RecommendationByDoctor).Width(110);
+
+
+if (!viewMode)
+columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=diabetesTemplateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+   columns.Command(command => { command.Custom("DiabetesControlEdit").Text("<span class='navi-icon flaticon2-contract'></span> Edit ").Click("EditRowTelICUDiabetesControlGrid"); }).Hidden();
+    if (!viewMode)
+        columns.Command(command => { command.Custom("TeleICUDestroyDiabetesControl").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowTelICUDiabetesControlGrid"); }).Hidden();
+
+})
+            .HtmlAttributes(new { style = "height:600px", @id = "TelICUDiabetesControlGrid" })
+            .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+            .ColumnMenu(c => c.Columns(true))
+            .Pdf(exp => exp.FileName("TelICUDiabetesControl.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+            .Excel(exp => exp.FileName("TelICUDiabetesControl.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(c => c.Id))
+.Destroy(action => action.Action("Delete_DiabetesControl", "TeleICU"))
+.Read(read => read.Action("Read_DiabetesControl", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) }))
+            .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'TelICUDiabetesControlGrid');}").RequestEnd("myOnReqEnd"))
+            )
+            .ColumnMenu(c => c.Columns(false).Filterable(false))
+                                )
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row" style="margin-top:20px;margin-bottom:20px;">
+
+        @if (!viewMode)
+        {
+            <div class="col-lg-12">
+                <a href="javascript:void(0);" onclick="setTime()" id="test" class="btn btn-primary" data-toggle="modal" data-target="#AddVitalSignModal">@ICUVitalSignResource.AddVitalSign</a>
+
+            </div>
+        }
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 @customeClass">
+            @(Html.KendoGrid<BoulevardManagement.DTO.TelICUVitalSignDTO>().Name("TelICUVitalSignGrid")
+.Columns(columns =>
+{
+//Text Field Template
+// columns.Bound(c => c.TextFiledName).Title("Title").Width(200);
+
+//Bool Field Template
+//columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+//Date Field Template
+//columns.Bound(c => c.DateFieldName).Title("Title").Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy}");
+columns.Bound(c => c.VitalSignDate).Title(ICUVitalSignResource.VitalSignDate).Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy hh:mm:tt}");
+columns.Bound(c => c.Heat).Title(ICUVitalSignResource.Heat).Width(110);
+columns.Bound(c => c.Pressure).Title(ICUVitalSignResource.Pressure).Width(110);
+columns.Bound(c => c.Pulse).Title(ICUVitalSignResource.Pulse).Width(110);
+columns.Bound(c => c.Oxygenation).Title(ICUVitalSignResource.Oxygenation).Width(110);
+columns.Bound(c => c.BloodGlucoseLevels).Title(ICUVitalSignResource.BloodGlucoseLevels).Width(110);
+columns.Bound(c => c.EmptyingOfUrine).Title(ICUVitalSignResource.EmptyingOfUrine).Width(110);
+columns.Bound(c => c.Drain).Title(ICUVitalSignResource.Drain).Width(110);
+columns.Bound(c => c.SecondDrain).Title(ICUVitalSignResource.SecondDrain).Width(110);
+columns.Bound(c => c.Notes).Title(ICUVitalSignResource.Notes).Width(110);
+
+
+if (!viewMode)
+columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=vitalTemplateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+   columns.Command(command => { command.Custom("VitalSignEdit").Text("<span class='navi-icon flaticon2-contract'></span> Edit ").Click("EditRowTelICUVitalSignGrid"); }).Hidden();
+    if (!viewMode)
+        columns.Command(command => { command.Custom("TeleICUDestroyVitalSign").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowTelICUVitalSignGrid"); }).Hidden();
+
+})
+            .HtmlAttributes(new { style = "height:600px", @id = "TelICUVitalSignGrid" })
+            .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+            .ColumnMenu(c => c.Columns(true))
+            .Pdf(exp => exp.FileName("TelICUVitalSign.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+            .Excel(exp => exp.FileName("TelICUVitalSign.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(c => c.Id))
+.Destroy(action => action.Action("Delete_VitalSign", "TeleICU"))
+.Read(read => read.Action("Read_VitalSign", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) }))
+            .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'TelICUVitalSignGrid');}").RequestEnd("myOnReqEnd"))
+            )
+            .ColumnMenu(c => c.Columns(false).Filterable(false))
+                                )
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="row" style="margin-top:20px;margin-bottom:20px;">
+        @if (!viewMode)
+        {
+            <div class="col-lg-12">
+                <a href="javascript:void(0);" onclick="setTime()" id="test" class="btn btn-primary" data-toggle="modal" data-target="#AddPumpModal">@PumpResource.AddPump</a>
+
+            </div>
+        }
+
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 @customeClass">
+            @(Html.KendoGrid<BoulevardManagement.DTO.TelICUPumpDTO>().Name("TelICUPumpGrid")
+.Columns(columns =>
+{
+//Text Field Template
+// columns.Bound(c => c.TextFiledName).Title("Title").Width(200);
+
+//Bool Field Template
+//columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+//Date Field Template
+//columns.Bound(c => c.DateFieldName).Title("Title").Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy}");
+columns.Bound(c => c.PumpDate).Title(PumpResource.Date).Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy hh:mm:tt}");
+columns.Bound(c => c.MedicationName).Title(PumpResource.MedicationName).Width(110);
+columns.Bound(c => c.FlowRate).Title(PumpResource.FlowRate).Width(110);
+columns.Bound(c => c.Notes).Title(PumpResource.Notes).Width(110);
+
+
+
+if (!viewMode)
+columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=pumpTemplateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+   columns.Command(command => { command.Custom("PumpEdit").Text("<span class='navi-icon flaticon2-contract'></span> Edit ").Click("EditRowTelICUPumpGrid"); }).Hidden();
+    if (!viewMode)
+        columns.Command(command => { command.Custom("TeleICUDestroyPump").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowTelICUPumpGrid"); }).Hidden();
+
+})
+            .HtmlAttributes(new { style = "height:600px", @id = "TelICUPumpGrid" })
+            .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+            .ColumnMenu(c => c.Columns(true))
+            .Pdf(exp => exp.FileName("TelICUPump.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+            .Excel(exp => exp.FileName("TelICUPump.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(c => c.Id))
+.Destroy(action => action.Action("Delete_Pump", "TeleICU"))
+.Read(read => read.Action("Read_Pump", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) }))
+            .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'TelICUPumpGrid');}").RequestEnd("myOnReqEnd"))
+            )
+            .ColumnMenu(c => c.Columns(false).Filterable(false))
+                                )
+        </div>
+    </div>
+    @if (!viewMode)
+    {
+        <button type="button" id="saveMedicationDialy" class="btn btn-primary" style="margin-top:20px">@CommonResource.Save</button>
+    }
+</div>
+
+
+
+
+
+@Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+@Html.Partial("_AddMedicationSchedulerModel")
+@Html.Partial("_AddDiabetesControlModel")
+@Html.Partial("_AddVitalSignModel")
+@Html.Partial("_AddPumpModel")
+
+
+
+
+
+<script>
+       $(document).ready(function () {
+
+        if ('@viewMode'=='True') {
+            $('#TelICUMedicationDailyScheduleFormId input').attr('readonly', 'readonly');
+            $('#TelICUMedicationDailyScheduleFormId textarea').attr('readonly', 'readonly');
+
+        }
+    });
+    $("#TelICUMedicationDailyScheduleFormId").on("submit", function (e) {
+
+            e.preventDefault();
+        var formData = new FormData();
+
+
+        var formdataSerialize = $(this).serializeArray();
+        for (var i = 0; i < formdataSerialize.length; i++) {
+
+            formData.append(formdataSerialize[i].name, formdataSerialize[i].value);
+        }
+
+
+       // console.log(formdata11);
+            $.ajax({
+                url: "@(Url.Action("UpdateMedicationDailySchedule", "TeleICU"))",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Success) {
+                        ShowSuccessfllyMsg(data.Message);
+                        $('#main-content').load('@Url.Action("GetTelICUMedicationScheduleTable", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {});
+                        $('#sticky-menu').load('@Url.Action("GetSickyMenu", "TeleICU", new { ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+                            onmenueload();
+                            $("#MedicationDailyScheduleTableBtn").addClass("active");
+                        });
+                    } else {
+                        onJSError(data.Message);
+                        $("#saveMedicationDialy").removeAttr("disabled");
+                    }
+                }
+            });
+
+
+
+
+           // $("#ManifestItemFormId").submit();
+    });
+
+    $("#saveMedicationDialy").on("click", function (e) {
+
+        //  $('#voice').val(formData);
+        $('#TelICUMedicationDailyScheduleFormId').validate();
+        if ($("#TelICUMedicationDailyScheduleFormId").valid()) {
+            $("#saveMedicationDialy").attr("disabled", "disabled");
+
+
+
+            $("#TelICUMedicationDailyScheduleFormId").submit();
+        }
+    });
+    $('#midecation-scheduler-content').load('@Url.Action("GetMedicationSchedulerForm", "TeleICU", new { MedicationSchedulerId = "", ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+        @*var datetimepicker = $("#datetimepicker").data("kendoDateTimePicker");
+        datetimepicker.value("@DateTime.Now.Day" + "/" + "@DateTime.Now.Month" + "/" + "@DateTime.Now.Year" + " " + "@DateTime.Now.ToString("hh:mm tt")");*@
+    });
+        $('#diabetes-control-content').load('@Url.Action("GetDiabetesControlForm", "TeleICU", new { DiabetesControlId = "", ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+        @*var datetimepicker = $("#datetimepicker").data("kendoDateTimePicker");
+        datetimepicker.value("@DateTime.Now.Day" + "/" + "@DateTime.Now.Month" + "/" + "@DateTime.Now.Year" + " " + "@DateTime.Now.ToString("hh:mm tt")");*@
+    });
+         $('#vital-sign-content').load('@Url.Action("GetVitalSignForm", "TeleICU", new { VitalSignId = "", ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+        @*var datetimepicker = $("#datetimepicker").data("kendoDateTimePicker");
+        datetimepicker.value("@DateTime.Now.Day" + "/" + "@DateTime.Now.Month" + "/" + "@DateTime.Now.Year" + " " + "@DateTime.Now.ToString("hh:mm tt")");*@
+    });
+         $('#pump-content').load('@Url.Action("GetPumpForm", "TeleICU", new { PumpId = "", ICUId = HashIdsManager.Encrypt(Model.TeleICUId) })', function () {
+        @*var datetimepicker = $("#datetimepicker").data("kendoDateTimePicker");
+        datetimepicker.value("@DateTime.Now.Day" + "/" + "@DateTime.Now.Month" + "/" + "@DateTime.Now.Year" + " " + "@DateTime.Now.ToString("hh:mm tt")");*@
+    });
+
+
+
+
+
+
+
+
+
+    $("input[type=number]").on("keypress", function (evt) {
+
+        if (evt.which != 8 && evt.which != 0 && evt.which < 48 || evt.which > 57) {
+            evt.preventDefault();
+        }
+    });
+</script>

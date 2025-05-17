@@ -1,0 +1,56 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.Model.Entities;
+@using BoulevardManagement.WebApplication.Utilities;
+
+@model List<UserNotificationDTO>
+
+
+
+@foreach (var notification in Model)
+{
+
+
+    <a href="@notification.NotificationURL" class=" kt-notification-v2__item  ">
+        <div class="kt-notification-v2__item-icon">
+
+
+           
+        </div>
+        <div class="kt-notification-v2__item-wrapper">
+            <div class="kt-notification-v2__item-title">
+                @notification.NotificationString
+            </div>
+            <div class="kt-notification-v2__item-desc">
+                @DateUtilities.GetPrettyDate(DateTime.Now - notification.CreationDate)
+
+            </div>
+
+        </div>
+
+    </a>
+
+
+    <hr />
+
+}
+
+<style>
+    .permalink_section {
+        width: 300px;
+        white-space: pre-wrap !important; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word !important; /* Internet Explorer 5.5+ */
+        border: 0px !important;
+    }
+
+    /*.notification-unread {
+        background-color: #ebedf0;
+    }
+
+    .notification-new {
+        background-color: #ebedf0;
+    }*/
+</style>
+

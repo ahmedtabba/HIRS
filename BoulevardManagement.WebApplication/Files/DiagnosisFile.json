@@ -1,0 +1,596 @@
+﻿ [
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": " Generalized anxiety disorder",
+            "SubDiagnosisArabicName": " القلق العام"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Specific phobia",
+            "SubDiagnosisArabicName": "رهاب محدد"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Social phobia (Social anxiety disorder)",
+            "SubDiagnosisArabicName": "رهاب اجتماعي"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Separation anxiety disorder",
+            "SubDiagnosisArabicName": "اضطراب قلق الانفصال"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Selective mutism",
+            "SubDiagnosisArabicName": "الصمت الانتقائي"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Panic Disorder",
+            "SubDiagnosisArabicName": "اضطراب الهلع"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Panic attack (specifier)",
+            "SubDiagnosisArabicName": "هجمة هلع (محدد)"
+        },
+        {
+            "DiagnosisName": "Anxiety disorders",
+            "DiagnosisArabicName": "اضطرابات القلق",
+            "SubDiagnosisName": "Agoraphobia",
+            "SubDiagnosisArabicName": "رهاب الساح"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Obsessive Compulsive Disorder",
+            "SubDiagnosisArabicName": " الوسواس القهري"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Trichotillomania (Hair-pulling disorder)",
+            "SubDiagnosisArabicName": "هوس نتف الشعر-اضطراب نتف الاشعار"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Excoriation (Skin-picking disorder)",
+            "SubDiagnosisArabicName": "نزع الجلد -اضطراب نزع الجلد"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Body dysmorphic disorder",
+            "SubDiagnosisArabicName": "اضطراب تشوه شكل الجسم"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Hoarding disorder",
+            "SubDiagnosisArabicName": "اضطراب الاكتناز"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Post Traumatic Stress Disorder",
+            "SubDiagnosisArabicName": "اضطراب ما بعد الصدمة"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Acute stress disorder",
+            "SubDiagnosisArabicName": "اضطراب الشدة الحاد"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Adjustment disorder",
+            "SubDiagnosisArabicName": "اضطراب التكيف (التأقلم)"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Reactive attachment disorder",
+            "SubDiagnosisArabicName": "اضطراب التعلق التفاعلي"
+        },
+        {
+            "DiagnosisName": "Obsessive-Compulsive and related disorders",
+            "DiagnosisArabicName": "طيف الوسواس القهري والاضطرابات المرتبطة",
+            "SubDiagnosisName": "Disinhibited social engagement disorder",
+            "SubDiagnosisArabicName": "اضطراب المشاركة الاجتماعية غير المثبطة"
+        },
+        {
+            "DiagnosisName": "Depressive disorders",
+            "DiagnosisArabicName": "الاضطرابات الاكتئابية",
+            "SubDiagnosisName": "Major Depressive Disorder",
+            "SubDiagnosisArabicName": "الاضطراب الاكتئابي الجسيم"
+        },
+        {
+            "DiagnosisName": "Depressive disorders",
+            "DiagnosisArabicName": "الاضطرابات الاكتئابية",
+            "SubDiagnosisName": "Persistent Depressive Disorder (Dysthymia)",
+            "SubDiagnosisArabicName": "اضطراب اكتئابي مستمر (سوء المزاج)"
+        },
+        {
+            "DiagnosisName": "Depressive disorders",
+            "DiagnosisArabicName": "الاضطرابات الاكتئابية",
+            "SubDiagnosisName": "Premenstrual dysphoric disorder",
+            "SubDiagnosisArabicName": "اضطراب سوء المزاج ما قبل الطمث"
+        },
+        {
+            "DiagnosisName": "Depressive disorders",
+            "DiagnosisArabicName": "الاضطرابات الاكتئابية",
+            "SubDiagnosisName": "Disruptive mood dysregulation disorder",
+            "SubDiagnosisArabicName": "اضطراب المزاج المتقلب المشوش"
+        },
+        {
+            "DiagnosisName": "Bipolar and related disorders",
+            "DiagnosisArabicName": "ثنائي القطب والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Bipolar I",
+            "SubDiagnosisArabicName": "اضطراب ثنائي القطب 1"
+        },
+        {
+            "DiagnosisName": "Bipolar and related disorders",
+            "DiagnosisArabicName": "ثنائي القطب والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Bipolar II",
+            "SubDiagnosisArabicName": "اضطراب ثنائي القطب 2"
+        },
+        {
+            "DiagnosisName": "Bipolar and related disorders",
+            "DiagnosisArabicName": "ثنائي القطب والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Cyclothymic",
+            "SubDiagnosisArabicName": "اضطراب المزاج الدوري"
+        },
+        {
+            "DiagnosisName": "Schizophrenia spectrum and other psychotic disorders",
+            "DiagnosisArabicName": "طيف الفصام والاضطرابات الأخرى ذات الصلة",
+            "SubDiagnosisName": "Schizophrenia",
+            "SubDiagnosisArabicName": "الفصام"
+        },
+        {
+            "DiagnosisName": "Schizophrenia spectrum and other psychotic disorders",
+            "DiagnosisArabicName": "طيف الفصام والاضطرابات الأخرى ذات الصلة",
+            "SubDiagnosisName": "Schizoaffective disorder",
+            "SubDiagnosisArabicName": "اضطراب الفصام الوجداني"
+        },
+        {
+            "DiagnosisName": "Schizophrenia spectrum and other psychotic disorders",
+            "DiagnosisArabicName": "طيف الفصام والاضطرابات الأخرى ذات الصلة",
+            "SubDiagnosisName": "Schizophreniform disorder",
+            "SubDiagnosisArabicName": "الاضطراب الفصامي الشكل"
+        },
+        {
+            "DiagnosisName": "Schizophrenia spectrum and other psychotic disorders",
+            "DiagnosisArabicName": "طيف الفصام والاضطرابات الأخرى ذات الصلة",
+            "SubDiagnosisName": "Brief psychotic disorder",
+            "SubDiagnosisArabicName": "الاضطراب الذهاني الوجيز"
+        },
+        {
+            "DiagnosisName": "Schizophrenia spectrum and other psychotic disorders",
+            "DiagnosisArabicName": "طيف الفصام والاضطرابات الأخرى ذات الصلة",
+            "SubDiagnosisName": "Delusional disorder",
+            "SubDiagnosisArabicName": "الاضطراب التوهمي"
+        },
+        {
+            "DiagnosisName": "Schizophrenia spectrum and other psychotic disorders",
+            "DiagnosisArabicName": "طيف الفصام والاضطرابات الأخرى ذات الصلة",
+            "SubDiagnosisName": "Catatonia",
+            "SubDiagnosisArabicName": "الكاتاتونيا"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Intellectual disability (intellectual developmental disorder)",
+            "SubDiagnosisArabicName": " الإعاقات الذهنية (اضطراب النمو الذهني )"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Global developmental delay",
+            "SubDiagnosisArabicName": "تأخر النمو الشامل"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Language disorder",
+            "SubDiagnosisArabicName": "اضطراب اللغة"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Speech sound disorder (phonological disorder)",
+            "SubDiagnosisArabicName": "اضطراب صوت الكلام"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Childhood-onset fluency disorder (Stuttering)",
+            "SubDiagnosisArabicName": "البدء الطفلي لاضطراب الطلاقة (التأتأة)"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Social (pragmatic) communication disorder",
+            "SubDiagnosisArabicName": "اضطراب التواصل الاجتماعي (العملي)"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Autism Spectrum disorder",
+            "SubDiagnosisArabicName": " اضطراب طيف التوحد"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "ADHD",
+            "SubDiagnosisArabicName": "اضطراب نقص الانتباه /فرط الحركة"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Specific learning disorder",
+            "SubDiagnosisArabicName": " اضطراب التعلم المحدد"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Developmental coordination disorder",
+            "SubDiagnosisArabicName": " اضطراب التناسق التطوري"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Stereotypic movement disorder",
+            "SubDiagnosisArabicName": "اضطراب الحركة النمطي"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Tic disorders",
+            "SubDiagnosisArabicName": " اضطراب العرة"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Tourette's disorder",
+            "SubDiagnosisArabicName": " اضطراب توريت"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Persistent(chronic) motoror vocal tic disorder",
+            "SubDiagnosisArabicName": "اضطراب العرة الحركية أو الصوتية المستمر المزمن"
+        },
+        {
+            "DiagnosisName": "Neurodevelopmental disorders",
+            "DiagnosisArabicName": "اضطرابات النمو العصبية",
+            "SubDiagnosisName": "Provisional tic disorder",
+            "SubDiagnosisArabicName": "اضطراب العرات التمهيدي"
+        },
+        {
+            "DiagnosisName": "Dissociative Disorders",
+            "DiagnosisArabicName": "الاضطرابات التفارقية",
+            "SubDiagnosisName": "Dissociative Identity Disorder",
+            "SubDiagnosisArabicName": "اضطراب الهوية التفارقية"
+        },
+        {
+            "DiagnosisName": "Dissociative Disorders",
+            "DiagnosisArabicName": "الاضطرابات التفارقية",
+            "SubDiagnosisName": "Dissociative amnesia",
+            "SubDiagnosisArabicName": "النساوة التفارقية"
+        },
+        {
+            "DiagnosisName": "Dissociative Disorders",
+            "DiagnosisArabicName": "الاضطرابات التفارقية",
+            "SubDiagnosisName": "Depersonalization/Derealization disorder",
+            "SubDiagnosisArabicName": "اضطراب تبدّد الشخصية/تبدد الواقع"
+        },
+        {
+            "DiagnosisName": "Somatic Symptom and related disorders",
+            "DiagnosisArabicName": "العرض الجسدي والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Conversion disorder",
+            "SubDiagnosisArabicName": "اضطراب التحويل -اضطراب العرض العصبي الوظيفي"
+        },
+        {
+            "DiagnosisName": "Somatic Symptom and related disorders",
+            "DiagnosisArabicName": "العرض الجسدي والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Illness anxiety disorder",
+            "SubDiagnosisArabicName": "اضطراب قلق المرض"
+        },
+        {
+            "DiagnosisName": "Somatic Symptom and related disorders",
+            "DiagnosisArabicName": "العرض الجسدي والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Somatic symptom disorder",
+            "SubDiagnosisArabicName": "اضطراب العرض الجسدي"
+        },
+        {
+            "DiagnosisName": "Somatic Symptom and related disorders",
+            "DiagnosisArabicName": "العرض الجسدي والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Psychological Factors Affecting Other Medical Conditions  ",
+            "SubDiagnosisArabicName": "العوامل النفسية المؤثرة في الحالات الطبية الأخرى"
+        },
+        {
+            "DiagnosisName": "Somatic Symptom and related disorders",
+            "DiagnosisArabicName": "العرض الجسدي والاضطرابات ذات الصلة",
+            "SubDiagnosisName": "Factitious Disorder",
+            "SubDiagnosisArabicName": "الاضطراب المُفتعَل"
+        },
+        {
+            "DiagnosisName": "Feeding and Eating Disorders",
+            "DiagnosisArabicName": "اضطرابات التغذية والأكل",
+            "SubDiagnosisName": "Rumination disorder",
+            "SubDiagnosisArabicName": "اضطراب الاجترار "
+        },
+        {
+            "DiagnosisName": "Feeding and Eating Disorders",
+            "DiagnosisArabicName": "اضطرابات التغذية والأكل",
+            "SubDiagnosisName": "Avoidant/Restrictive food intake disorder",
+            "SubDiagnosisArabicName": "اضطراب تناول الطعام التجنبي المقيد"
+        },
+        {
+            "DiagnosisName": "Feeding and Eating Disorders",
+            "DiagnosisArabicName": "اضطرابات التغذية والأكل",
+            "SubDiagnosisName": "Anorexia Nervosa",
+            "SubDiagnosisArabicName": "فقدان الشهية العصبي"
+        },
+        {
+            "DiagnosisName": "Feeding and Eating Disorders",
+            "DiagnosisArabicName": "اضطرابات التغذية والأكل",
+            "SubDiagnosisName": "Bulimia Nervosa",
+            "SubDiagnosisArabicName": "النهم العصبي"
+        },
+        {
+            "DiagnosisName": "Feeding and Eating Disorders",
+            "DiagnosisArabicName": "اضطرابات التغذية والأكل",
+            "SubDiagnosisName": "Binge-eating disorder",
+            "SubDiagnosisArabicName": "اضطراب الشراهة للطعام"
+        },
+        {
+            "DiagnosisName": "Elimination Disorders",
+            "DiagnosisArabicName": "اضطرابات الافراغ",
+            "SubDiagnosisName": "Enuresis",
+            "SubDiagnosisArabicName": "سلس البول"
+        },
+        {
+            "DiagnosisName": "Elimination Disorders",
+            "DiagnosisArabicName": "اضطرابات الافراغ",
+            "SubDiagnosisName": "Encopresis",
+            "SubDiagnosisArabicName": "سلس الغائط"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Insomnia disorder",
+            "SubDiagnosisArabicName": "اضطراب الأرق"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Hypersomnolence disorder",
+            "SubDiagnosisArabicName": "اضطراب فرط النعاس"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Narcolepsy",
+            "SubDiagnosisArabicName": "النوم الانتيابي"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Obstructive Sleep Apnea Hypopnea",
+            "SubDiagnosisArabicName": "توقف التنفس أو قصور التنفس الانسدادي أثناء النوم"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Central Sleep Apnea",
+            "SubDiagnosisArabicName": "توقف التنفس وسط النوم"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Sleep-related hypoventilation",
+            "SubDiagnosisArabicName": "نقص التهوية المتعلق بالنوم"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Circadian rhythm sleep-wake disorders",
+            "SubDiagnosisArabicName": "اضطراب إيقاع النوم -اليقظة اليومي"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Sleepwalking",
+            "SubDiagnosisArabicName": "المشي أثناء النوم"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Sleep terrors",
+            "SubDiagnosisArabicName": "رعب النوم"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Nightmare disorder",
+            "SubDiagnosisArabicName": "اضطراب الكابوس"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "REM Sleep behavior disorder",
+            "SubDiagnosisArabicName": "اضطراب السلوك خلال نوم حركة العين السريعة"
+        },
+        {
+            "DiagnosisName": "Sleep-Wake Disorders",
+            "DiagnosisArabicName": "اضطرابات النوم واليقظة",
+            "SubDiagnosisName": "Restless legs syndrome",
+            "SubDiagnosisArabicName": "متلازمة الساقين المتململين"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Delayed ejaculation",
+            "SubDiagnosisArabicName": "تأخر القذف"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Erectile disorder",
+            "SubDiagnosisArabicName": "اضطراب الانتصاب"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Orgasmic disorder",
+            "SubDiagnosisArabicName": "اضطراب النشوة الجنسية"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Sexual interest/arousal disorder",
+            "SubDiagnosisArabicName": "اضطراب الاهتمام/الاستثارة الجنسي"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Genito-pelvic pain/penetration disorder",
+            "SubDiagnosisArabicName": "اضطراب ألم الإيلاج الحوضي التناسلي"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Hypoactive sexual desire disorder",
+            "SubDiagnosisArabicName": "اضطراب نقص النشاط والرغبة الجنسية"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": "Premature ejaculation",
+            "SubDiagnosisArabicName": "القذف المبكر"
+        },
+        {
+            "DiagnosisName": "Sexual Dysfunctions",
+            "DiagnosisArabicName": "اختلالات الوظيفة الجنسية",
+            "SubDiagnosisName": " Gender Dysphoria",
+            "SubDiagnosisArabicName": "الانزعاج من الجندر"
+        },
+        {
+            "DiagnosisName": "Substance-related and Addictive disorders",
+            "DiagnosisArabicName": "الاضطرابات المتعلقة بمادة والإدمانية",
+            "SubDiagnosisName": "Substance use disorders",
+            "SubDiagnosisArabicName": "اضطرابات استعمال المادة"
+        },
+        {
+            "DiagnosisName": "Substance-related and Addictive disorders",
+            "DiagnosisArabicName": "الاضطرابات المتعلقة بمادة والإدمانية",
+            "SubDiagnosisName": "Substance intoxication",
+            "SubDiagnosisArabicName": "الانسمام بمادة"
+        },
+        {
+            "DiagnosisName": "Substance-related and Addictive disorders",
+            "DiagnosisArabicName": "الاضطرابات المتعلقة بمادة والإدمانية",
+            "SubDiagnosisName": "Substance withdrawal",
+            "SubDiagnosisArabicName": "سحب المادة"
+        },
+        {
+            "DiagnosisName": "Substance-related and Addictive disorders",
+            "DiagnosisArabicName": "الاضطرابات المتعلقة بمادة والإدمانية",
+            "SubDiagnosisName": "Substance induced mental disorders",
+            "SubDiagnosisArabicName": "اضطرابات نفسية ناجمة عن استخدام مواد"
+        },
+        {
+            "DiagnosisName": "Substance-related and Addictive disorders",
+            "DiagnosisArabicName": "الاضطرابات المتعلقة بمادة والإدمانية",
+            "SubDiagnosisName": "Gambling disorder",
+            "SubDiagnosisArabicName": "اضطراب المقامرة"
+        },
+        {
+            "DiagnosisName": "Disruptive, Impulse-control, and Conduct disorders",
+            "DiagnosisArabicName": "اضطرابات التشوش والتحكم بالاندفاع والمسلك",
+            "SubDiagnosisName": "Oppositional Defiant Disorder",
+            "SubDiagnosisArabicName": "اضطراب التحدي المعارض"
+        },
+        {
+            "DiagnosisName": "Disruptive, Impulse-control, and Conduct disorders",
+            "DiagnosisArabicName": "اضطرابات التشوش والتحكم بالاندفاع والمسلك",
+            "SubDiagnosisName": "Intermittent Explosive Disorder",
+            "SubDiagnosisArabicName": "الاضطراب الانفجاري المتقطع"
+        },
+        {
+            "DiagnosisName": "Disruptive, Impulse-control, and Conduct disorders",
+            "DiagnosisArabicName": "اضطرابات التشوش والتحكم بالاندفاع والمسلك",
+            "SubDiagnosisName": "Conduct disorder",
+            "SubDiagnosisArabicName": "اضطراب المسلك"
+        },
+        {
+            "DiagnosisName": "Disruptive, Impulse-control, and Conduct disorders",
+            "DiagnosisArabicName": "اضطرابات التشوش والتحكم بالاندفاع والمسلك",
+            "SubDiagnosisName": "Pyromania",
+            "SubDiagnosisArabicName": "هوس إشعال الحرائق"
+        },
+        {
+            "DiagnosisName": "Disruptive, Impulse-control, and Conduct disorders",
+            "DiagnosisArabicName": "اضطرابات التشوش والتحكم بالاندفاع والمسلك",
+            "SubDiagnosisName": "Kleptomania",
+            "SubDiagnosisArabicName": "هوس السرقة"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Relational Problems",
+            "SubDiagnosisArabicName": "مشاكل العلاقات"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Abuse and Neglect",
+            "SubDiagnosisArabicName": "سوء المعاملة والإهمال"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Educational and Occupational Problems  ",
+            "SubDiagnosisArabicName": "مشاكل تعليمية و مهنية"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Housing and Economic Problems ",
+            "SubDiagnosisArabicName": "مشاكل السكن والمشاكل الاقتصادية"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "problems related to social environment",
+            "SubDiagnosisArabicName": "مشاكل أخرى ذات صلة بالبيئة الاجتماعية"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Other health service encounters for counseling and medical advice ",
+            "SubDiagnosisArabicName": "مقابلات الخدمات الصحية الأخرى للنصح والمشورة الطبية"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Problems related to psychological, personal, and environmental conditions",
+            "SubDiagnosisArabicName": "مشاكل ذات صلة بالظروف الأخرى النفسية، الشخصية، والظروف البيئية"
+        },
+        {
+            "DiagnosisName": "Other Conditions that may be a Focus of Clinical Attention",
+            "DiagnosisArabicName": "حالات أخرى قد تكون محوراً للاهتمام السريري",
+            "SubDiagnosisName": "Problems related to access to medical care and other forms of health care",
+            "SubDiagnosisArabicName": "المشاكل المتعلقة بالحصول على الرعاية الطبية وأشكال الرعاية الصحية الأخرى"
+        }
+    ]

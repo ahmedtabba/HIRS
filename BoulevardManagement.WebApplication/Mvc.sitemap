@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Home" controller="Home" action="Index">
+    <mvcSiteMapNode title="Warehouse Categories" controller="WarehouseCategory" action="Index"/>
+    <mvcSiteMapNode title="State of Product" controller="ProductCategory" action="Index"/>
+    <mvcSiteMapNode title="Food Categories" controller="FoodCategory" action="Index"/>
+    <mvcSiteMapNode title="Geographical Group" controller="CustomerGroup" action="Index"/>
+    <mvcSiteMapNode title="SalesPerson Group" controller="AgentGroup" action="Index"/>
+    <!--<mvcSiteMapNode title="Customer Product Groups" controller="CustomerProductGroup" action="Index"/>-->
+
+    <mvcSiteMapNode title="Create a new account" controller="Account" action="Register"/>
+    <mvcSiteMapNode title="Show Users" controller="Account" action="Users"/>
+    <mvcSiteMapNode title="Change Password" controller="Manage" action="ChangePassword"/>
+
+    <mvcSiteMapNode title="Show Customers" controller="Customer" action="Index"/>
+    <mvcSiteMapNode title="Customer Info" controller="Customer" action="Edit"/>
+    
+    
+    <mvcSiteMapNode title="ShowItems" controller="ZestItem" action="Index"/>
+    <mvcSiteMapNode title="New Formula Item" controller="ZestItem" action="FormulaItem"/>
+    <mvcSiteMapNode title="New Purchased Item" controller="ZestItem" action="PurchasedItem"/>
+    <mvcSiteMapNode title="Show Formulas" controller="FormulaForm" action="Index"/>
+    <mvcSiteMapNode title="New Formula" controller="FormulaForm" action="CreateFormula"/>
+
+
+    <mvcSiteMapNode title="New Sample Request" controller="SampleRequest" action="Create"/>
+    <mvcSiteMapNode title="New Sample Request" controller="SampleRequest" action="Index"/>
+    <mvcSiteMapNode title="Show Sample Requests" controller="SampleRequest" action="ViewAll"/>
+
+
+    <mvcSiteMapNode title="New Competitive Sample" controller="CompetitiveSample" action="Index"/>
+    <mvcSiteMapNode title="Show CompetitiveSamples" controller="CompetitiveSample" action="ViewAll"/>
+    
+   <mvcSiteMapNode title="Customers Feedbacks" controller="CustomerFeedback" action="Index"/>
+    <mvcSiteMapNode title="Customer Feedback" controller="CustomerFeedback" action="Edit"/>
+    <mvcSiteMapNode title="Communication Ways" controller="CommunicationWay" action="Index"/>
+    <mvcSiteMapNode title="Feedback Types" controller="FeedbackType" action="Index"/>
+ 
+  </mvcSiteMapNode>
+</mvcSiteMap>

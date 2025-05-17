@@ -1,0 +1,90 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@using TripleA.Utilities;
+@model PatientDTO
+
+<style>
+    .bolded{
+        font-weight:700!important;
+    }
+</style>
+
+<div class="card card-custom card-stretch card-shadowless bg-gray-100 gutter-b">
+    <div class="card-header border-0 pt-5">
+        <div class="card-title">
+            <h1 class="card-label">@CommonResource.PatientInfo  </h1>
+        </div>
+    </div>
+    
+    <div class="card-body pt-2">
+        <div class="form-group row">
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.PatientCode:</label>
+                <strong style="color: #F37038;">@Model.PatientCode</strong>
+            </div>
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.FullName:</label>
+                @Model.FullName
+            </div>
+
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.FatherName:</label>
+                @Model.FatherName
+            </div>
+
+          
+
+
+
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.MotherName:</label>
+                @Model.MotherName
+            </div>
+
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.Gender:</label>
+                @Model.Gender.GetEnumDescription()
+            </div>
+
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.BirthDate:</label>
+                @Model.BirthDate.ToShortDateString()
+            </div>
+
+          
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.PlaceOfBirth:</label>
+                @Model.PlaceOfBirth
+            </div>
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.PhoneNumber:</label>
+                @Model.PhoneNumber
+            </div>
+
+            <div class="col-lg-4 martialstatusClass">
+                <label class="bolded">@PatientResource.MaritalStatus:</label>
+                @if (Model.MaritalStatus != null)
+                {
+                    <span>@Model.MaritalStatus.GetEnumDescription()</span>
+
+                }
+            </div>
+
+            <div class="col-lg-4">
+                <label class="bolded">@PatientResource.BloodType:</label>
+                @if (Model.BloodType != null)
+                {
+                    <span>@Model.BloodType.GetEnumDescription()</span>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--Patient Info End-->

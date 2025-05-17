@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Abortion" xml:space="preserve">
+    <value>Abortion</value>
+  </data>
+  <data name="AbortionInfoSpan" xml:space="preserve">
+    <value>Please enter abortion</value>
+  </data>
+  <data name="AgeAtAdmission" xml:space="preserve">
+    <value>Age at admission</value>
+  </data>
+  <data name="AgeAtAdmissionInfoSpan" xml:space="preserve">
+    <value>Please enter age at admission</value>
+  </data>
+  <data name="ApgarScore" xml:space="preserve">
+    <value>Apgar score</value>
+  </data>
+  <data name="ApgarScoreFifthMin" xml:space="preserve">
+    <value>5 th min</value>
+  </data>
+  <data name="ApgarScoreFifthMinInfoSpan" xml:space="preserve">
+    <value>Please enter 5 th min</value>
+  </data>
+  <data name="ApgarScoreFirstMin" xml:space="preserve">
+    <value>1 th min</value>
+  </data>
+  <data name="ApgarScoreFirstMinInfoSpan" xml:space="preserve">
+    <value>Please enter 1 th min</value>
+  </data>
+  <data name="ApgarScoreTenthMin" xml:space="preserve">
+    <value>10 th min</value>
+  </data>
+  <data name="ApgarScoreTenthMinInfoSpan" xml:space="preserve">
+    <value>Please enter 10 th min</value>
+  </data>
+  <data name="BirthWeight" xml:space="preserve">
+    <value>Birth weight (gram)</value>
+  </data>
+  <data name="BirthWeightInfoSpan" xml:space="preserve">
+    <value>Please enter birth weight</value>
+  </data>
+  <data name="BP" xml:space="preserve">
+    <value>BP</value>
+  </data>
+  <data name="BPInfoSpan" xml:space="preserve">
+    <value>Please enter BP</value>
+  </data>
+  <data name="CardiovascularSystem" xml:space="preserve">
+    <value>Cardiovascular System</value>
+  </data>
+  <data name="CardiovascularSystemInfoSpan" xml:space="preserve">
+    <value>Please enter cardiovascular system</value>
+  </data>
+  <data name="CentralNervousSystem" xml:space="preserve">
+    <value>Central Nervous System</value>
+  </data>
+  <data name="CentralNervousSystemInfoSpan" xml:space="preserve">
+    <value>Please enter central nervous system</value>
+  </data>
+  <data name="ChronicDiseasesAndPreviousObstetricalHistory" xml:space="preserve">
+    <value>Chronic diseases and previous obstetrical history (Diabetes, hypertension, neonatal death, RH or ABO incompatibility, etc…)</value>
+  </data>
+  <data name="ChronicDiseasesAndPreviousObstetricalHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter chronic diseases and previous obstetrical history</value>
+  </data>
+  <data name="ChronologicalAge" xml:space="preserve">
+    <value>Chronological age (after birth)</value>
+  </data>
+  <data name="ChronologicalAgeInfoSpan" xml:space="preserve">
+    <value>Please enter chronological age</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="ColorInfoSpan" xml:space="preserve">
+    <value>Please enter color</value>
+  </data>
+  <data name="CommunicationWithFamily" xml:space="preserve">
+    <value>Communication with family (Reason for admission, medical or surgical management, education, family support, etc…)</value>
+  </data>
+  <data name="CommunicationWithFamilyInfoSpan" xml:space="preserve">
+    <value>Please enter communication with family</value>
+  </data>
+  <data name="CurrentIllnessHistory" xml:space="preserve">
+    <value>Current illness history</value>
+  </data>
+  <data name="CurrentIllnessHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter current illness history</value>
+  </data>
+  <data name="CurrentPregnancyRelatedMedicalHistory" xml:space="preserve">
+    <value>Current pregnancy related medical history (diabetes, hypertension, oligoamnios, infection, etc…)</value>
+  </data>
+  <data name="CurrentPregnancyRelatedMedicalHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter current pregnancy related medical history</value>
+  </data>
+  <data name="FamilyHistory" xml:space="preserve">
+    <value>Family history (Consanguinity, congenital anomalies, metabolic disorders, etc…)</value>
+  </data>
+  <data name="FamilyHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter family history</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="FromInfoSpan" xml:space="preserve">
+    <value>Please enter from</value>
+  </data>
+  <data name="GastrointestinalTract" xml:space="preserve">
+    <value>Gastrointestinal tract</value>
+  </data>
+  <data name="GastrointestinalTractAndGenitourinarySystem" xml:space="preserve">
+    <value>Gastrointestinal Tract &amp; Genitourinary System</value>
+  </data>
+  <data name="GastrointestinalTractAndGenitourinarySystemInfoSpan" xml:space="preserve">
+    <value>Please enter gastrointestinal tract &amp; genitourinary system</value>
+  </data>
+  <data name="GastrointestinalTractInfoSpan" xml:space="preserve">
+    <value>Please enter gastrointestinal tract</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="GenitourinarySystem" xml:space="preserve">
+    <value>Genitourinary System</value>
+  </data>
+  <data name="GenitourinarySystemInfoSpan" xml:space="preserve">
+    <value>Please enter genitourinary system</value>
+  </data>
+  <data name="GestationalAge" xml:space="preserve">
+    <value>Gestational age (weeks)</value>
+  </data>
+  <data name="GestationalAgeInfoSpan" xml:space="preserve">
+    <value>Please enter gestational age</value>
+  </data>
+  <data name="Gravida" xml:space="preserve">
+    <value>Gravida</value>
+  </data>
+  <data name="GravidaInfoSpan" xml:space="preserve">
+    <value>Please enter gravida</value>
+  </data>
+  <data name="HaematologicalSystem" xml:space="preserve">
+    <value>Haematological System</value>
+  </data>
+  <data name="HaematologicalSystemInfoSpan" xml:space="preserve">
+    <value>Please enter haematological system</value>
+  </data>
+  <data name="HeadCircumference" xml:space="preserve">
+    <value>Head circumference (cm)</value>
+  </data>
+  <data name="HeadCircumferenceInfoSpan" xml:space="preserve">
+    <value>Please enter head circumference</value>
+  </data>
+  <data name="HR" xml:space="preserve">
+    <value>HR (b/min)</value>
+  </data>
+  <data name="HRInfoSpan" xml:space="preserve">
+    <value>Please enter HR</value>
+  </data>
+  <data name="LabourAndDelivery" xml:space="preserve">
+    <value>Labour &amp; Delivery</value>
+  </data>
+  <data name="LabourAndDeliveryInfoSpan" xml:space="preserve">
+    <value>Please enter labour &amp; delivery</value>
+  </data>
+  <data name="LabourAndDeliveryRemarks" xml:space="preserve">
+    <value>Labour &amp; Delivery Remarks</value>
+  </data>
+  <data name="LabourAndDeliveryRemarksInfoSpan" xml:space="preserve">
+    <value>Please enter labour &amp; delivery remarks</value>
+  </data>
+  <data name="Lenghth" xml:space="preserve">
+    <value>Length (cm)</value>
+  </data>
+  <data name="LenghthInfoSpan" xml:space="preserve">
+    <value>Please enter length</value>
+  </data>
+  <data name="Map" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="MotherAge" xml:space="preserve">
+    <value>Mother age</value>
+  </data>
+  <data name="MotherAgeInfoSpan" xml:space="preserve">
+    <value>Please enter mother age</value>
+  </data>
+  <data name="OnlineNICUConsultationForm" xml:space="preserve">
+    <value>Online NICU Consultation Form</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Others</value>
+  </data>
+  <data name="OthersInfoSpan" xml:space="preserve">
+    <value>Please enter others</value>
+  </data>
+  <data name="Parity" xml:space="preserve">
+    <value>Parity</value>
+  </data>
+  <data name="ParityInfoSpan" xml:space="preserve">
+    <value>Please enter parity</value>
+  </data>
+  <data name="PhysicalExamination" xml:space="preserve">
+    <value>Physical Examination</value>
+  </data>
+  <data name="PlanOfCare" xml:space="preserve">
+    <value>Plan of care (IVF, Antibiotics, Medications, Labs, investigations, consultations, etc…)</value>
+  </data>
+  <data name="PlanOfCareInfoSpan" xml:space="preserve">
+    <value>Please enter plan of care</value>
+  </data>
+  <data name="Posture" xml:space="preserve">
+    <value>Posture</value>
+  </data>
+  <data name="PostureInfoSpan" xml:space="preserve">
+    <value>Please enter posture</value>
+  </data>
+  <data name="PregnancyAndDeliveryHistory" xml:space="preserve">
+    <value>Pregnancy and delivery history</value>
+  </data>
+  <data name="PrimaryDiagnosisOrDifferentialDiagnosis" xml:space="preserve">
+    <value>Primary Diagnosis &amp; Differential Diagnosis</value>
+  </data>
+  <data name="PrimaryDiagnosisOrDifferentialDiagnosisInfoSpan" xml:space="preserve">
+    <value>Please enter primary diagnosis &amp; differential diagnosis</value>
+  </data>
+  <data name="Procedures" xml:space="preserve">
+    <value>Procedures (Intubation, umbilical line catheterization, chest tube, etc…)</value>
+  </data>
+  <data name="ProceduresInfoSpan" xml:space="preserve">
+    <value>Please enter procedures</value>
+  </data>
+  <data name="PsychosocialHistory" xml:space="preserve">
+    <value>Psychosocial history (Home environment, occupation of father and mother, problems, family support system, etc…)</value>
+  </data>
+  <data name="PsychosocialHistoryInfoSpan" xml:space="preserve">
+    <value>Please enter psychosocial history</value>
+  </data>
+  <data name="RBS" xml:space="preserve">
+    <value>RBS (mg/dL)</value>
+  </data>
+  <data name="RBSInfoSpan" xml:space="preserve">
+    <value>Please enter RBS</value>
+  </data>
+  <data name="ReasonOfAdmission" xml:space="preserve">
+    <value>Reason of admission</value>
+  </data>
+  <data name="ReasonOfAdmissionInfoSpan" xml:space="preserve">
+    <value>Please enter reason of admission</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="RemarksInfoSpan" xml:space="preserve">
+    <value>Please enter remarks</value>
+  </data>
+  <data name="RespiratorySystem" xml:space="preserve">
+    <value>Respiratory System</value>
+  </data>
+  <data name="RespiratorySystemInfoSpan" xml:space="preserve">
+    <value>Please enter respiratory system</value>
+  </data>
+  <data name="Resuscitation" xml:space="preserve">
+    <value>Resuscitation</value>
+  </data>
+  <data name="ResuscitationInfoSpan" xml:space="preserve">
+    <value>Please enter resuscitation</value>
+  </data>
+  <data name="ResuscitationRemarks" xml:space="preserve">
+    <value>Resuscitation Remarks</value>
+  </data>
+  <data name="ResuscitationRemarksInfoSpan" xml:space="preserve">
+    <value>Please enter resuscitation remarks</value>
+  </data>
+  <data name="RR" xml:space="preserve">
+    <value>RR (b/min)</value>
+  </data>
+  <data name="RRInfoSpan" xml:space="preserve">
+    <value>Please enter RR</value>
+  </data>
+  <data name="Skin" xml:space="preserve">
+    <value>Skin</value>
+  </data>
+  <data name="SkinInfoSpan" xml:space="preserve">
+    <value>Please enter skin</value>
+  </data>
+  <data name="SpO2" xml:space="preserve">
+    <value>SpO2 %</value>
+  </data>
+  <data name="SpO2InfoSpan" xml:space="preserve">
+    <value>Please enter SpO2 %</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Temp" xml:space="preserve">
+    <value>Temp (C)</value>
+  </data>
+  <data name="TempInfoSpan" xml:space="preserve">
+    <value>Please enter Temp</value>
+  </data>
+  <data name="VitalSigns" xml:space="preserve">
+    <value>Vital Signs</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Weight (gram)</value>
+  </data>
+  <data name="WeightInfoSpan" xml:space="preserve">
+    <value>Please enter weight</value>
+  </data>
+</root>

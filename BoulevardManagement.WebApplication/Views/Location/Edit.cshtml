@@ -1,0 +1,159 @@
+﻿
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@model LocationDTO
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+<!--begin::Container-->
+<div class="container">
+
+    <div class="card card-custom  " @*id="kt_page_sticky_card"*@>
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">
+                    @if (Model.Id == 0)
+                    {
+                        @Html.Raw(LocationResource.NewLocation);
+                    }
+                    else
+                    {
+                        @Html.Raw(LocationResource.UpdateLocation);
+                    }
+                    <i class="mr-2"></i>
+
+                </h3>
+            </div>
+            <div class="card-toolbar">
+                <a href="@Url.Action("Index","Location")" class="btn btn-light-primary font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+                </a>
+                <div class="btn-group">
+                    <button type="button" id="saveBtn" class="btn btn-primary font-weight-bolder">
+                        <i class="ki ki-check icon-sm"></i>@CommonResource.Save
+                    </button>
+                    @if (User.IsInRoles(RoleConsistent.Location.Edit, RoleConsistent.Location.Add))
+                    {
+                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                            <ul class="nav nav-hover flex-column">
+                                @if (User.IsInRole(RoleConsistent.Location.Edit))
+                                {
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link" id="saveAndContinueBtn">
+                                            <i class="nav-icon flaticon2-reload"></i>
+                                            <span class="nav-text">@CommonResource.Save &amp; @CommonResource.Continue</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.IsInRole(RoleConsistent.Location.Add))
+                                {
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link" id="saveAndAddNewBtn">
+                                            <i class="nav-icon flaticon2-add-1"></i>
+                                            <span class="nav-text">@CommonResource.Save &amp; @CommonResource.AddNew</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!--begin::Form-->
+        @using (Html.BeginForm("Edit", "Location", FormMethod.Post, new { @id = "LocationFormId" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.Id)
+            @Html.Hidden("FormType", SubmitFormType.SaveAndExist, new { @id = "FormType" })
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>@LocationResource.Code:</label>
+                        @Html.EditorFor(m => m.Code, new { htmlAttributes = new { @class = "form-control", @placeholder = LocationResource.Code, @id = "Code" } })
+                        @Html.ValidationMessageFor(x => x.Code)
+                        <span class="form-text text-muted">@LocationResource.CodeInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@LocationResource.Name:</label>
+                        @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = LocationResource.Name, @id = "Name" } })
+                        @Html.ValidationMessageFor(x => x.Name)
+                        <span class="form-text text-muted">@LocationResource.NameInfoSpan</span>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <label>@LocationResource.Department:</label>
+                        <div class="@customeClass">
+                            @(Html.Kendo().DropDownListFor(x => x.DepartmentId)
+                                                                    .DataTextField("Name")
+                                                                    .DataValueField("Id")
+                                                                    .Filter("contains")
+                                                                    .OptionLabel(LocationResource.SelectDepartment)
+                                                                    //.Events(ev => ev.Change("onChange"))
+                                                                    .DataSource(source =>
+                                                                    {
+                                                                        source.Read(read =>
+                                                            {
+                                                                read.Action("GetHasLocationsDepartments", "Department", new { @Area = "" })/*.Data("DataFunction")*/;
+                                                            }).ServerFiltering(true);
+                                                                    }).HtmlAttributes(new { @class = "form-control custom-style", @id = "DepartmentId", @style = "width:100%" }))
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DepartmentId)
+
+                        <span class="form-text text-muted">@LocationResource.DepartmentInfoSpan</span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-12">
+                        <label>@LocationResource.Note:</label>
+                        @Html.TextAreaFor(c => c.Note, new { @class = "form-control", @placeholder = LocationResource.Note, rows = 3, columns = 30 })
+                        @Html.ValidationMessageFor(model => model.Note)
+                        <span class="form-text text-muted">@LocationResource.NoteInfoSpan</span>
+                    </div>
+                </div>
+
+
+            </div>
+        }
+
+
+
+        <!--end::Form-->
+    </div>
+</div>
+<!--end::Container-->
+
+<script>
+    $(function () {
+
+        $("#saveBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndExist");
+            Submit();
+        });
+
+
+        $("#saveAndContinueBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndContinue");
+            Submit();
+        });
+
+        $("#saveAndAddNewBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndAddNew");
+            Submit();
+        });
+    });
+
+    function Submit() {
+        $(".k-widget").removeClass("input-validation-error");
+        $("#LocationFormId").submit();
+    }
+</script>
+

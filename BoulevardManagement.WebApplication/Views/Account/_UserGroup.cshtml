@@ -1,0 +1,58 @@
+﻿
+@model BoulevardManagement.WebApplication.Models.UserGroupViewModel
+
+@using (Html.BeginForm("ChangeUserGroup", "Account", FormMethod.Post, new { @id = "ChangeUserGroupForm" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="modal" id="UserGroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="Close">
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title"><i class="fa fa-user-circle"></i>&nbsp;Change User Group</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        @Html.Hidden("userId", "", new { @id = "userId" })
+
+
+                        @Html.Label("Group", new { @class = "form-label" })
+
+                        @(Html.Kendo().MultiSelectFor(c=>c.GroupIds)
+                              .Name("UserGroups")
+                              .DataTextField("Name")
+                              .DataValueField("Id")
+                              .Placeholder("Select group...")
+                              .AutoBind(false)
+                              .Value(Model.GroupIds)
+                              .DataSource(source =>
+                              {
+                                  source.Read(read =>
+                                  {
+                                      read.Action("GetApplicationGroups", "Account", new { @Area = ""});
+                                  })
+                                  .ServerFiltering(true);
+                              }))
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer">
+                
+                <button type="button" id="SaveUserGroup" class="btn btn btn-gold">Save</button>
+                <button type="button" id="CancleUserGroup" class="btn btn btn-gold pull-right" data-dismiss="modal">Cancel </button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+}
+

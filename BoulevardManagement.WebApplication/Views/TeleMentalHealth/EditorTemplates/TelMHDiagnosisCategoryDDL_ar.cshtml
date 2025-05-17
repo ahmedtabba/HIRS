@@ -1,0 +1,21 @@
+﻿@using BoulevardManagement.WebApplication.Resources;
+
+@model  int
+@(Html.Kendo().DropDownListFor(x=>x)
+                      .DataTextField("ArabicName")
+                      .DataValueField("Id")
+                      .OptionLabel(CommonResource.Select)
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+
+                              read.Action("GetDiagnosisCategorys_ar", "TeleMentalHealth", new { @Area = "" });
+                          }).Events(e => e.Error("KendoDDL_ErrorHandler"))
+                              .ServerFiltering(true);
+                      }).Filter("contains")
+                       .Value(Model.ToString())
+                      .HtmlAttributes(new { required = true, validationmessage = "required field", @id = "TelMHDiagnosisCategoryId" })
+//    .Events(e => e/*.Select("onSelectedItem")*/.Change("DiagnosisCategoryDDLChange_ar"))
+
+)

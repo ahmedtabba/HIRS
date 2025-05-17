@@ -1,0 +1,142 @@
+﻿
+
+@using Kendo.Mvc.UI.Html;
+@using BoulevardManagement.DTO;
+
+@{
+    var TempAttchmentFolder = BoulevardManagement.Utilities.Configurations.AttachmentsPhysicalPath.ToString();
+}
+
+<script type="text/javascript" src="~/Scripts/FileUpload.js"></script>
+
+@model BoulevardManagement.WebApplication.Models.AttachmentTemplateGridModel
+
+    @(Html.KendoGrid<ZestAttachmentDTO>()
+                    .Name(Model.GridId ) 
+                    .Columns(columns =>
+                    {
+
+                   
+
+                    columns.Bound(c => c.Description).Title("Description").Width(300);
+                    columns.Bound(c => c.CreatedByName).Title("By");
+                    columns.Bound(c => c.CreationDate).Title("Creation Date").ClientTemplate("#=kendo.toString(CreationDate, 'dd-MMM-yyyy hh:mm')#");
+                    columns.Bound(c => c.FileExtension).Title("Type").ClientTemplate("# if (FileExtension == '.jpg' || FileExtension == '.png') { #" + "<i class='fa fa-file-image-o'  style='color:black' aria-hidden='true'></i>" + "# } else if (FileExtension == '.pdf') { #" + "<i class='fa fa-file-pdf-o'  style='color:black' aria-hidden='true'></i>" + "# } else if (FileExtension == '.doc' || FileExtension == '.docx') { #" + "<i class='fa fa-file-word-o'  style='color:black' aria-hidden='true'></i>" + "# } else if (FileExtension == '.ppt' || FileExtension == '.pptx') { #" + "<i class='fa fa-file-powerpoint-o'  style='color:black' aria-hidden='true'></i>" + "# } else if (FileExtension == '.rar' || FileExtension == '.zip') { #" + "<i class='fa fa-file-archive-o' aria-hidden='true'></i>" + "# } else { #" + "<i class='fa fa-file-o'  style='color:black' aria-hidden='true'></i>" + "#}#");
+                    columns.Template(@<text></text>).Width(50).ClientTemplate("<a  href='" +
+                    Url.Action("Download", "Attachment") +
+                    "?attachmentId=#= EncrptedId #'" +
+                   "><i class='fa fa-download' style='color:black'></i></a>");
+
+                        columns.Command(command =>
+                        {
+                            command.Edit().Text("Edit");
+                            command.Custom(Model.GridId + "AttachmentDestroy").Text("Delete").Click("DeleteAttachment" + Model.GridId + "RowGrid");
+                        });
+                    })
+
+
+                     .Editable(editable => editable.Mode(GridEditMode.PopUp)
+                     .TemplateName("AttachmentUploader"))
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Events(events =>
+                    events.RequestEnd("on" + Model.GridId + "DataSourceRequestEnd")
+                    )
+                    .Model(model => { model.Id(c => c.Id); model.Field(c => c.ReferenceId); model.Field(p => p.CreationDate).Editable(false); })
+                     .PageSize(5)
+                         .Read(read => read.Action("Read", "Attachment", new { type = (int)Model.ReferenceType, objectId = Model.ReferenceId }))
+                         .Create(create => create.Action("Create", "Attachment", new { type = (int)Model.ReferenceType, parentid = Model.ReferenceId, referanceStatus = Model.ReferenceStatus }).Data("additionalDetail"))
+                         .Update(action => action.Action("Edit", "Attachment", new { type = (int)Model.ReferenceType, parentid = Model.ReferenceId, referanceStatus = Model.ReferenceStatus }).Data("additionalDetail"))
+                         .Events(events => events.Error("KendoGrid_ErrorHandler"))
+                )
+                 .ToolBar(toolbar =>
+                 {
+                     toolbar.Create().Text("Add New");
+                 })
+                 .Events(events => events.Edit("OnEditEvidence")
+                    .DataBound("on" + Model.GridId + "DataBound")
+                    )
+
+    )
+
+@Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+
+<script type="text/javascript">
+
+
+    function getResource(name) {
+        if (name == 'FileUploadPath')
+            return '@TempAttchmentFolder.Replace("\\","\\\\")';
+
+        return '';
+    }
+
+    function on@(Html.Raw(Model.GridId))DataSourceRequestEnd(e)
+    {
+        if (e.type == "create" || e.type == "update") {
+            this.read();
+        }
+    }
+
+    function on@(Html.Raw(Model.GridId))DataBound(e)
+    {
+        var grid = $("#@(Html.Raw(Model.GridId))").data("kendoGrid");
+        var gridData = grid.dataSource.view();
+
+        for (var i = 0; i < gridData.length; i++) {
+            var currentUid = gridData[i].uid;
+            if (gridData[i].ReferenceStatus != @Model.ReferenceStatus || gridData[i].CreatedByName!='@ViewBag.UserFullName') {
+                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                
+                var deleteButton = $(currenRow).find(".k-grid-AttachmentGridAttachmentDestroy");
+                var editButton = $(currenRow).find(".k-grid-edit");
+                editButton.hide();
+                deleteButton.hide();
+            }
+        }
+     }
+
+    var @Html.Raw(Model.GridId);
+    function DeleteAttachment@(Html.Raw(Model.GridId))RowGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+
+        @Html.Raw(Model.GridId) = this.element.closest("[data-role=grid]").getKendoGrid();
+
+        $('#DeleteConfirm').modal('show');
+
+
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            DeleteAttachment@(Html.Raw(Model.GridId))(data.Id);
+            $('#DeleteConfirm').modal('hide');
+        });
+
+    }
+
+
+    function DeleteAttachment@(Html.Raw(Model.GridId))(id) {
+
+        data = {
+            AttachmentID: id
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("Delete", "Attachment")",
+            data: data,
+        dataType: 'json',
+        success: function (data) {
+            if (!Ajax_ErrorHandler(data)) {
+
+                @(Html.Raw(Model.GridId)).dataSource.read();
+                @(Html.Raw(Model.GridId)).refresh();
+            }
+
+        }
+
+    });
+    }
+</script>

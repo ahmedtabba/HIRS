@@ -1,0 +1,270 @@
+﻿@using BoulevardManagement.DTO;
+@*@model List<StickyNoteDTO>*@
+@using BoulevardManagement.WebApplication.Resources
+<style>
+
+
+    @@keyframes pulse {
+        0% {
+            box-shadow: 0px 0px 5px 0px rgba(173,0,0,.3);
+        }
+
+        65% {
+            box-shadow: 0px 0px 5px 13px rgba(173,0,0,.3);
+        }
+
+        90% {
+            box-shadow: 0px 0px 5px 13px rgba(173,0,0,0);
+        }
+    }
+
+    .avatar-circle {
+        width: 50px;
+        height: 50px;
+        /*background-color: #827259;*/
+        background-color: #e15f4f;
+        text-align: center;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+    }
+
+    .avatar-circle-left {
+        width: 50px;
+        height: 50px;
+        /*background-color: #827259;*/
+        background-color: #4787be;
+        text-align: center;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+    }
+
+    .initials {
+        position: relative;
+        top: 17px; /* 25% of parent */
+        font-size: 14px; /* 50% of parent */
+        line-height: 10px; /* 50% of parent */
+        color: #fff;
+        font-family: "Courier New", monospace;
+        font-weight: bold;
+    }
+
+    .box-Notes {
+        border-top-color: #6B6B6B;
+    }
+
+    .btn-Notes:hover, .btn-Notes:active, .btn-Notes.hover {
+        background-color: #949494;
+    }
+
+    .btn-Notes {
+        background-color: #6B6B6B;
+        border-color: #949494;
+        color: #ccc;
+    }
+
+    .icon-padding {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    .direct-chat-msg {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .direct-chat-text {
+        margin-bottom: 15px;
+    }
+
+    .chat-text {
+        margin-top: 25px !important;
+        padding-left: 60px !important;
+        padding-right: 60px !important;
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .direct-chat-name {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .direct-chat-timestamp {
+        margin-left: 60px;
+        margin-right: 10px;
+    }
+</style>
+
+@*<script type="text/javascript">
+        var modelType = '@ViewBag.ObjectType';
+        var modelId = '@ViewBag.ObjectId';
+        var Channel = '@ViewBag.Channel';
+    </script>*@
+<div class="tab-content">
+    <div class="tab-pane active" id="kt_tabs_2_1" role="tabpanel" style="padding:10px">
+        <div class="box  col-lg-12">
+            <div class="box-header with-border" id="InfoHeading" role="button">
+                <h3 class="box-title" style="font-size:1.75rem">
+                    <strong>@NotesResource.Notes</strong>
+                </h3>
+            </div>
+            <div class="box direct-chat direct-chat-warning @(ViewBag.Channel== (int)ChannelEnum.General ? "box-Notes": "box-gold")">
+                <input type="hidden" id="hdnObjectType_@ViewBag.Channel" name="hdnObjectType" value="@ViewBag.ObjectType">
+                <input type="hidden" id="hdnObjectId_@ViewBag.Channel" name="hdnObjectId" value="@ViewBag.ObjectId">
+                <input type="hidden" id="hdnObjectTag_@ViewBag.Channel" name="hdnObjectTag" value="@ViewBag.ObjectTag">
+                <input type="hidden" id="hdnChannel_@ViewBag.Channel" name="hdnChannel" value="@ViewBag.Channel">
+                <input type="hidden" id="hdnParantId_@ViewBag.Channel" name="hdnParantId" value="@ViewBag.ParentId">
+
+               
+                <div class="box-body">
+                    <div id="divNotes_@ViewBag.Channel" class="direct-chat-messages">
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <form action="#" method="post" id="noteForm">
+                        <div class="form-group">
+                            <textarea class="form-control" style="width:100%;" rows="3" id="txtNote_@ViewBag.Channel" name="txtNote" placeholder="@NotesResource.TypeHere"></textarea>
+                            <input hidden id="parentIdHolder" value=null />
+                        </div>
+                        <div class="row ChatSendSection">
+                            <div class="col">
+                                <button type="button" id="btn-send-note_@ViewBag.Channel" class="btn btn-light-primary font-weight-bolder mr-2 pull-right " style="margin-left:0px !important;"><i class="fab fa-telegram"></i>@NotesResource.Send</button>
+                                @if (User.IsInRole(RoleConsistent.StickyNote.Record))
+                                    {
+                                        <button type="button" class="recordButtonClass recbutton  pull-right" style="color:white;margin-left: 10px !important;margin-right: 10px;" data-channelid="@ViewBag.Channel"></button>
+
+                                    }
+
+                               
+
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+                <div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    var IsReplayButton = false;
+    var parentId = null;
+    var dataChannelId = 0;
+    var isRecordPressed = false;
+    var isStop = false;
+    var BufferVoiceMessage;
+    var IsModalClosePressed = false;
+    var IsStickyNoteSection = "";
+    $(document).ready(function () {
+        debugger;
+
+        $('.recordButtonClass').addClass("notRec");
+
+                document.getElementById('btn-send-note_@ViewBag.Channel').addEventListener('click', function () {
+                    var parentNoteId = $("#parentIdHolder").val();
+
+                    AddNote('@ViewBag.ObjectType', '@ViewBag.ObjectId', '@ViewBag.ObjectTag', '@ViewBag.Channel', parentNoteId);
+                });
+                console.log("ready!");
+            });
+
+    function UploadVoiceNote(formData) {
+        
+        $.ajax({
+            type: "POST",
+            url: '/StickyNote/Upload',
+            data: formData,
+            // dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                
+                var parentNoteId = $("#parentIdHolder").val();
+                var channel = dataChannelId;
+        var data = {
+            objectType: '@ViewBag.ObjectType'
+            , objectId: '@ViewBag.ObjectId'
+            , objectTag: '@ViewBag.ObjectTag'
+            , channel: channel
+            , parantId: parentNoteId
+            , note: response,
+            isVoice:true
+
+        };
+                  $.ajax({
+                type: 'POST',
+                url: "@Url.Action("AddNote", "StickyNote", new { @Area = "" })",
+                data: data,
+                //dataType: 'json',
+                success: function (data) {
+                                    StickyNotesload('@ViewBag.ObjectType','@ViewBag.ObjectId','@ViewBag.ObjectTag',channel); //HERE
+                    ShowSuccessfllyMsg("@NotesResource.VoiceAdded");
+
+                }
+                ,
+                error: function (err) {
+
+                    onJSError("@NotesResource.VoiceField");
+
+                }
+            });
+            },
+            error: function (error) {
+                
+                alert("errror");
+            },
+
+        });
+
+    }
+    $('#RecordModal').on('hidden.bs.modal', function () {
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        $(".recordButtonClass").removeClass("Rec");
+        $(".recordButtonClass").addClass("notRec");
+        $(".recordReplyButtonClass").removeClass("Rec");
+        $(".recordReplyButtonClass").addClass("notRec");
+        BufferVoiceMessage = null;
+        if (IsModalClosePressed) {
+            stopRecordingForClose();
+        }
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+        seconds.text("00");
+        minutes.text("00");
+    });
+    $('#RecordModal').on('shown.bs.modal', function () {
+        IsModalClosePressed = false;
+        var recordingsList = document.getElementById("recordingsList");
+        recordingsList.innerHTML = "";
+        BufferVoiceMessage = null;
+        IsStop = false;
+        var minuts = $("#secondsrecord");
+        var seconds = $("#secondsrecord");
+        var minutes = $("#minutesrecord");
+
+     //   seconds.text("00");
+       // minutes.text("00");
+    });
+
+
+
+
+
+</script>
+<script src="~/assets/js/WebAudioRecorder.min.js" type="text/javascript"></script>
+<script src="~/assets/js/appNote.js" type="text/javascript"></script>

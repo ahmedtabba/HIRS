@@ -1,0 +1,523 @@
+﻿@using BoulevardManagement.Utilities;
+@using BoulevardManagement.WebApplication.Resources;
+@using BoulevardManagement.DTO;
+@{
+    var customeClass = "";
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+    var Genders = new[] {
+new { name = Gender.Male.GetDescription(), value = 0 },
+new { name = Gender.Female.GetDescription(), value = 1 },
+};
+
+}
+<style>
+  
+
+</style>
+<!--begin::Container-->
+<div class="container">
+    <div class="card card-custom card-collapse" data-card="true" id="kt_card_4" style="margin-top:10px">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@CommonResource.Filters</h3>
+            </div>
+            <div class="card-toolbar">
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body @customeClass" kt-hidden-height="471" style="display: none; overflow: hidden; padding-top: 0px; padding-bottom: 0px;">
+          
+            <div class="row" style="margin-bottom:10px;">
+                <div class="col-md-12">
+                    <fieldset>
+                        <legend>@CommonResource.CreationDate:</legend>
+
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="CreationDatefromdate-cb" onchange="validateDateInputState()" />
+                                        @Html.Label(CommonResource.From, new { @class = "control-label required", @style = "width:150px;" })
+                                    </div>
+                                    @(Html.Kendo().DatePicker()
+                                                                                                                                                .Name("CreationDateStart")
+                                                                                                                                                //.Value(DateTime.Now)
+                                                                                                                                                .Max(DateTime.Now)
+                                                                                                                                                .Format("dd/MM/yyyy")
+                                                                                                                                                .Culture("en-US")
+                                                                                                                                                    .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                                                                                                                                                .Events(e => e.Change("startChanged"))
+                                                                                                                                                .HtmlAttributes(new { style = "width:280px", @class = "custom-style", onkeydown = "javascript:return false;" }))
+
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="margin-left:10px;margin-right:10px"></div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="CreationDatetodate-cb" onchange="validateDateInputState()" />
+                                        @Html.Label(CommonResource.To, new { @class = "control-label required", @style = "width:150px;" })
+                                    </div>
+                                    @(Html.Kendo().DatePicker()
+                                                                                                                                                    .Name("CreationDateend")
+                                                                                                                                                    // .Value(DateTime.Now)
+                                                                                                                                                    .Max(DateTime.Now)
+                                                                                                                                                    .Format("dd/MM/yyyy")
+                                                                                                                                                    .Culture("en-US")
+                                                                                                                                                    .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                                                                                                                                                    .Events(e => e.Change("endChanged"))
+                                                                                                                                                    .HtmlAttributes(new { style = "width:280px", @class = "custom-style", onkeydown = "javascript:return false;" })
+                                                            )
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+
+            <div class="row" style="margin-bottom:10px;">
+                <div class="col-md-12">
+                    <fieldset>
+                        <legend>@PatientResource.BirthDate:</legend>
+
+                        <div class="row">
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="BirthDatefromdate-cb" onchange="validateBirhtDateInputState()" />
+                                        @Html.Label(CommonResource.From, new { @class = "control-label required", @style = "width:150px;" })
+                                    </div>
+                                    @(Html.Kendo().DatePicker()
+                                                                                                                                                .Name("BirthDateStart")
+                                                                                                                                                //.Value(DateTime.Now)
+                                                                                                                                                .Max(DateTime.Now)
+                                                                                                                                                .Format("dd/MM/yyyy")
+                                                                                                                                                .Culture("en-US")
+                                                                                                                                                    .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                                                                                                                                                .Events(e => e.Change("startBDChanged"))
+                                                                                                                                                .HtmlAttributes(new { style = "width:280px", @class = "custom-style", onkeydown = "javascript:return false;" }))
+
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="margin-left:10px;margin-right:10px"></div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="BirthDatetodate-cb" onchange="validateBirhtDateInputState()" />
+                                        @Html.Label(CommonResource.To, new { @class = "control-label required", @style = "width:150px;" })
+                                    </div>
+                                    @(Html.Kendo().DatePicker()
+                                                                                                                                                    .Name("BirthDateend")
+                                                                                                                                                    // .Value(DateTime.Now)
+                                                                                                                                                    .Max(DateTime.Now)
+                                                                                                                                                    .Format("dd/MM/yyyy")
+                                                                                                                                                    .Culture("en-US")
+                                                                                                                                                    .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                                                                                                                                                    .Events(e => e.Change("endBDChanged"))
+                                                                                                                                                    .HtmlAttributes(new { style = "width:280px", @class = "custom-style", onkeydown = "javascript:return false;" })
+                                                            )
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+
+        </div>
+        <!--end::Body-->
+    </div>
+    <div class="card card-custom" data-card="true" id="kt_card_3">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@PatientResource.Patients</h3>
+            </div>
+            <div class="card-toolbar">
+                @if (User.IsInRole(RoleConsistent.Patient.Add))
+                {
+                    <a href="@Url.Action("Create", "Patient", new { @Area = "" })" data-toggle="tooltip" title="@CommonResource.AddNewTooltip" class="btn btn-icon btn-circle btn-sm btn-light-facebook mr-1" data-card-tool="">
+                        <i class="ki ki-plus icon-nm"></i>
+                    </a>
+                }
+
+                <a href="javascript:void(0);" onclick="$('.k-i-refresh').trigger('click');" data-toggle="tooltip" title="@CommonResource.RefreshTooltip" class="btn btn-icon btn-circle btn-sm btn-light-google mr-1" data-card-tool="reload">
+                    <i class="ki ki-reload icon-nm"></i>
+                </a>
+
+                <a href="javascript:void(0);" onclick=" $('.k-grid-excel').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportExcelTooltip" class="btn btn-icon btn-circle btn-sm btn-light-skype mr-1" data-card-tool="">
+                    <i class="fa fas fa-file-excel icon-nm"></i>
+                </a>
+
+                <a href="javascript:void(0);" onclick=" $('.k-grid-pdf').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportPdfTooltip" class="btn btn-icon btn-circle btn-sm btn-light-youtube mr-1" data-card-tool="">
+                    <i class="fa fas fa-file-pdf icon-nm"></i>
+                </a>
+
+
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle" onclick="toggel()">
+                    <i id="cust-icon" class="ki ki-arrow-down icon-nm"></i>
+                </a>
+
+            </div>
+        </div>
+        <div class="card-body @customeClass" kt-hidden-height="471" style="" id="asd">
+            @(Html.KendoGrid<BoulevardManagement.DTO.PatientDTO>().Name("PatientGrid")
+        .Columns(columns =>
+        {
+        columns.Bound(c => c.PatientCode).ClientTemplate("#=LinkTemplate(EncrptedId,PatientCode)#").Title(PatientResource.PatientCode).Width(130);
+        columns.Bound(c => c.FirstName).ClientTemplate("#=LinkTemplate(EncrptedId,FirstName)#").Title(PatientResource.FirstName).Width(130);
+        columns.Bound(c => c.LastName).ClientTemplate("#=LinkTemplate(EncrptedId,LastName)#").Title(PatientResource.LastName).Width(130);
+        columns.Bound(c => c.PhoneNumber).Title(PatientResource.PhoneNumber).Width(150);
+        columns.Bound(c => c.BirthDate).Title(PatientResource.BirthDate).Format("{0:dd/MM/yyyy}").Filterable(c => c.Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150);
+        columns.ForeignKey(p => p.Gender, Genders, "value", "name").Title(PatientResource.Gender).ClientTemplate("#: GenderDescription #").Width(150);
+
+        if (User.Identity.IsIT()&&!isRTL)
+            columns.Bound(c => c.DepartmentName).Title("Department").Width(200);
+
+        if (User.Identity.IsIT() && isRTL)
+            columns.Bound(c => c.DepartmentArabicName).Title("القسم").Width(200);
+
+        if (this.User.IsInRoles(RoleConsistent.Patient.Edit) || this.User.IsInRoles(RoleConsistent.Patient.Delete))
+            columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=templateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+            if (this.User.IsInRoles(RoleConsistent.Patient.Delete))
+                columns.Command(command => { command.Custom("PatientDestroy").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowPatientGrid"); }).Hidden();
+
+        })
+                    .HtmlAttributes(new { style = "height:1000px", @id = "PatientGrid" })
+                    .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+                    .ColumnMenu(c => c.Columns(true))
+                    .Pdf(exp => exp.FileName(PatientResource.Patients + ".pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+                    .Excel(exp => exp.FileName(PatientResource.Patients + ".xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Model(model => model.Id(c => c.Id))
+                    .Create(action => action.Action("Create", "Patient"))
+                    .Destroy(action => action.Action("Delete", "Patient"))
+                    .Read(read => read.Action("Read", "Patient").Data("GetFilterCriterias"))
+                    .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'PatientGrid');}").RequestEnd("myOnReqEnd"))
+                    )
+                    .ColumnMenu(c => c.Columns(false).Filterable(false))
+            )
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Tables Widget 5-->
+    <!--end::Dashboard-->
+    @Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+</div>
+<!--end::Container-->
+
+
+<script>
+    var PatientUrl = '@Url.Action("Edit", "Patient", new { PatientId = "MyCode"})';
+
+    var deletedPatient;
+    function myOnReqEnd(e) {
+
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = `${deletedPatient.FullName}) `;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowPatientGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#PatientGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedPatient = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptions(id, ob) {
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.Patient.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowPatientGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-PatientDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+
+           }
+           if ('@this.User.IsInRole(RoleConsistent.Patient.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "Patient", action = "Edit" })' + "?PatientId=" + id;
+          }
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditUrl != "") {
+            result = result + "<li class='navi-item'><a href=" + EditUrl + " class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+
+
+    function GetFilterCriterias() {
+
+
+        var CreationDatefromdateCB = document.getElementById("CreationDatefromdate-cb").checked;
+        var CreationDatetodateCB = document.getElementById("CreationDatetodate-cb").checked;
+        var CreationDateStartValue = "";
+        var CreationDateStartDateValue = "";
+
+        var CreationDateendDateValue = "";
+        var CreationDateendValue;
+
+        if (CreationDatefromdateCB) {
+            CreationDateStartValue = $("#CreationDateStart").data("kendoDatePicker").value();
+            CreationDateStartDateValue = kendo.toString(CreationDateStartValue, "dd/MM/yyyy");
+        }
+        if (CreationDatetodateCB) {
+            CreationDateendValue = $("#CreationDateend").data("kendoDatePicker").value();
+            CreationDateendDateValue = kendo.toString(CreationDateendValue, "dd/MM/yyyy");
+        }
+
+        var BirthDatefromdateCB = document.getElementById("BirthDatefromdate-cb").checked;
+        var BirthDatetodateCB = document.getElementById("BirthDatetodate-cb").checked;
+        var BirthDateStartValue = "";
+        var BirthDateStartDateValue = "";
+
+        var BirthDateendDateValue = "";
+        var BirthDateendValue;
+
+        if (BirthDatefromdateCB) {
+            BirthDateStartValue = $("#BirthDateStart").data("kendoDatePicker").value();
+            BirthDateStartDateValue = kendo.toString(BirthDateStartValue, "dd/MM/yyyy");
+        }
+        if (BirthDatetodateCB) {
+            BirthDateendValue = $("#BirthDateend").data("kendoDatePicker").value();
+            BirthDateendDateValue = kendo.toString(BirthDateendValue, "dd/MM/yyyy");
+        }
+
+
+        return {
+            CreationDateStart: CreationDateStartDateValue,
+            CreationDateEnd: CreationDateendDateValue,
+            BirthDateStart: BirthDateStartDateValue,
+            BirthDateEnd: BirthDateendDateValue
+        }
+    }
+
+    function refresh(e) {
+        $('#PatientGrid').data('kendoGrid').dataSource.read();
+        $('#PatientGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+
+
+     var url = '@Url.Action("Edit", "Patient", new { patientId = "MyCode"})';
+    function LinkTemplate(id, text) {
+
+        if (text == null) {
+            text = '';
+            }
+                @if (User.IsInRoles(RoleConsistent.Patient.Edit))
+                    {
+                    <text>
+            var actionurl = url.replace("MyCode", id);
+        return '<a   href="' + actionurl + '"> ' + text + '</a>';
+                    </text>
+                }else
+                {
+                    <text>
+        return "<span>" + text + "</span>";
+                    </text>
+                }
+
+        }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        var today = dd + '/' + mm + '/' + yyyy;
+
+
+
+        var CreationDatestartDatepicker = $("#CreationDateStart").data("kendoDatePicker");
+        CreationDatestartDatepicker.value(today);
+        var CreationDateendDatepicker = $("#CreationDateend").data("kendoDatePicker");
+        CreationDateendDatepicker.value(today);
+        CreationDateendDatepicker.trigger("change");
+
+        var BirthDatestartDatepicker = $("#BirthDateStart").data("kendoDatePicker");
+        BirthDatestartDatepicker.value(today);
+        var BirthDateendDatepicker = $("#BirthDateend").data("kendoDatePicker");
+        BirthDateendDatepicker.value(today);
+        BirthDateendDatepicker.trigger("change");
+
+
+        validateDateInputState();
+        validateBirhtDateInputState();
+
+    });
+
+
+    function validateDateInputState() {
+        var CreationDatefromdateCB = document.getElementById("CreationDatefromdate-cb").checked;
+        var CreationDatetodateCB = document.getElementById("CreationDatetodate-cb").checked;
+        var Fromdatepicker = $("#CreationDateStart").data("kendoDatePicker");
+        Fromdatepicker.enable(CreationDatefromdateCB);
+
+        var Todatepicker = $("#CreationDateend").data("kendoDatePicker");
+        Todatepicker.enable(CreationDatetodateCB);
+
+
+        refresh();
+
+    }
+
+    function validateBirhtDateInputState() {
+        var BirthDatefromdateCB = document.getElementById("BirthDatefromdate-cb").checked;
+        var BirthDatetodateCB = document.getElementById("BirthDatetodate-cb").checked;
+        var Fromdatepicker = $("#BirthDateStart").data("kendoDatePicker");
+        Fromdatepicker.enable(BirthDatefromdateCB);
+
+        var Todatepicker = $("#BirthDateend").data("kendoDatePicker");
+        Todatepicker.enable(BirthDatetodateCB);
+
+
+        refresh();
+
+    }
+
+    function endChanged(e) {
+        var startPicker = $("#CreationDateStart").data("kendoDatePicker"),
+            endDate = this.value();
+
+        if (endDate) {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate() - 1);
+            startPicker.max(endDate);
+        }
+
+        refresh();
+    }
+
+    function startChanged(e) {
+        var endPicker = $("#CreationDateend").data("kendoDatePicker"),
+            startDate = this.value();
+
+        if (startDate) {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate() + 1);
+            endPicker.min(startDate);
+        }
+
+        refresh();
+    }
+
+
+    function endBDChanged(e) {
+        var startPicker = $("#BirthDateStart").data("kendoDatePicker"),
+            endDate = this.value();
+
+        if (endDate) {
+            endDate = new Date(endDate);
+            endDate.setDate(endDate.getDate() - 1);
+            startPicker.max(endDate);
+        }
+
+        refresh();
+    }
+
+    function startBDChanged(e) {
+        var endPicker = $("#BirthDateend").data("kendoDatePicker"),
+            startDate = this.value();
+
+        if (startDate) {
+            startDate = new Date(startDate);
+            startDate.setDate(startDate.getDate() + 1);
+            endPicker.min(startDate);
+        }
+
+        refresh();
+    }
+
+
+    function toggel() {
+        if ($("#cust-icon").hasClass("ki-arrow-down")) {
+            $("#cust-icon").removeClass("ki-arrow-down");
+            $("#cust-icon").addClass("ki-arrow-up");
+        } else {
+            $("#cust-icon").removeClass("ki-arrow-up");
+            $("#cust-icon").addClass("ki-arrow-down");
+        }
+        $('#asd').slideToggle();
+    }
+
+</script>
+
+<style>
+    .k-rtl .k-grid td {
+        position: inherit !important;
+    }
+
+    .k-grid-content .btn-group {
+        position: absolute !important;
+    }
+</style>

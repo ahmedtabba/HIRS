@@ -1,0 +1,212 @@
+﻿@using BoulevardManagement.WebApplication.Resources
+@{
+    ViewBag.Title = String.Format("{0} {1}", ViewBag.objectType, OperationLogResource.OperationLogTitle);
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">@OperationLogResource.Filters</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+
+
+        </div>
+    </div>
+    <div id="FilterCriteriaDiv" class="box-body">
+        <div class="row">
+            <div class="col-md-2 viewlog-div">
+                @Html.Label(OperationLogResource.Search, new { @class = "form-label ", @style = "padding-right:5px;" })
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @(Html.Kendo().TextBox().Name("SearchText").HtmlAttributes(new { placeholder = OperationLogResource.SearchText }))
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 viewlog-div">
+                @Html.Label(OperationLogResource.DateFrom, new { @class = "form-label ", @style = "padding-right:5px;" })
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+
+                    @(Html.Kendo().DatePicker()
+                                        .Name("FromDate")
+                                        .Events(e => { e.Change("RefreshGrid"); })
+                                        .Value(DateTime.Now)
+                                        .Format("dd/MM/yyyy").Culture("en-US")
+                                        .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                                        .HtmlAttributes(new { @type = "text", @class = "form-control", title = "datepicker" })
+                    )
+                </div>
+            </div>
+            <div class="col-md-2 viewlog-div">
+                @Html.Label(OperationLogResource.DateTo, new { @class = "form-label ", @style = "padding-right:5px;" })
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    @(Html.Kendo().DatePicker()
+                                        .Name("ToDate")
+                                        .Events(e => { e.Change("RefreshGrid"); })
+                                        .Value(DateTime.Now)
+                                        .Format("dd/MM/yyyy").Culture("en-US")
+                                        .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                                        .HtmlAttributes(new { @type = "text", @class = "form-control", title = "datepicker" })
+                    )
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 viewlog-div">
+                @Html.Label(OperationLogResource.OperationType, new { @class = "form-label" })
+            </div>
+            <div class="col-md-4">
+                <div class="form-group  filters" id="filters">
+                    @(Html.Kendo().DropDownList().Name("OperationType")
+                                        .Events(e => e.Change("RefreshGrid"))
+                                        .BindTo(new List<SelectListItem>() {
+                                                            new SelectListItem() { Text = OperationLogResource.ALL, Value = "-1" },
+                                                            new SelectListItem() { Text = OperationLogResource.Add, Value = "0" },
+                                                            new SelectListItem() { Text = OperationLogResource.Update, Value = "1" },
+                                                            new SelectListItem() { Text = OperationLogResource.Delete, Value = "2" },
+                                                            new SelectListItem() { Text = OperationLogResource.Mention, Value = "3" },
+
+                                        })
+                    )
+
+                  
+                </div>
+            </div>
+            <div class="col-md-2 viewlog-div">
+                @Html.Label(OperationLogResource.User, new { @class = "form-label" })
+            </div>
+            <div class="col-md-4">
+                <div class="form-group  filters" id="filters">
+                    @(Html.Kendo().DropDownList().Name("UserId").DataTextField("FullName")
+                                                                                                                                                                                                                                                   .DataValueField("Id")
+                                                                                                                                                                                                                                                   .OptionLabel(OperationLogResource.SelectUser)
+                                                                                                                                                                                                                                                   .DataSource(source =>
+                                                                                                                                                                                                                                                   {
+                                                                                                                                                                                                                                                       source.Read(read =>
+                                                                                                                                                                                                                                                                               {
+                                                                                                                                                                                                                                                                                   read.Action("GetUsers", "Account", new { @Area = "" });
+                                                                                                                                                                                                                                                                               }).Events(e => e.Error("KendoDDL_ErrorHandler"))
+
+                                                                                                                                                                                                                                                                               .ServerFiltering(true);
+                                                                                                                                                                                                                                                   })
+                                                                                                                                                                                                                                                    .Events(e => e.Change("RefreshGrid")).Filter("contains"))
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-1 pull-right">
+                <button id="refreshBtn" class="btn btn-primary pull-right">
+                    <i class="fa fa-refresh" aria-hidden="true"></i> @OperationLogResource.Refresh
+                </button>
+            </div>
+
+            <div class="col-md-4">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@{ var operationTypes = new[] {
+
+new { name = OperationLogResource.Add, value = 0 },
+new { name = OperationLogResource.Update, value = 1 },
+new { name =OperationLogResource.Delete, value = 2 },
+new { name = OperationLogResource.Mention, value = 3 },
+}; }
+
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+<div class="@customeClass" id="ControlRegion">
+    @(Html.KendoGrid<BoulevardManagement.DTO.OperationLogDTO>()
+                                .Name("OperationLogGrid")
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.LogDescription).Title(OperationLogResource.Description).Width(490);
+
+                        //columns.Bound(c => c.EntityType).Title("Source Name");
+                        columns.Bound(c => c.ObjectRefernceNO).Title(OperationLogResource.RefNo)
+                        .Template(@<text></text>)
+                                                              .ClientTemplate("<a href='" + "#=ObjectLink#'>" + "#=ObjectRefernceNO#" + "</a>");
+                                            columns.Bound(c => c.MentionedBy)
+            .Template(@<text></text>)
+                  .ClientTemplate("<a href='" + "#=MentionedLink#'>" + "#=MentionedBy#" + "</a>")
+                  .Title(OperationLogResource.MentionedBy);
+                    //columns.Bound(c => c.OperationType).Title(OperationLogResource.Operation);
+                    columns.ForeignKey(p => p.OperationType, operationTypes, "value", "name").ClientTemplate("#: OperationTypeDescription #").Title(OperationLogResource.Operation);
+                    //.ClientTemplate("# if (OperationType == 0) { #" + "<i style='color:\\#0073b7' class='fa fa-plus' aria-hidden='true'></i>" + "# } else if (OperationType  == 1) { #" + "<i style='color:\\#00a65a;' class='fa fa-pencil' aria-hidden='true'></i>" + "# } else if (OperationType  == 2) { #" + "<i style='color:\\#dd4b39;' class='fa fa-trash' aria-hidden='true'></i>" + "# } else { #" + "<i style='Color:\\#f39c12' class='fa fa-thumb-tack' aria-hidden='true'></i>" + "#}#");
+                    columns.Bound(c => c.UserName).Title(OperationLogResource.User);
+                                columns.Bound(c => c.CreationDate).Title(OperationLogResource.At).Format("{0:dd-MM-yyyy hh:mm}").Filterable(c => c.Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Filterable(false).Width(145);
+                            })
+                                        .ColumnMenu(c => c.Columns(true))
+                                        .HtmlAttributes(new { style = "height:1000px", @id = "OperationLogGrid" })
+                                        .Pdf(exp => exp.FileName("OperationLog.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+                                        .Excel(exp => exp.FileName("OperationLog.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+                                        .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .Model(model => model.Id(c => c.Id))
+                                        .Read(read => read.Action("Read", "OperationLog").Data("GetFilterCriterias"))
+                                        .PageSize(50))
+    )
+</div>
+
+<script type="text/javascript">
+
+    if ($('#refreshBtn'))
+        $("#refreshBtn").click(function (e) {
+            e.preventDefault();
+            RefreshGrid();
+
+        });
+
+
+
+    function GetFilterCriterias() {
+
+        var fromDate = kendo.toString($("#FromDate").data("kendoDatePicker").value(), 'dd/MM/yyyy');
+        var toDate = kendo.toString($("#ToDate").data("kendoDatePicker").value(), 'dd/MM/yyyy');
+        var objectType = '@ViewBag.ObjectType';
+        var objectId = '0';
+        //var operationType = $('input[name="OperationType"]:checked').val();
+        var operationType = $("#OperationType").data("kendoDropDownList").value();
+        var searchText = $('input[name="SearchText"]').val();
+
+        var UseValuerId = $("[name='UserId']").data("kendoDropDownList").value();
+        return {
+            objectType: objectType,
+            objectId: objectId,
+            fromDate: fromDate,
+            toDate: toDate,
+            operationType: operationType,
+            searchText: searchText,
+            userId: UseValuerId
+        }
+    }
+
+    function RefreshGrid() {
+
+        $('#OperationLogGrid').data('kendoGrid').dataSource.read();
+        $('#OperationLogGrid').data('kendoGrid').refresh();
+
+    }
+
+
+
+</script>

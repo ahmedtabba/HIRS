@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>حول المنصة</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>أضف</value>
+  </data>
+  <data name="AddICUCase" xml:space="preserve">
+    <value>أضف حالة وحدة العناية المركزة </value>
+  </data>
+  <data name="Adding" xml:space="preserve">
+    <value>إضافة</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>إضافة جديد</value>
+  </data>
+  <data name="AddNewTooltip" xml:space="preserve">
+    <value>إضافة جديد</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>العودة</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء </value>
+  </data>
+  <data name="CannotChooseSameDiagnosis" xml:space="preserve">
+    <value>لا يمكن اختيار نفس التشخيص مرتين</value>
+  </data>
+  <data name="CaseClosure" xml:space="preserve">
+    <value>إغلاق الحالة </value>
+  </data>
+  <data name="CaseClosureReason" xml:space="preserve">
+    <value>سبب إغلاق الحالة</value>
+  </data>
+  <data name="CaseClosureReasonInfoSpan" xml:space="preserve">
+    <value>يرجى إختيار سبب إغلاق الحالة</value>
+  </data>
+  <data name="CaseClosures" xml:space="preserve">
+    <value>الحالات المغلقة</value>
+  </data>
+  <data name="Cases" xml:space="preserve">
+    <value>الحالات</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>تغيير كلمة المرور</value>
+  </data>
+  <data name="ChooseSubDiagnoses" xml:space="preserve">
+    <value>اختر التشخيص الفرعي</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق </value>
+  </data>
+  <data name="CloseCase" xml:space="preserve">
+    <value>إغلاق الحالة </value>
+  </data>
+  <data name="CloseCaseMessage" xml:space="preserve">
+    <value>تم إغلاق الحالة</value>
+  </data>
+  <data name="ClosureNote" xml:space="preserve">
+    <value>ملاحظة الإغلاق</value>
+  </data>
+  <data name="ClosureNoteInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل ملاحظات الإغلاق</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>اتصل بنا </value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>استمر </value>
+  </data>
+  <data name="CreationDate" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
+  </data>
+  <data name="Definitions" xml:space="preserve">
+    <value>التعاريف</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="DeleteConfirmContent" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف السجل؟</value>
+  </data>
+  <data name="DeleteConfirmTitle" xml:space="preserve">
+    <value>تأكيد الحذف</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>تم</value>
+  </data>
+  <data name="DownloadALL" xml:space="preserve">
+    <value>تحميل الكل</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تحرير</value>
+  </data>
+  <data name="Editing" xml:space="preserve">
+    <value>التحرير </value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>الخروج</value>
+  </data>
+  <data name="ExportExcelTooltip" xml:space="preserve">
+    <value>تصدير إلى الإكسل</value>
+  </data>
+  <data name="ExportPdfTooltip" xml:space="preserve">
+    <value>تصدير إلى pdf</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>تصدير إلى الإكسل</value>
+  </data>
+  <data name="ExportToPDF" xml:space="preserve">
+    <value>تصدير إلى pdf</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>الفلاتر</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>من</value>
+  </data>
+  <data name="Handle" xml:space="preserve">
+    <value>Handle</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>مرحبا</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الصفحة الرئيسية</value>
+  </data>
+  <data name="ICU" xml:space="preserve">
+    <value>وحدة العناية المركزة </value>
+  </data>
+  <data name="ICUCases" xml:space="preserve">
+    <value>حالات العناية المركزة </value>
+  </data>
+  <data name="InvolvedConsultants" xml:space="preserve">
+    <value>الاستشاريين المشاركين في الحالة</value>
+  </data>
+  <data name="InvolvedServiceProviders" xml:space="preserve">
+    <value>مزودي الخدمة المشاركين في الحالة</value>
+  </data>
+  <data name="MeetTopic" xml:space="preserve">
+    <value>موضوع الاجتماع</value>
+  </data>
+  <data name="MentalHealth" xml:space="preserve">
+    <value>الصحة النفسية </value>
+  </data>
+  <data name="MentalHealthCases" xml:space="preserve">
+    <value>حالات الصحة النفسية </value>
+  </data>
+  <data name="MonthlyAvg" xml:space="preserve">
+    <value>المتوسط الشهري</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>المزيد</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>حسابي</value>
+  </data>
+  <data name="MyNotifications" xml:space="preserve">
+    <value>تنبيهاتي</value>
+  </data>
+  <data name="MyPatients" xml:space="preserve">
+    <value>مرضاي</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>التنبيهات</value>
+  </data>
+  <data name="NPICU" xml:space="preserve">
+    <value>وحدة العناية المركزة لحديثي الولاة و الأطفال</value>
+  </data>
+  <data name="NPICUCases" xml:space="preserve">
+    <value>حالات العناية المركزة لحديثي الولادة و الأطفال </value>
+  </data>
+  <data name="Oprions" xml:space="preserve">
+    <value>خيارات</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>أخرى</value>
+  </data>
+  <data name="PatientInfo" xml:space="preserve">
+    <value>معلومات المريض</value>
+  </data>
+  <data name="Patients" xml:space="preserve">
+    <value>المرضى</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>الطباعة</value>
+  </data>
+  <data name="Profileinfo" xml:space="preserve">
+    <value>معلومات الصفحة الشخصية </value>
+  </data>
+  <data name="RefreshTooltip" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="ReOpenCase" xml:space="preserve">
+    <value>إعادة فتح الحالة</value>
+  </data>
+  <data name="ReOpenCaseMessage" xml:space="preserve">
+    <value>تم إعادة فتح الحالة</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>التقارير</value>
+  </data>
+  <data name="RequiredFeild" xml:space="preserve">
+    <value>هذا الحقل مطلوب</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>الخيارات</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>....اختر الملف</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>خدمات</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>إظهار</value>
+  </data>
+  <data name="ShowClosures" xml:space="preserve">
+    <value>إظهار الحالات المغلقة</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+  <data name="SomeFeildIsRequired" xml:space="preserve">
+    <value>هنالك بعض الحقول مطلوب ملؤها</value>
+  </data>
+  <data name="SuccessfullyAddedMSG" xml:space="preserve">
+    <value>تمت الإضافة بنحاح</value>
+  </data>
+  <data name="SuccessfullyDeletedMSG" xml:space="preserve">
+    <value>تم الحذف بنجاح</value>
+  </data>
+  <data name="SuccessfullyUpdatedMSG" xml:space="preserve">
+    <value>تم التعديل بنجاح</value>
+  </data>
+  <data name="ThisFieldisRequired" xml:space="preserve">
+    <value>هذا الحقل مطلوب</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>إلى</value>
+  </data>
+  <data name="TotalPatientsInICU" xml:space="preserve">
+    <value>العدد الإجمالي للمرضى في قسم العناية المشددة</value>
+  </data>
+  <data name="TotalPatientsInMentalHealth" xml:space="preserve">
+    <value>العدد الإجمالي للمرضى في قسم الصحة النفسية</value>
+  </data>
+  <data name="TotalPatientsInNPICU" xml:space="preserve">
+    <value>العدد الإجمالي للمرضى في قسم الأطفال و حديثي الولادة </value>
+  </data>
+  <data name="UserProfile" xml:space="preserve">
+    <value>ملف المستخدم </value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+</root>

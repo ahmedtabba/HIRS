@@ -1,0 +1,95 @@
+﻿@using BoulevardManagement.DTO;
+@using BoulevardManagement.Model.Entities;
+@using BoulevardManagement.WebApplication.Resources;
+@using BoulevardManagement.WebApplication.Utilities;
+
+
+@model List<UserNotificationDTO>
+
+<script type="text/javascript">
+    function notifcationClick(notificationId) {
+
+             $.ajax({
+            type: 'POST',
+            url: "@Url.Action("ViewNotification", "Home", new { @Area = "" })",
+            data: { notificationId: notificationId},
+            //dataType: 'json',
+            success: function () {
+                $('#notificationsmenu').load('@Url.Action("GetNotification", "Home")', function () {
+
+                $('#notificationscount').html($(".notification-new").length);
+                $('#notificationscounttext').html("You have <b> <span class='label label-warning'>" + $(".notification-new").length + "</span></b> notificatons");
+            });
+            }
+
+        });
+    }
+
+    function MarkAsUnRead(notificationId) {
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("MarkUnRead", "Home", new { @Area = "" })",
+            data: { notificationId: notificationId },
+            dataType: 'json',
+            success: function (data) {
+                $('#notificationsmenu').load('@Url.Action("GetNotification", "Home")', function () {
+
+                    $('#notificationscount').html($(".notification-new").length);
+                    $('#notificationscounttext').html("You have <b> <span class='label label-warning'>" + $(".notification-new").length + "</span></b> notifications");
+                });
+            }
+
+        });
+    }
+
+</script>
+<div class="navi navi-icon-circle navi-spacer-x-0">
+    @foreach (var notification in Model)
+    {
+        String onclick = String.Format("notifcationClick({0})", notification.Id);
+        string onMarkAsUnread = String.Format("MarkAsUnRead({0})", notification.Id);
+
+
+        <!--begin::Item-->
+        <a href="@notification.NotificationURL" target="_blank" onclick="@onclick" class="navi-item @(!notification.IsView?"notification-new":"")  @(notification.IsUnRead?"notification-unread":"")">
+            <div class="navi-link rounded">
+                <div class="symbol symbol-50 mr-3">
+                    <div class="symbol-label">
+                        @Html.Raw(notification.ObjectTypeIcon)
+                    </div>
+                </div>
+                <div class="navi-text">
+                    <div class="font-weight-bold font-size-lg">@notification.NotificationString</div>
+                    <div class="text-muted"> @DateUtilities.GetPrettyDate(DateTime.Now - notification.CreationDate)</div>
+                </div>
+            </div>
+        </a>
+        <!--end::Item-->
+
+
+     
+        if (!notification.IsUnRead)
+        {
+            <div style="cursor:pointer; ">
+                <a class="btn btn-block btn-outline-hover-primary" href="#" style=" color:#365899;  display:block; " onclick="@onMarkAsUnread">@NotificationResource.MarkAsUnRead</a>
+            </div>
+        }
+
+        <hr />
+
+    }
+</div>
+<style>
+    .permalink_section {
+        width: 300px;
+        white-space: pre-wrap !important; /* css-3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        word-wrap: break-word !important; /* Internet Explorer 5.5+ */
+        border: 0px !important;
+    }
+
+  
+</style>
+

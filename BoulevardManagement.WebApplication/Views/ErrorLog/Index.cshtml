@@ -1,0 +1,92 @@
+﻿@using BoulevardManagement.WebApplication.Resources
+<style>
+    .k-window {
+        right: 86px !important;
+        left: 93.875px !important;
+    }
+
+    .k-rtl .k-filtercell > span {
+        padding-left: 0 !important;
+    }
+</style>
+
+@{ 
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+<div class="@customeClass" id="ControlRegion">
+    @(Html.KendoGrid<BoulevardManagement.DTO.ErrorLogDTO>()
+                .Name("ErrGrid")
+                .Columns(columns =>
+                {
+                    columns.Bound(c => c.Code).Title(ErrorLogViewResource.Code);
+                    columns.Bound(c => c.CreationDate).Title(ErrorLogViewResource.Date).Width(150).Format(@"{0:dd/MM/yyyy || hh:mm}");
+                    columns.Bound(c => c.Location).Title(ErrorLogViewResource.Location);
+                    columns.Bound(c => c.Message).Title(ErrorLogViewResource.Message);
+                    columns.Bound(c => c.UserName).Title(ErrorLogViewResource.UserName);
+                    columns.Bound(c => c.Details).ClientTemplate(@"#=getButtom(EncrptedId)#")
+                          .Title(ErrorLogViewResource.Details);
+        //        columns.Bound(c => c.Details).Title("Contract ID")
+        //.ClientTemplate(@Html.ActionLink("#=ContractIDCoalesced#", "TransactionSummary", "Home", new { contractOid = "#=ContractOid#" }, null).ToHtmlString());
+
+
+    }).ColumnMenu()
+                .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("Details"))
+                .HtmlAttributes(new { style = "min-height:1360px;height:100%;", @id = "ErrGrid" })
+                .ToolBar(toolbar => { toolbar.Custom().Text(ErrorLogViewResource.Clean).Action("Clean", "ErrorLog"); })
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .Sort(sort => sort.Add(x => x.CreationDate).Descending())
+                    .Model(model => model.Id(c => c.Id))
+                    .Read(read => read.Action("Read", "ErrorLog"))
+                    .Update(update => update.Action("Read", "ErrorLog"))
+                    .Events(events => events.Error("function(args){KendoGrid_ErrorHandler(args,'ErrGrid');}"))
+                    .PageSize(50))
+
+    )
+
+
+
+    @(Html.Kendo().Dialog()
+                    .Name("dialog")
+                    .Title("Software Update")
+                    .Content("")
+                    .Width(700)
+                    .Modal(true)
+                    .Visible(false)
+    )
+</div>
+
+<script>
+
+    function onOpen() {
+        return false;
+    }
+    function getButtom(EncrptedId) {
+        return '<button onClick="showPop(\'' + EncrptedId + '\')" >@ErrorLogViewResource.Details</button>';
+
+    }
+    function showPop(EncrptedId) {
+         var details=  $.ajax({
+                        type: 'POST',
+                        url: "@Url.Action("GetDetails", "ErrorLog", new { @Area = "" })",
+                        data: { encrptedId: EncrptedId },
+                        async: false,
+                        dataType: 'json',
+        }).responseText;
+
+        var regexp = new RegExp('\n', 'g');
+        details = details.replace(regexp, '<br>');
+
+         $("#dialog").kendoDialog();
+         var dialog = $("#dialog").data("kendoDialog");
+         dialog.content(details);
+         dialog.title("Details");
+         dialog.open();
+
+    }
+</script>

@@ -1,0 +1,41 @@
+﻿
+
+<script type="text/javascript">
+    function GetFilterCriterias() {
+        var objectType = '@ViewBag.ObjectType';
+        var objectId = '@ViewBag.ObjectId';
+        return { objectType: objectType, objectId: objectId }
+    }
+</script>
+<div id="ControlRegion">
+    @(Html.KendoGrid<BoulevardManagement.DTO.OperationLogDTO>
+                                ()
+                                .Name("OperationLogGrid")
+                                .Columns(columns =>
+                                {
+                                    columns.Bound(c => c.CreationDate).Title("At").Format("{0:dd-MMM-yyyy hh:mm}").Filterable(c => c.Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(190).Filterable(false);
+                                    columns.Bound(c => c.MentionedBy)
+                                    .Template(@<text></text>)
+                                            .ClientTemplate("<a href='" + "#=MentionedLink#'>" + "#=MentionedBy#" + "</a>")
+                                            .Title("Mentioned By");
+                                            columns.Bound(c => c.OperationType).Title("Operation");
+                                //.ClientTemplate("# if (OperationType == 0) { #" + "<i style='color:\\#0073b7' class='fa fa-plus' aria-hidden='true'></i>" + "# } else if (OperationType  == 1) { #" + "<i style='color:\\#00a65a;' class='fa fa-pencil' aria-hidden='true'></i>" + "# } else if (OperationType  == 2) { #" + "<i style='color:\\#dd4b39;' class='fa fa-trash' aria-hidden='true'></i>" + "# } else { #" + "<i style='Color:\\#f39c12' class='fa fa-thumb-tack' aria-hidden='true'></i>" +  "#}#" + "#=OperationType#" ).Filterable(false);
+                                columns.Bound(c => c.UserName).Title("User");
+                                            columns.Bound(c => c.LogDescription).Title("Description").Width(400);
+
+
+
+                                        })
+                             .ColumnMenu(c => c.Columns(true))
+                             .HtmlAttributes(new { style = ViewBag.isObjectSummary ? "height:500px" : "height:1000px", @id = "OperationLogGrid" })
+                             .Pdf(exp => exp.FileName("OperationLog.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+                             .Excel(exp => exp.FileName("OperationLog.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+                             .DataSource(dataSource => dataSource
+                             .Ajax()
+                             .Model(model => model.Id(c => c.Id))
+                             .Read(read => read.Action("Read", "OperationLog").Data("GetFilterCriterias"))
+                             .PageSize(50))
+    )
+</div>
+
+

@@ -1,0 +1,35 @@
+﻿<div class="modal fade hide" id="RecordModal" role="dialog" aria-labelledby="myModalLabel" style="z-index:2000" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><i class="fa fa-warning"></i>Record</h4>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="CloseRecordModal">
+                    <i class="" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="ContentRecord" style="text-align:center">
+                        <div class="RecordTimer">
+                            <label id="minutesrecord" style="font-size: 5em">00</label>
+                            <label id="colon" style="font-size: 5em">:</label>
+                            <label id="secondsrecord" style="font-size: 5em">00</label>
+                        </div>
+                        <ul id="recordingsList" style="list-style-type: none;text-align:center;padding:0px"></ul>
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="SendRecordbtn" class="btn btn btn-outline" data-dismiss="modal"><i class="fa fa-save kt-font-brand"></i></button>
+                <button type="button" id="StopRecordBtn" class="btn btn btn-outline pull-right"><i class="fa fa-stop kt-font-brand"></i></button>
+                <button type="button" id="DeleteRecordBtn" class="btn btn btn-outline pull-right" style="display:none"><i class="fa fa-trash kt-font-brand"></i></button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

@@ -1,0 +1,24 @@
+﻿
+<div class="error-box">
+    <div class="row">
+        <div class="col-md-2">
+            <i class="fa fa-ban error-icon"></i>
+        </div>
+        <div class="col-md-10">
+
+            <div class="error-title">
+                Access Denied
+            </div>
+            <div class="error-content">
+                You are not authorized to access this page, please contact the system administrator
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ReturnUrl != null)
+            {
+    <a href="@ViewBag.ReturnUrl" class="btn btn-gold">
+        Back
+    </a>
+}

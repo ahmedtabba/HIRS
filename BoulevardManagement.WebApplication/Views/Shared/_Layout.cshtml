@@ -1,0 +1,447 @@
+﻿
+<!DOCTYPE html>
+
+@{
+    var rtlSettings = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        rtlSettings = "direction=rtl dir=rtl style=direction: rtl";
+    }
+}
+<html @rtlSettings lang="en" class="notranslate" translate="no">
+<!--begin::Head-->
+<head>
+    <base href="">
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title | TeleMedicine </title>
+    <meta name="description" content="Updates and statistics" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
+
+    @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+
+
+    <link href="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.rtl.css" rel="stylesheet" />
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.rtl.css" rel="stylesheet" />
+    <link href="~/assets/css/style.bundle.rtl.css" rel="stylesheet" />
+    <link href="~/Content/kendo-boulevard-custom-styles-rtl.css" rel="stylesheet" />
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    }
+    else
+    {
+    <!--begin::Page Vendors Styles(used by this page)-->
+    <link href="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
+    <!--end::Page Vendors Styles-->
+    <!--begin::Global Theme Styles(used by all pages)-->
+    <link href="~/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/kendo-boulevard-custom-styles.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <!--end::Global Theme Styles-->
+    }
+
+    @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+
+
+    <script>
+        var maxMBErrorMsg = 'حجم المرفق لا يمكن أن يكون أكبر من 5 ميجا!';
+        var maxPhotoMBErrorMsg = 'حجم الصورة لا يمكن أن يكون أكبر من 5 ميجا!';
+        var FileTypeNotPermitedErrorMsg = 'نوع الملف غير مسموح به';
+        var OnlyOneFileIsPermited = 'يسمح فقط بملف واحد';
+        var doneValue = "تم";
+        var Editing = 'عملة تعديل';
+        var Adding = 'عملية إضافة';
+        var Deleting = 'عملية حذف';
+        var HasBeenCompletedSuccessfully = 'تمت بنجاح';
+    </script>
+    }
+    else
+    {
+    <script>
+        var maxMBErrorMsg = 'attachment size cannot exceed 5 MB';
+        var maxPhotoMBErrorMsg = 'Photo size cannot exceed 5 MB!';
+        var FileTypeNotPermitedErrorMsg = 'File type not permited';
+        var OnlyOneFileIsPermited = 'Only one file is permited';
+        var doneValue = "Done";
+        var Editing = 'Editing';
+        var Adding = 'Adding';
+        var Deleting = 'Deleting';
+        var HasBeenCompletedSuccessfully = 'has been completed successfully';
+    </script>
+    }
+
+
+
+
+
+    @Styles.Render("~/Content/css/kendocss")
+
+
+    <!--begin::Global Theme Bundle(used by all pages)-->
+    <script src="~/assets/plugins/global/plugins.bundle.js"></script>
+    <script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+    <script src="~/assets/js/scripts.bundle.js"></script>
+    @*
+    <script src="~/Scripts/jquery-3.1.1.js"></script>*@
+    @Scripts.Render("~/bundles/modernizr")
+    @*@Scripts.Render("~/bundles/jquery")*@
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/kendojs")
+
+    <script src="~/Scripts/customnew.js"></script>
+
+    <!--end::Fonts-->
+    <!--begin::Layout Themes(used by all pages)-->
+    <!--end::Layout Themes-->
+
+
+    <link rel="shortcut icon" href="~/Content/img/uossm-01.png" />
+    <meta name="google" content="notranslate" />
+
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+<body id="kt_body" class="header-fixed header-mobile-fixed page-loading" lang="en">
+    <!--begin::Main-->
+    <!--begin::Header Mobile-->
+    @{ Html.RenderPartial("_HeaderMobile"); }
+    <!--end::Header Mobile-->
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Page-->
+        <div class="d-flex flex-row flex-column-fluid page">
+            <!--begin::Wrapper-->
+            <div class="d-flex flex-column flex-row-fluid wrapper container" id="kt_wrapper">
+                <!--begin::Header-->
+                <div id="kt_header" class="header header-fixed">
+                    <!--begin::Container-->
+                    <div class="container">
+                        <!--begin::Header Menu Wrapper-->
+                        <div class="header-menu-wrapper header-menu-wrapper-left" id="kt_header_menu_wrapper">
+                            <!--begin::Logo-->
+                            <div class="header-logo mr-10 d-none d-lg-flex">
+                                <a href="/">
+                                    <img alt="Logo" src="~/Content/img/uossm-01.png" style="height:45px!important;" />
+                                </a>
+                            </div>
+                            <!--end::Logo-->
+                            <!--begin::Header Menu-->
+                            @{ Html.RenderPartial("_MainMenu"); }
+                            <!--end::Header Menu-->
+                        </div>
+                        <!--end::Header Menu Wrapper-->
+                        <!--begin::Topbar-->
+                        <div class="topbar" style="z-index:1">
+                            <!--begin::Search-->
+                            @*@{ Html.RenderPartial("_SearchInput"); }*@
+
+                            <!--end::Search-->
+                            <!--begin::Quick Actions-->
+                            @*@{ Html.RenderPartial("_QuickActions"); }*@
+                            <!--end::Quick Actions-->
+                            <!--begin::Chat-->
+                            <!--<div class="topbar-item mr-1 mr-lg-5">
+                                <div class="btn btn-icon btn-circle btn-hover-light-primary btn-clean" data-toggle="modal" data-target="#kt_chat_modal">
+                                    <span class="svg-icon svg-icon-lg">-->
+                            <!--begin::Svg Icon | path:~/assets/media/svg/icons/Communication/Chat6.svg-->
+                            <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M14.4862 18L12.7975 21.0566C12.5304 21.54 11.922 21.7153 11.4386 21.4483C11.2977 21.3704 11.1777 21.2597 11.0887 21.1255L9.01653 18H5C3.34315 18 2 16.6569 2 15V6C2 4.34315 3.34315 3 5 3H19C20.6569 3 22 4.34315 22 6V15C22 16.6569 20.6569 18 19 18H14.4862Z" fill="black" />
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6 7H15C15.5523 7 16 7.44772 16 8C16 8.55228 15.5523 9 15 9H6C5.44772 9 5 8.55228 5 8C5 7.44772 5.44772 7 6 7ZM6 11H11C11.5523 11 12 11.4477 12 12C12 12.5523 11.5523 13 11 13H6C5.44772 13 5 12.5523 5 12C5 11.4477 5.44772 11 6 11Z" fill="black" />
+                                </g>
+                            </svg>-->
+                            <!--end::Svg Icon-->
+                            <!--</span>
+                                </div>
+                            </div>-->
+                            <!--end::Chat-->
+                            <!--begin: Notifications -->
+                            <div class="topbar-item mr-1 mr-lg-3">
+                                <div class="btn btn-icon btn-circle btn-hover-light-primary" id="kt_quick_panel_toggle" onclick="ViewAllNotification()">
+                                    <i class="flaticon2-bell-5 icon-lg"></i>
+                                </div>
+                                <span style="font-size: 8px; top: 20px; position: absolute;" class="badge badge-danger" @*style="font-size: 8px;top: -10px;right: -10px;" *@ id="new-notification-count">0</span>
+                            </div>
+
+
+                            <!--end: Notifications -->
+                            <!--begin::Lang-->
+                            @{ Html.RenderPartial("_Lang"); }
+                            <!--end::Lang-->
+                            <!--begin::User-->
+                            <div class="topbar-item">
+                                <div class="btn btn-icon btn-circle btn-light-primary" id="kt_quick_user_toggle">
+                                    <span class="svg-icon svg-icon-lg">
+                                        <!--begin::Svg Icon | path:~/assets/media/svg/icons/General/User.svg-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <path d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                <path d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z" fill="#000000" fill-rule="nonzero" />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </div>
+                            </div>
+                            <!--end::User-->
+                        </div>
+                        <!--end::Topbar-->
+                    </div>
+                    <!--end::Container-->
+                </div>
+                <!--end::Header-->
+                <!--begin::Content-->
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <!--begin::Entry-->
+                    <div class="d-flex flex-column-fluid">
+                        <!--begin::Container-->
+                        <div class="container">
+                            @*<ul>
+                                <li id="en-lang" class="active-lang" on>
+                                    <a href="@Url.Action(" ChangeLanguage", "Home" , new { lang="en-US" })"><strong style="color: white; background-color: green; padding: 3px; border-radius: 5px;">En</strong>English</a>
+                                </li>
+
+                                <li id="ar-lang">
+                                    <a href="@Url.Action(" ChangeLanguage", "Home" , new { lang="ar-SY" })"><strong style="color:white; background-color:green; padding:3px; border-radius:5px;">Ar</strong> Arabic</a>
+                                </li>
+                            </ul>*@
+
+                            @RenderBody()
+                        </div>
+                        <!--end::Container-->
+                    </div>
+                    <!--end::Entry-->
+                </div>
+                <!--end::Content-->
+                <!--begin::Footer-->
+                @{ Html.RenderPartial("_MainFooter"); }
+                <!--end::Footer-->
+            </div>
+            <!--end::Wrapper-->
+        </div>
+        <!--end::Page-->
+    </div>
+    <!--end::Main-->
+    <!-- begin::User Panel-->
+    @{ Html.RenderPartial("_UserPanel"); }
+    <!-- end::User Panel-->
+    <!--begin::Quick Panel-->
+    @{ Html.RenderPartial("_QuickPanel"); }
+    <!--end::Quick Panel-->
+    <!--begin::Chat Panel-->
+    @{ Html.RenderPartial("_ChatPanel"); }
+    <!--end::Chat Panel-->
+    @{ Html.RenderPartial("_Notifications"); }
+    <!--begin::Scrolltop-->
+    @{ Html.RenderPartial("_ScrollTop"); }
+    <!--end::Scrolltop-->
+    <!--begin::Sticky Toolbar-->
+    @{ Html.RenderPartial("_StickyToolbar"); }
+    <!--end::Sticky Toolbar-->
+    <!--begin::Demo Panel-->
+    <div id="kt_demo_panel" class="offcanvas offcanvas-right p-10">
+        <!--begin::Header-->
+        <div class="offcanvas-header d-flex align-items-center justify-content-between pb-7">
+            <h4 class="font-weight-bold m-0">Select A Demo</h4>
+            <a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_demo_panel_close">
+                <i class="ki ki-close icon-xs text-muted"></i>
+            </a>
+        </div>
+        <!--end::Header-->
+        <!--begin::Content-->
+        <div class="offcanvas-content">
+            <!--begin::Wrapper-->
+            <div class="offcanvas-wrapper mb-5 scroll-pull">
+                <h5 class="font-weight-bold mb-4 text-center">Demo 1</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo1.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo1/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo1/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 2</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo2.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo2/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo2/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 3</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo3.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo3/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo3/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 4</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo offcanvas-demo-active">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo4.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo4/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo4/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 5</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo5.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo5/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo5/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 6</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo6.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo6/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo6/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 7</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo7.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="../../demo7/dist" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">HTML</a>
+                        <a href="https://preview.keenthemes.com/keen/demo7/rtl/index.html" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow" target="_blank">RTL</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 8</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo8.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="#" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow disabled opacity-90">Coming soon</a>
+                    </div>
+                </div>
+                <h5 class="font-weight-bold mb-4 text-center">Demo 9</h5>
+                <div class="overlay rounded-lg mb-8 offcanvas-demo">
+                    <div class="overlay-wrapper rounded-lg">
+                        <img src="~/assets/media/demos/demo9.png" alt="" class="w-100" />
+                    </div>
+                    <div class="overlay-layer">
+                        <a href="#" class="btn btn-white btn-text-primary btn-hover-primary font-weight-boldest text-center min-w-75px shadow disabled opacity-90">Coming soon</a>
+                    </div>
+                </div>
+            </div>
+            <!--end::Wrapper-->
+            <!--begin::Purchase-->
+            <div class="offcanvas-footer">
+                <a href="https://themes.getbootstrap.com/product/keen-the-ultimate-bootstrap-admin-theme/" target="_blank" class="btn btn-block btn-danger btn-shadow font-weight-bolder text-uppercase">Buy Keen Now!</a>
+            </div>
+            <!--end::Purchase-->
+        </div>
+        <!--end::Content-->
+    </div>
+    <!--end::Demo Panel-->
+    <script>var HOST_URL = "https://preview.keenthemes.com/keen/theme/tools/preview";</script>
+    <!--begin::Global Config(global config for global JS scripts)-->
+    <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#0BB783", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#ef4849 ", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#D7F9EF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
+    <!--end::Global Config-->
+    @RenderSection("scripts", required: false)
+
+    @Scripts.Render("~/bundles/kendojs")
+    <script src="@Url.Content("~/Scripts/kendo/2017.2.621/cultures/kendo.culture.en-US.min.js")"></script>
+    <!--end::Global Theme Bundle-->
+    <!--begin::Page Vendors(used by this page)-->
+    <script src="~/assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
+    <!--end::Page Vendors-->
+    <!--begin::Page Scripts(used by this page)-->
+    <script src="~/assets/js/pages/widgets.js"></script>
+    <!--end::Page Scripts-->
+    <script src="@Url.Content("~/Scripts/kendo/2017.2.621/cultures/kendo.culture.en-US.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/customnew.js")"></script>
+
+</body>
+<!--end::Body-->
+</html>
+
+<script>
+    $(document).ready(function () {
+        debugger
+        $('.@(ViewContext.RouteData.Values["Controller"].ToString().ToLower())').addClass("menu-item-active");
+        GetNewNotificationCount();
+
+        var infoMsg = '@TempData["InfoMesage"]';
+
+        if (infoMsg != '') {
+            toastr.success(infoMsg, '');
+        }
+
+        var errorMsg = '@TempData["ErrorMesage"]';
+
+        if (errorMsg != '') {
+            toastr.error(errorMsg, '');
+        }
+
+        $('#notificationsmenu').load('@Url.Action("GetNotification", "Home", new { category = "ALL" })', function () {
+
+        });
+
+        $('#read-notificationsmenu').load('@Url.Action("GetNotification", "Home", new { category = "Read" })', function () {
+
+        });
+
+        $('#unread-notificationsmenu').load('@Url.Action("GetNotification", "Home", new { category = "UnRead" })', function () {
+
+        });
+
+    });
+
+
+    function ViewAllNotification() {
+
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("ViewAllNotification", "Home", new { @Area = "" })",
+            dataType: 'json',
+            success: function (data) {
+                //$('#new-notification-count').html('0');
+            }
+
+        });
+    }
+    function GetNewNotificationCount() {
+        $.ajax({
+            type: 'GET',
+            url: "@Url.Action("GetUnRaedNotificationCount", "Home", new { @Area = "" })",
+            success: function (data) {
+                $('#new-notification-count').html(data);
+            }
+
+        });
+    }
+</script>
+@*
+<script src="~/assets/plugins/global/plugins.bundle.js"></script>
+<script src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
+<script src="~/assets/js/scripts.bundle.js"></script>*@
+@*
+<script src="~/assets/js/pages/features/cards/tools.js"></script>*@
+

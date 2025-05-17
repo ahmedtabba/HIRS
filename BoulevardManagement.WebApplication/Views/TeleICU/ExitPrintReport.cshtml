@@ -1,0 +1,497 @@
+﻿
+@using BoulevardManagement.DTO;
+@using BoulevardManagement.WebApplication.Resources;
+@model TeleICUDTO
+
+
+@{
+    Layout = null;
+    var ExitObject = (BoulevardManagement.DTO.TelICUExitDTO)ViewBag.ExitObject;
+    var direction = "ltr";
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    <style>
+        table.DataTable td {
+            word-wrap: break-word;
+        }
+
+        .check_box_font {
+            font-size: 0.9em !important;
+            color: #333 !important;
+            width: 90%;
+            /*font-family: inherit;*/
+        }
+
+        .checkbox_margin {
+            margin: 15px;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+            .invoice-box table {
+                width: 100%;
+                line-height: inherit;
+            }
+
+                .invoice-box table td {
+                    padding: 5px;
+                    vertical-align: top;
+                }
+
+                .invoice-box table tr td:nth-child(2) {
+                }
+
+                .invoice-box table tr.top table td {
+                    padding-bottom: 20px;
+                }
+
+                    .invoice-box table tr.top table td.title {
+                        font-size: 45px;
+                        line-height: 45px;
+                        color: #333;
+                    }
+
+                .invoice-box table tr.information table td {
+                    padding-bottom: 40px;
+                }
+
+                .invoice-box table tr.heading td {
+                    background: #eee;
+                    font-weight: bold;
+                }
+
+                .invoice-box table tr.details td {
+                    padding-bottom: 20px;
+                }
+
+                .invoice-box table tr.item td {
+                }
+
+                .invoice-box table tr.item.last td {
+                }
+
+                .invoice-box table tr.total td:nth-child(2) {
+                    font-weight: bold;
+                }
+
+        @@media only screen and (max-width: 600px) {
+            .invoice-box table tr.top table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+            .invoice-box table tr.information table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+
+        /** RTL **/
+        .rtl {
+            direction: rtl;
+            font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        }
+
+            .rtl table {
+                text-align: right;
+            }
+
+                .rtl table tr td:nth-child(2) {
+                    text-align: left;
+                }
+
+        table {
+            border-collapse: collapse;
+        }
+
+            table td, table th {
+                border: 1px solid black;
+            }
+
+            table tr:first-child th {
+                border-top: 0;
+            }
+
+            table tr:last-child td {
+                border-bottom: 0;
+            }
+
+            table tr td:first-child,
+            table tr th:first-child {
+                border-left: 0;
+            }
+
+            table tr td:last-child,
+            table tr th:last-child {
+                border-right: 0;
+            }
+
+        input {
+            position: relative;
+            vertical-align: middle;
+        }
+
+        label {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            font-weight:bold;
+        }
+    </style>
+
+    @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        @Styles.Render("~/Content/css/AdminLTE-RTL")
+        @Styles.Render("~/Content/css-RTL")
+        direction = "rtl";
+    }
+    else
+    {
+        @Styles.Render("~/Content/css/AdminLTE")
+        @Styles.Render("~/Content/css")
+    }
+
+</head>
+
+<body dir="@direction">
+    <div class="invoice-box">
+        <div class="header">
+            <table cellpadding="0" cellspacing="0" frame=void rules=rows>
+                <tr class="top">
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td class="title" style="vertical-align: middle;border:hidden">
+                                    <img src="~/Content/img/uossm-01.png" style="width:80%; height:60px">
+                                </td>
+                                <td width="70%" style="vertical-align: middle;border:hidden;padding-left:60px">
+                                   HIRS Telemedicine
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="content">
+            <table class="DataTable" cellpadding="0" cellspacing="0" style="border:1px solid;table-layout:fixed">
+
+
+
+                <tr class="heading">
+                    <td td width="100%" colspan="3" align="center">
+                        @if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+                        {
+                            <strong>معلومات المريض</strong>
+
+                        }
+                        else
+                        {
+                            <strong>Patient Info</strong>
+
+                        }
+                    </td>
+
+
+                </tr>
+
+                <tr>
+
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.FullName, new { @class = "form-label" })
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.FullName, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.FatherName, new { @class = "form-label" })
+
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.CareGiver, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.MotherName, new { @class = "form-label" })
+
+                    </td>
+
+
+                </tr>
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" width="33%" class="DateOfBirthLabel">
+                        @Model.PatientName
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%">
+                        @Model.PatientFatherName
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%" class="divCareLabel">
+                        @Model.PatientMotherName
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.Gender, new { @class = "form-label" })
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.FullName, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.BirthDate, new { @class = "form-label" })
+
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.CareGiver, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.PlaceOfBirth, new { @class = "form-label" })
+
+                    </td>
+
+
+                </tr>
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" width="33%" class="DateOfBirthLabel">
+                        @if (Model.PatientGender != null)
+                        {
+                            @Model.PatientGender.GetDescription()
+
+                        }
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%">
+                        @Model.PatientDateOfBirth
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%" class="divCareLabel">
+                        @Model.PatientPlaceOfBirth
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.PhoneNumber, new { @class = "form-label" })
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.FullName, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.MaritalStatus, new { @class = "form-label" })
+
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.CareGiver, new { @class = "form-label" })*@
+                        @Html.Label(PatientResource.BloodType, new { @class = "form-label" })
+
+                    </td>
+
+
+                </tr>
+
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" width="33%" class="DateOfBirthLabel">
+
+                        @Model.PatientPhoneNumber
+
+
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%">
+                        @if (Model.PatientMaritalStatus != null)
+                        {
+                            <span>  @Model.PatientMaritalStatus.GetDescription()</span>
+
+                        }
+
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%" class="divCareLabel">
+                        @if (Model.PatientBloodType!=null)
+                        {
+                        <span>  @Model.PatientBloodType.GetDescription()</span>
+
+                        }
+                    </td>
+
+                </tr>
+
+                <tr style="height:20px;"></tr>
+
+
+
+                <tr class="heading">
+                    <td td width="100%" colspan="3" align="center">
+                        <strong>  @ICUExitResource.Exit</strong>
+                    </td>
+
+
+                </tr>
+
+                <tr>
+
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.Diagnosis, new { @class = "form-label" })
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.FullName, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.BloodPressure, new { @class = "form-label" })
+
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.CareGiver, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.Temperature, new { @class = "form-label" })
+
+                    </td>
+
+
+                </tr>
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" width="33%" class="DateOfBirthLabel">
+                        @ExitObject.Diagnosis
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%">
+                        @ExitObject.BloodPressure
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%" class="divCareLabel">
+                        @ExitObject.Temperature
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.TemperatureRecovery, new { @class = "form-label" })
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.FullName, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.Oxygenation, new { @class = "form-label" })
+
+                    </td>
+                    <td width="33%">
+                        @*@Html.LabelFor(model => model.CareGiver, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.Pulse, new { @class = "form-label" })
+
+                    </td>
+
+
+                </tr>
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" width="33%" class="DateOfBirthLabel">
+
+                        @ExitObject.Temperature
+
+
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%">
+                        @ExitObject.Oxygenation
+                    </td>
+                    <td style="word-wrap: break-word;" width="33%" class="divCareLabel">
+                        @ExitObject.Pulse
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td width="100%" colspan="3">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.Recommendations, new { @class = "form-label" })
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" colspan="3" width="100%" class="DateOfBirthLabel">
+
+                        @ExitObject.Recommendations
+
+
+                    </td>
+
+
+                </tr>
+
+
+                <tr>
+
+                    <td width="100%" colspan="3">
+                        @*@Html.LabelFor(model => model.DateOfBirth, new { @class = "form-label" })*@
+                        @Html.Label(ICUExitResource.Medication, new { @class = "form-label" })
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td style="word-wrap: break-word;" colspan="3" width="100%" class="DateOfBirthLabel">
+
+                        @ExitObject.Medication
+
+
+                    </td>
+
+
+                </tr>
+
+
+
+
+
+
+            </table>
+        </div>
+    </div>
+    <script>
+
+              $(document).ready(function ($) {
+                    window.print();
+                });
+
+
+
+
+
+
+
+
+
+   
+
+
+
+    </script>
+</body>
+</html>
+
+
+

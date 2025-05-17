@@ -1,0 +1,12 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h1 class="text-danger">Oops!! Unexpected Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+<h4 class="text-danger"><b>Error code:</b> @ViewData["Code"]</h4>
+<h4 class="text-danger"><b>Details:</b> @ViewData["Error"]</h4>
+
+

@@ -1,0 +1,19 @@
+﻿@using BoulevardManagement.WebApplication.Models
+@model List<StickyMenuItemVM>
+
+@foreach (var item in Model)
+{
+    <!--begin::Item-->
+@*<li class="nav-item mb-2" id="" data-toggle="tooltip" title="" data-placement="right" data-original-title="@item.Text">*@    
+    <button type="button" @(!item.IsActive?"disabled":"") id="@item.Id" class="btn btn-light-primary font-weight-bold mr-2 btn-block sticky-menu-button">@item.Text</button>
+
+    <!--<a class="btn btn-sm btn-icon btn-bg-light btn-icon-success btn-hover-success" href="javascript:void(0);" id="@item.Id">
+        <span class="svg-icon svg-icon-lg">-->
+            <!--begin::Svg Icon | path:~/assets/media/svg/icons/Shopping/Box2.svg-->
+            <!--@item.Text-->
+            <!--end::Svg Icon-->
+        <!--</span>
+    </a>-->
+@*</li>*@
+}
+

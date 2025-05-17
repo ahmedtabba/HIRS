@@ -1,0 +1,224 @@
+﻿
+@using BoulevardManagement.Utilities;
+@using BoulevardManagement.WebApplication.Resources;
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+<!--begin::Container-->
+<div class="container">
+
+    <div class="card card-custom" data-card="true" id="kt_card_3">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@LocationResource.Locations</h3>
+            </div>
+            <div class="card-toolbar">
+
+                <a href="javascript:void(0);" onclick=" $('.k-grid-excel').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportExcelTooltip" class="btn btn-icon btn-circle btn-sm btn-light-skype mr-1" data-card-tool="">
+                    <i class="fa fas fa-file-excel icon-nm"></i>
+                </a>
+
+                <a href="javascript:void(0);" onclick=" $('.k-grid-pdf').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportPdfTooltip" class="btn btn-icon btn-circle btn-sm btn-light-youtube mr-1" data-card-tool="">
+                    <i class="fa fas fa-file-pdf icon-nm"></i>
+                </a>
+                @if (User.IsInRole(RoleConsistent.Location.Add))
+                {
+                    <a href="@Url.Action("Create", "Location", new { @Area = "" })" data-toggle="tooltip" title="@CommonResource.AddNewTooltip" class="btn btn-icon btn-circle btn-sm btn-light-facebook mr-1" data-card-tool="">
+                        <i class="ki ki-plus icon-nm"></i>
+                    </a>
+                }
+                <a href="javascript:void(0);" onclick="$('.k-i-refresh').trigger('click');" data-toggle="tooltip" title="@CommonResource.RefreshTooltip" class="btn btn-icon btn-circle btn-sm btn-light-google mr-1" data-card-tool="reload">
+                    <i class="ki ki-reload icon-nm"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+
+            </div>
+        </div>
+        <div class="card-body" kt-hidden-height="471" style="">
+            <div class="@customeClass">
+                @(Html.KendoGrid<BoulevardManagement.DTO.LocationDTO>().Name("LocationGrid")
+                            .Columns(columns =>
+                            {
+                            //Text Field Template
+                            columns.Bound(c => c.Code).ClientTemplate("#=LinkTemplate(EncrptedId,Code)#").Title(LocationResource.Code).Width(200);
+                                columns.Bound(c => c.Name).Title(LocationResource.Name).Width(200);
+                                columns.Bound(c => c.DepartmentName).Title(LocationResource.Department).Width(200);
+
+                            //Bool Field Template
+                            //columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+                            //Date Field Template
+                            //columns.Bound(c => c.DateFieldName).Title("Title").Filterable(c => c.Cell(x => x.Template("datePicker")).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy}");
+                            if (this.User.IsInRoles(RoleConsistent.Location.Edit) || this.User.IsInRoles(RoleConsistent.Location.Delete))
+                                    columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=templateOptions(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+                                if (this.User.IsInRoles(RoleConsistent.Location.Delete))
+                                    columns.Command(command => { command.Custom("LocationDestroy").Text("<span class='k-icon k-i-close'></span>" + CommonResource.Delete).Click("DeleteRowLocationGrid"); }).Hidden();
+
+                            })
+                                        .HtmlAttributes(new { style = "height:1000px", @id = "LocationGrid" })
+                                        .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+                                        .ColumnMenu(c => c.Columns(true))
+                                        .Pdf(exp => exp.FileName("Location.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+                                        .Excel(exp => exp.FileName("Location.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+                                        .DataSource(dataSource => dataSource
+                                        .Ajax()
+                                        .Model(model => model.Id(c => c.Id))
+                                        .Create(action => action.Action("Create", "Location"))
+                                        .Destroy(action => action.Action("Delete", "Location"))
+                                        .Read(read => read.Action("Read", "Location").Data("GetFilterCriterias"))
+                                        .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'LocationGrid');}").RequestEnd("myOnReqEnd"))
+                                        )
+                                       // .ColumnMenu(c => c.Columns(false))
+                )
+            </div>
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Tables Widget 5-->
+    <!--end::Dashboard-->
+    @Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+</div>
+<!--end::Container-->
+
+
+<script>
+    var LocationUrl = '@Url.Action("Edit", "Location", new { LocationId = "MyCode"})';
+
+    var deletedLocation;
+    function myOnReqEnd(e) {
+        if (e.response.Data.length == 0)
+            return;
+        if (e.type === "destroy") {
+            var details = `${deletedLocation.Name}) `;
+            onRequestEnd(e, details);
+        }
+    }
+
+
+
+    function DeleteRowLocationGrid(e) {
+
+        e.preventDefault();
+        var tr = $(e.target).closest("tr"); //get the row for deletion
+        var data = this.dataItem(tr); //get the row data.
+        $('#DeleteConfirm').modal('show');
+        var grid = $("#LocationGrid").data("kendoGrid");
+        $("#DeleteConfirmButton").unbind("click");
+        $("#DeleteConfirmButton").click(function () {
+            deletedLocation = data;
+            grid.dataSource.remove(data); //prepare a "destroy" request
+            grid.dataSource.sync(); //actually send the request (might be ommited if the autoSync option is enabled in the dataSource)
+            $('#DeleteConfirm').modal('hide');
+        });
+    }
+
+    function templateOptions(id, ob) {
+        
+
+          var EditUrl = "";
+         var DeleteLi = "";
+           if ('@this.User.IsInRole(RoleConsistent.Location.Delete)'=='True') {
+               DeleteLi = "<li class='navi-item'>" + "<a onClick=" + "\"DeleteRowLocationGrid(" + ob + ")\"" +" href='#' class='navi-link  k-button-icontext k-grid-LocationDestroy'><i class='navi-icon flaticon2-trash'></i><span class='navi-text'>@CommonResource.Delete</span></a></li>";
+
+           }
+           if ('@this.User.IsInRole(RoleConsistent.Location.Edit)'=='True') {
+               EditUrl = '@Url.RouteUrl("Default", new { controller = "Location", action = "Edit" })' + "?LocationId=" + id;
+          }
+
+        var result = `<div class=" ml-2"  >
+
+
+<a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+															<span class="svg-icon svg-icon-lg">
+																<!--begin::Svg Icon | path:assets/media/svg/icons/Text/Dots.svg-->
+																<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+												<rect x="0" y="0" width="24" height="24" />
+												<path d="M7,3 L17,3 C19.209139,3 21,4.790861 21,7 C21,9.209139 19.209139,11 17,11 L7,11 C4.790861,11 3,9.209139 3,7 C3,4.790861 4.790861,3 7,3 Z M7,9 C8.1045695,9 9,8.1045695 9,7 C9,5.8954305 8.1045695,5 7,5 C5.8954305,5 5,5.8954305 5,7 C5,8.1045695 5.8954305,9 7,9 Z" fill="#000000" />
+												<path d="M7,13 L17,13 C19.209139,13 21,14.790861 21,17 C21,19.209139 19.209139,21 17,21 L7,21 C4.790861,21 3,19.209139 3,17 C3,14.790861 4.790861,13 7,13 Z M17,19 C18.1045695,19 19,18.1045695 19,17 C19,15.8954305 18.1045695,15 17,15 C15.8954305,15 15,15.8954305 15,17 C15,18.1045695 15.8954305,19 17,19 Z" fill="#000000" opacity="0.3" />
+											</g>
+										</svg>
+																<!--end::Svg Icon-->
+															</span>
+														</a>
+
+
+<div class="dropdown-menu dropdown-menu-sm p-0 m-0 dropdown-menu-right">
+											<ul class="navi py-5">
+`;
+        if (EditUrl != "") {
+            result = result + "<li class='navi-item'><a href=" + EditUrl + " class='navi-link' ><i class='navi-icon flaticon2-contract'></i><span class='navi-text'>@CommonResource.Edit</span></a></li>";
+        }
+        if (DeleteLi != "") {
+            result = result + DeleteLi;
+        }
+
+        result = result +
+            "</ul></div></div>";
+
+        return result;
+    }
+
+
+
+
+
+    function GetFilterCriterias() {
+
+        return {  }
+    }
+
+    function refresh(e) {
+        $('#LocationGrid').data('kendoGrid').dataSource.read();
+        $('#LocationGrid').data('kendoGrid').refresh();
+    }
+
+
+    $(document).ready(function () {
+        $(".k-grid-toolbar").hide();
+
+    });
+
+
+
+      var url = '@Url.Action("Edit", "Location", new { locationId = "MyCode"})';
+    function LinkTemplate(id, text) {
+
+        if (text == null) {
+            text = '';
+            }
+                @if (User.IsInRoles(RoleConsistent.Location.Edit))
+                    {
+                    <text>
+            var actionurl = url.replace("MyCode", id);
+        return '<a   href="' + actionurl + '"> ' + text + '</a>';
+                    </text>
+                }else
+                {
+                    <text>
+        return "<span>" + text + "</span>";
+                    </text>
+                }
+
+        }
+
+</script>
+
+<style>
+    .k-rtl .k-grid td {
+        position: inherit !important;
+    }
+
+    .k-grid-content .btn-group {
+        position: absolute !important;
+    }
+</style>
+

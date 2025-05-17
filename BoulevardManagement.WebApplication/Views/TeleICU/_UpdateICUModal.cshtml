@@ -1,0 +1,97 @@
+﻿@using BoulevardManagement.DTO
+@using BoulevardManagement.WebApplication.Resources
+@model TeleICUDTO
+
+@{
+    var customeClass = "";
+    var isRTL = System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft;
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+<div class="modal" id="update-ICU-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@TeleICUResource.UpdateICUCase</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("Edit", "TeleICU", FormMethod.Post, new { @id = "AddFormId" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <input hidden name="PatientId" id="PatientId" value="@Model.PatientId" />
+                <input hidden name="LocationId" id="LocationId" value="@Model.LocationId" />
+                <input hidden name="Id" id="Id" value="@Model.Id" />
+                <div class="modal-body">
+                    <div class="row ">
+                        <div class="col-lg-12 form-group @customeClass">
+                            <label class="form-label">@CommonResource.InvolvedServiceProviders</label>
+                            @(Html.Kendo().MultiSelectFor(x=>x.InvolvedServiceProvidersIds)
+          .DataTextField("FullName")
+          .DataValueField("Id")
+          .TagMode(TagMode.Multiple)
+          .ValuePrimitive(true)
+          .Placeholder(CommonResource.Select)
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("GetUsersBasedOnJobAndDepartmentId", "Account", new { JobRole = JobRole.ServiceProvider, DepartmentId = Model.PatientDepartmentId });
+              }).ServerFiltering(true);
+          }).Filter("contains")
+          //.Events(c=>c.DataBound("dataBound"))
+          .HtmlAttributes(new { @class = "form-control custom-style", @id= "InvolvedServiceProvidersIds" })
+          )
+
+                        </div>
+
+
+                        <div class="col-lg-12 form-group @customeClass">
+                            <label class="form-label">@CommonResource.InvolvedConsultants</label>
+
+                            @(Html.Kendo().MultiSelectFor(x=>x.InvolvedConsultantsIds)
+          .DataTextField("FullName")
+          .DataValueField("Id")
+          .TagMode(TagMode.Multiple)
+          .ValuePrimitive(true)
+          .Placeholder(CommonResource.Select)
+          .DataSource(source =>
+          {
+              source.Read(read =>
+              {
+                  read.Action("GetUsersBasedOnJobAndDepartmentId", "Account", new { JobRole = JobRole.Consultant, DepartmentId = Model.PatientDepartmentId });
+              }).ServerFiltering(true);
+          }).Filter("contains")
+          //.Events(c=>c.DataBound("dataBound"))
+          .HtmlAttributes(new { @class = "form-control custom-style", @id= "InvolvedConsultantsIds" })
+          )
+
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveTelICU" type="button" class="btn btn-primary">@CommonResource.Save</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@CommonResource.Close</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        $("#saveTelICU").on("click", function () {
+            $("#AddFormId").submit();
+        });
+
+    });
+
+
+</script>

@@ -1,0 +1,93 @@
+﻿
+@using BoulevardManagement.Utilities;
+@using BoulevardManagement.WebApplication.Resources;
+
+@{
+    var customeClass = "";
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customeClass = "k-rtl";
+    }
+}
+
+
+
+<div class="card card-custom card-collapse" data-card="true" id="kt_card_4">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">@NPICUConsultantSectionResource.ConsultantSections</h3>
+        </div>
+        <div class="card-toolbar">
+
+            <a href="javascript:void(0);" onclick=" $('.k-grid-excel').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportExcelTooltip" class="btn btn-icon btn-circle btn-sm btn-light-skype mr-1" data-card-tool="">
+                <i class="fa fas fa-file-excel icon-nm"></i>
+            </a>
+
+            <a href="javascript:void(0);" onclick=" $('.k-grid-pdf').trigger('click');" data-toggle="tooltip" title="@CommonResource.ExportPdfTooltip" class="btn btn-icon btn-circle btn-sm btn-light-youtube mr-1" data-card-tool="">
+                <i class="fa fas fa-file-pdf icon-nm"></i>
+            </a>
+            <a href="javascript:void(0);" onclick="$('.k-i-refresh').trigger('click');" data-toggle="tooltip" title="@CommonResource.RefreshTooltip" class="btn btn-icon btn-circle btn-sm btn-light-google mr-1" data-card-tool="reload">
+                <i class="ki ki-reload icon-nm"></i>
+            </a>
+            <a href="javascript:void(0);"  onclick="$('.k-i-refresh').trigger('click');" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1 custom-toggel" data-card-tool="toggle">
+                <i class="ki ki-arrow-down icon-nm"></i>
+            </a>
+
+        </div>
+    </div>
+    <div class="card-body @customeClass" kt-hidden-height="471" style="display: none; overflow: hidden; padding-top: 0px; padding-bottom: 0px;">
+        @(Html.KendoGrid<BoulevardManagement.DTO.NPICUConsultantSectionDTO>().Name("NPICUConsultantSectionGrid")
+.Columns(columns =>
+{
+
+
+//Bool Field Template
+//columns.Bound(c => c.BoolFieldName).Title("Title?").ClientTemplate("#if (BoolFieldName) {# " + "Yes" + "#}else{#" + "No" + "#}#").Width(120);
+
+//Date Field Template
+columns.Bound(c => c.DateOfCreate).Title(NICUConsultationFormFollowUPResource.DateAndTime).Filterable(c => c.Cell(x => x.Template("datePicker")).Enabled(false).Operators(x => x.ForDate(d => d.IsEqualTo("equal")))).Width(150).Format(@"{0:dd/MM/yyyy || hh:mm tt}");
+
+//Text Field Template
+columns.Bound(c => c.CreatorName).Title(NICUConsultationFormFollowUPResource.User).Filterable(x=>x.Enabled(false)).Width(200);
+
+if (this.User.IsInRoles(RoleConsistent.NPICU.EditNPICUConsultantSection)|| this.User.IsInRoles(RoleConsistent.NPICU.ViewNPICUConsultantSection))
+    columns.Template(@<text></text>).HeaderHtmlAttributes(new { @style = "padding-bottom:11px;" }).ClientTemplate("#=templateOptionsConsultantSectionGrid(EncrptedId,this)#").Title(CommonResource.Oprions).Width(50);
+            columns.Command(command => { command.Custom("NPICUConsultantSectionDestroy").Text("<span class='k-icon k-i-close'></span> Delete ").Click("DeleteRowNPICUConsultantSectionGrid"); }).Hidden();
+
+})
+            .HtmlAttributes(new { style = "height:400px", @id = "NPICUConsultantSectionGrid" })
+            .ToolBar(toolbar => { toolbar.Excel().HtmlAttributes(new { style = "display:none" }); toolbar.Pdf().HtmlAttributes(new { style = "display:none" }); })
+            .ColumnMenu(c => c.Columns(true))
+            .Pdf(exp => exp.FileName("NPICUConsultantSection.pdf").ProxyURL(Url.Action("Export_Save", "Base")).AllPages().AvoidLinks().PaperSize("A4").Scale(0.8).Margin("2cm", "1cm", "1cm", "1cm").Landscape().RepeatHeaders().TemplateId("page-template"))
+            .Excel(exp => exp.FileName("NPICUConsultantSection.xlsx").ProxyURL(Url.Action("Export_Save", "Base")).AllPages(true))
+            .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(c => c.Id))
+            .Destroy(action => action.Action("DeleteNPICUConsultantSection", "NPICU"))
+            .Read(read => read.Action("Read_NPICUConsultantSection", "NPICU").Data("GetNICUId"))
+            .Events(events => events.Error("function(e){KendoGrid_ErrorHandler(e,'NPICUConsultantSectionGrid');}").RequestEnd("myOnReqEndConsultantSection"))
+            )
+            .ColumnMenu(c => c.Columns(false).Filterable(false))
+                                )
+    </div>
+    @Html.Partial("Modals/ConfirmModal", new BoulevardManagement.WebApplication.Models.DeleteConfirmModal())
+
+    <!--end::Body-->
+</div>
+    <!--end::Tables Widget 5-->
+    <!--end::Dashboard-->
+
+
+<script src="~/assets/js/scripts.bundle.js"></script>
+
+
+<style>
+    .k-rtl .k-grid td {
+        position: inherit !important;
+    }
+
+    .k-grid-content .btn-group {
+        position: absolute !important;
+    }
+</style>
+

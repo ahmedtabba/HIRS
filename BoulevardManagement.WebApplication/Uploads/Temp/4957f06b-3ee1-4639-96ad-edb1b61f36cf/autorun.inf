@@ -1,0 +1,9 @@
+[autorun]
+OPEN=setup.exe /AUTORUN
+ICON=setup.exe,1
+
+shell\configure=&«· ﬂÊÌ‰...
+shell\configure\command=setup.exe
+
+shell\install= &À»Ì ...
+shell\install\command=setup.exe

@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccompanyingPersonExisted" xml:space="preserve">
+    <value>الشخص المرافق</value>
+  </data>
+  <data name="AppearanceBehaviorAndCooperationWithTheExaminer" xml:space="preserve">
+    <value>أ - المظهر و السلوك و التعاون مع الفاحص</value>
+  </data>
+  <data name="AppearanceBehaviorAndCooperationWithTheExaminerInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل المظهر و السلوك و التعاون مع الفاحص</value>
+  </data>
+  <data name="CaseSummary" xml:space="preserve">
+    <value>ملخص الحالة </value>
+  </data>
+  <data name="CaseSummaryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل ملخص الحالة</value>
+  </data>
+  <data name="CauseOfReferral" xml:space="preserve">
+    <value>سبب الإحالة</value>
+  </data>
+  <data name="CauseOfReferralInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل سبب الإحالة </value>
+  </data>
+  <data name="CharacteristicsOfThePreDisorder" xml:space="preserve">
+    <value>سمات الشخصية القبل مرضية </value>
+  </data>
+  <data name="CharacteristicsOfThePreDisorderInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل السمات الشخصية القبل مرضية </value>
+  </data>
+  <data name="ClinicalStory" xml:space="preserve">
+    <value>القصة السريرية </value>
+  </data>
+  <data name="ComplaintDetails" xml:space="preserve">
+    <value>تفصيل الشكاية</value>
+  </data>
+  <data name="ComplaintDetailsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل تفصيل الشكاية</value>
+  </data>
+  <data name="CurrentComplaint" xml:space="preserve">
+    <value>الشكاية الحالية كما يعبر عنها المريض | كلام المريض  </value>
+  </data>
+  <data name="CurrentComplaintInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل ملاحظات الشكاية الحالية</value>
+  </data>
+  <data name="CurrentPlaceResidence" xml:space="preserve">
+    <value>مكان الإقامة الحالية</value>
+  </data>
+  <data name="CurrentPlaceResidenceInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل مكان الإقامة الحالية</value>
+  </data>
+  <data name="CurrentWork" xml:space="preserve">
+    <value>العمل الحالي</value>
+  </data>
+  <data name="CurrentWorkInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل العمل الحالي</value>
+  </data>
+  <data name="Diagnosis" xml:space="preserve">
+    <value>	التشخيص التفريقي المبدئي</value>
+  </data>
+  <data name="DiagnosisTitle" xml:space="preserve">
+    <value>التشخيص</value>
+  </data>
+  <data name="EducationalLevel" xml:space="preserve">
+    <value>المستوى التعليمي</value>
+  </data>
+  <data name="EducationalLevelInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل المستوى التعليمي</value>
+  </data>
+  <data name="Existed" xml:space="preserve">
+    <value>موجود</value>
+  </data>
+  <data name="FamilyPrecedents" xml:space="preserve">
+    <value>السوابق العائلية</value>
+  </data>
+  <data name="FamilyPrecedentsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل السوابق العائلية</value>
+  </data>
+  <data name="GeneralMedicalPrecedents" xml:space="preserve">
+    <value>السوابق الطبية العامة" أمراض عضوية، عمليات جراحية"</value>
+  </data>
+  <data name="GeneralMedicalPrecedentsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل "السوابق الطبية العامة" أمراض عضوية، عمليات جراحية</value>
+  </data>
+  <data name="MoodAndAffection" xml:space="preserve">
+    <value>ث - المزاج و الوجدان</value>
+  </data>
+  <data name="MoodAndAffectionInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل المزاج و الوجدان</value>
+  </data>
+  <data name="MostLikelyDiagnosis" xml:space="preserve">
+    <value>التشخيص الأكثر احتمالاً</value>
+  </data>
+  <data name="MostLikelyDiagnosisInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال التشخيص الأكثر احتمالاً</value>
+  </data>
+  <data name="NumberOfBrothers" xml:space="preserve">
+    <value>عدد الأخوة</value>
+  </data>
+  <data name="NumberOfBrothersInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل عدد الأخوة</value>
+  </data>
+  <data name="PerceptionAndConsciousness" xml:space="preserve">
+    <value>ح - الإدراك و الوعي </value>
+  </data>
+  <data name="PerceptionAndConsciousnessInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الإدراك و الوعي</value>
+  </data>
+  <data name="PersonalInformation" xml:space="preserve">
+    <value>المعلومات الشخصية</value>
+  </data>
+  <data name="PlaceOfInterview" xml:space="preserve">
+    <value>مكان المقابلة</value>
+  </data>
+  <data name="PlaceOfInterviewInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل مكان المقابلة</value>
+  </data>
+  <data name="PreviousPlaceResidence" xml:space="preserve">
+    <value>مكان الإقامة السابقة</value>
+  </data>
+  <data name="PreviousPlaceResidenceInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل مكان الإقامة السابقة</value>
+  </data>
+  <data name="PreviousWork" xml:space="preserve">
+    <value>العمل السابق </value>
+  </data>
+  <data name="PreviousWorkInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل العمل السابق</value>
+  </data>
+  <data name="PsychologicalExamination" xml:space="preserve">
+    <value>الفحص النفسي</value>
+  </data>
+  <data name="PsychologicalNeurologicalAndPersonalAddictivePrecedents" xml:space="preserve">
+    <value>السوابق النفسية و العصبية و الإدمانية الشخصية</value>
+  </data>
+  <data name="PsychologicalNeurologicalAndPersonalAddictivePrecedentsInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل السوابق النفسية و العصبية و الإدمانية الشخصية</value>
+  </data>
+  <data name="PsychomotorActivity" xml:space="preserve">
+    <value>ب - النشاط النفسي</value>
+  </data>
+  <data name="PsychomotorActivityInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل النشاط النفسي</value>
+  </data>
+  <data name="Remarks" xml:space="preserve">
+    <value>ملاحظات </value>
+  </data>
+  <data name="RemarksInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال الملاحظات</value>
+  </data>
+  <data name="RiskAssessment" xml:space="preserve">
+    <value>تقييم الخطر</value>
+  </data>
+  <data name="RiskAssessmentInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل تقييم الخطر </value>
+  </data>
+  <data name="SenseAndCognition" xml:space="preserve">
+    <value>خ - الحس والاستعراف</value>
+  </data>
+  <data name="SenseAndCognition_Abstraction" xml:space="preserve">
+    <value>خ/ث - التجريد </value>
+  </data>
+  <data name="SenseAndCognition_AbstractionInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل التجريد </value>
+  </data>
+  <data name="SenseAndCognition_AttentionAndConcentration" xml:space="preserve">
+    <value>خ/ت - الانتباه و التركيز </value>
+  </data>
+  <data name="SenseAndCognition_AttentionAndConcentrationInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الانتباه و التركيز</value>
+  </data>
+  <data name="SenseAndCognition_ConsciousnessAndOrientation" xml:space="preserve">
+    <value>خ/أ - الوعي و التوجه </value>
+  </data>
+  <data name="SenseAndCognition_ConsciousnessAndOrientationInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الوعي و التوجه </value>
+  </data>
+  <data name="SenseAndCognition_Insight" xml:space="preserve">
+    <value>خ/ح - الاستبصار</value>
+  </data>
+  <data name="SenseAndCognition_InsightInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الاستبصار</value>
+  </data>
+  <data name="SenseAndCognition_Judgment" xml:space="preserve">
+    <value>خ/ج - المحاكمة </value>
+  </data>
+  <data name="SenseAndCognition_JudgmentInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل المحاكمة </value>
+  </data>
+  <data name="SenseAndCognition_Memory" xml:space="preserve">
+    <value>خ/ب - الذاكرة </value>
+  </data>
+  <data name="SenseAndCognition_MemoryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الذاكرة </value>
+  </data>
+  <data name="SocialStory" xml:space="preserve">
+    <value>قصة اجتماعية (زواج ، عمل ، مراهقة وطفولة ... الخ)</value>
+  </data>
+  <data name="SocialStoryInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل القصة الإجتماعية </value>
+  </data>
+  <data name="SourceOfReferral" xml:space="preserve">
+    <value>مصدر الإحالة </value>
+  </data>
+  <data name="SourceOfReferralInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل مصدر الإحالة</value>
+  </data>
+  <data name="Speech" xml:space="preserve">
+    <value>ت - الكلام </value>
+  </data>
+  <data name="SpeechInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل الكلام </value>
+  </data>
+  <data name="SubDiagnosisTitle" xml:space="preserve">
+    <value>التشخيص الفرعي </value>
+  </data>
+  <data name="Thinking" xml:space="preserve">
+    <value>ج - التفكير </value>
+  </data>
+  <data name="ThinkingInfoSpan" xml:space="preserve">
+    <value>يرجى إدخال حقل التفكير</value>
+  </data>
+</root>

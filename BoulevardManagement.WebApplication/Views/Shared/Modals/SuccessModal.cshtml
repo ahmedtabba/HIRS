@@ -1,0 +1,54 @@
+﻿@model BoulevardManagement.WebApplication.Models.SuccessModal
+
+<div class="modal modal-success fade" id="@Model.ModelId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="Close@(Model.ButtonId)">
+                    <i class="fa fa-close" aria-hidden="true"></i>
+                </button>
+                <h4 class="modal-title"><i class="fa fa-info-circle"></i>&nbsp;@Model.Title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        @Model.Content
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <div class="modal-footer">
+                
+                @if (Model.ShowCancelBtn)
+                {
+                    <a href="@Model.OkURL" id="@Model.ButtonId" class="btn btn-outline" role="button">@Model.ButtonTextOk</a>
+
+                }
+                else
+                {
+                <button type="button" id="@Model.ButtonId" class="btn btn btn-outline" data-dismiss="modal">@Model.ButtonTextOk</button>
+                }
+
+@if (Model.ShowCancelBtn)
+{
+                <button type="button" id="Cancle@(Model.ButtonId)" class="btn btn btn-outline pull-right" data-dismiss="modal">@Model.ButtonTextCancel</button>
+}
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+
+@if ((ViewData["ShowSuccess"] != null && (bool)ViewData["ShowSuccess"] )|| (ViewData["ShowNewFormulaMsg"] != null && (bool)ViewData["ShowNewFormulaMsg"]))
+{
+   <script type="text/javascript">
+
+       $(document).ready(function ($) {
+           $('#@Model.ModelId').modal('show');
+       });
+   </script>
+}
+

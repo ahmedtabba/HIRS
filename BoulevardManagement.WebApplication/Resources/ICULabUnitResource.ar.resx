@@ -1,0 +1,369 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddLabUnit" xml:space="preserve">
+    <value>إضافة تحليل جديد</value>
+  </data>
+  <data name="AG" xml:space="preserve">
+    <value>AG</value>
+  </data>
+  <data name="BE" xml:space="preserve">
+    <value>BE</value>
+  </data>
+  <data name="BloodGases" xml:space="preserve">
+    <value>غازات الدم</value>
+  </data>
+  <data name="Calcium" xml:space="preserve">
+    <value>الكالسيوم </value>
+  </data>
+  <data name="CBC" xml:space="preserve">
+    <value>CBC</value>
+  </data>
+  <data name="CBCBloodGroup" xml:space="preserve">
+    <value>زمرة الدم</value>
+  </data>
+  <data name="CBCHB" xml:space="preserve">
+    <value>H.B</value>
+  </data>
+  <data name="CBCHT" xml:space="preserve">
+    <value>H.T</value>
+  </data>
+  <data name="CBCL" xml:space="preserve">
+    <value>L</value>
+  </data>
+  <data name="CBCM" xml:space="preserve">
+    <value>M</value>
+  </data>
+  <data name="CBCN" xml:space="preserve">
+    <value>N</value>
+  </data>
+  <data name="CBCPLT" xml:space="preserve">
+    <value>PLT</value>
+  </data>
+  <data name="CBCWBC" xml:space="preserve">
+    <value>W.B.C</value>
+  </data>
+  <data name="Chemistry" xml:space="preserve">
+    <value>Chemistry</value>
+  </data>
+  <data name="ChemistryAlbumin" xml:space="preserve">
+    <value>ألبومين</value>
+  </data>
+  <data name="ChemistryALP" xml:space="preserve">
+    <value>ALP</value>
+  </data>
+  <data name="ChemistryAmylase" xml:space="preserve">
+    <value>Amylase</value>
+  </data>
+  <data name="ChemistryBilirDirct" xml:space="preserve">
+    <value>Bilir.Dirct</value>
+  </data>
+  <data name="ChemistryBilirIndirect" xml:space="preserve">
+    <value>Blllr.Indirect</value>
+  </data>
+  <data name="ChemistryBilirTotal" xml:space="preserve">
+    <value>Bilir.Total</value>
+  </data>
+  <data name="ChemistryCKMB" xml:space="preserve">
+    <value>CKMP</value>
+  </data>
+  <data name="ChemistryCreatinine" xml:space="preserve">
+    <value>Creatinine</value>
+  </data>
+  <data name="ChemistryCRP" xml:space="preserve">
+    <value>CRP</value>
+  </data>
+  <data name="ChemistryGlobulins" xml:space="preserve">
+    <value>Globulins</value>
+  </data>
+  <data name="ChemistryGlucose" xml:space="preserve">
+    <value>Glucose</value>
+  </data>
+  <data name="ChemistrySGPT" xml:space="preserve">
+    <value>S.G.P.T</value>
+  </data>
+  <data name="ChemistryTotalProteins" xml:space="preserve">
+    <value>البروتين الكلي</value>
+  </data>
+  <data name="ChemistryUrea" xml:space="preserve">
+    <value>اليوريا</value>
+  </data>
+  <data name="Chloride" xml:space="preserve">
+    <value>كلوريد</value>
+  </data>
+  <data name="CoagulationActivity" xml:space="preserve">
+    <value>Activity</value>
+  </data>
+  <data name="CoagulationBleedingTime" xml:space="preserve">
+    <value>زمن النزيف</value>
+  </data>
+  <data name="CoagulationClottingtime" xml:space="preserve">
+    <value>زمن التخثر </value>
+  </data>
+  <data name="CoagulationControl" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="CoagulationINR" xml:space="preserve">
+    <value>INR</value>
+  </data>
+  <data name="CoagulationO" xml:space="preserve">
+    <value>(O)</value>
+  </data>
+  <data name="CoagulationPatient" xml:space="preserve">
+    <value>مريض</value>
+  </data>
+  <data name="CoagulationPT" xml:space="preserve">
+    <value>PT</value>
+  </data>
+  <data name="CoagulationTest" xml:space="preserve">
+    <value>إختبار التخثر</value>
+  </data>
+  <data name="Electrolytes" xml:space="preserve">
+    <value>الشوارد</value>
+  </data>
+  <data name="GeneralAttachment" xml:space="preserve">
+    <value>المرفق العام للتحليل</value>
+  </data>
+  <data name="HCO3" xml:space="preserve">
+    <value>HCO3</value>
+  </data>
+  <data name="LabUnit" xml:space="preserve">
+    <value>وحدة المخبر</value>
+  </data>
+  <data name="LabUnits" xml:space="preserve">
+    <value>وحدات المخبر</value>
+  </data>
+  <data name="Magnesium" xml:space="preserve">
+    <value>مغنيزيوم </value>
+  </data>
+  <data name="PCO2" xml:space="preserve">
+    <value>PCO2</value>
+  </data>
+  <data name="PH" xml:space="preserve">
+    <value>PH</value>
+  </data>
+  <data name="Phosphorous" xml:space="preserve">
+    <value>الفوسفور</value>
+  </data>
+  <data name="PO2" xml:space="preserve">
+    <value>PO2</value>
+  </data>
+  <data name="Potassium" xml:space="preserve">
+    <value>بوتاسيوم</value>
+  </data>
+  <data name="SEROLOGY" xml:space="preserve">
+    <value>أمراض الدم</value>
+  </data>
+  <data name="SerologyA" xml:space="preserve">
+    <value>(A)</value>
+  </data>
+  <data name="SerologyCoagulationM" xml:space="preserve">
+    <value>(M)</value>
+  </data>
+  <data name="SerologyH" xml:space="preserve">
+    <value>(H)</value>
+  </data>
+  <data name="SerologyHBSAG" xml:space="preserve">
+    <value>Hbs Ag</value>
+  </data>
+  <data name="SerologyHCV" xml:space="preserve">
+    <value>H.C.V</value>
+  </data>
+  <data name="SerologyHIV" xml:space="preserve">
+    <value>H.I.V</value>
+  </data>
+  <data name="SerologyM" xml:space="preserve">
+    <value>(M)</value>
+  </data>
+  <data name="SerologyO" xml:space="preserve">
+    <value>(O)</value>
+  </data>
+  <data name="Sodium" xml:space="preserve">
+    <value>الصوديوم </value>
+  </data>
+  <data name="TROPONINT" xml:space="preserve">
+    <value>TROPONIN T</value>
+  </data>
+  <data name="UrineAmorphousUrate" xml:space="preserve">
+    <value>Amorphous Urate</value>
+  </data>
+  <data name="UrineAppearance" xml:space="preserve">
+    <value>المظهر </value>
+  </data>
+  <data name="UrineBacteria" xml:space="preserve">
+    <value>بكتيريا</value>
+  </data>
+  <data name="UrineBilllrubin" xml:space="preserve">
+    <value>Billlrubin</value>
+  </data>
+  <data name="UrineCalciumOxalate" xml:space="preserve">
+    <value>Calcium Oxalate</value>
+  </data>
+  <data name="UrineCandida" xml:space="preserve">
+    <value>Candida</value>
+  </data>
+  <data name="UrineColor" xml:space="preserve">
+    <value>اللون </value>
+  </data>
+  <data name="UrineECells" xml:space="preserve">
+    <value>E.Cells</value>
+  </data>
+  <data name="UrineGCylinders" xml:space="preserve">
+    <value>G Cylinders</value>
+  </data>
+  <data name="UrineGlucose" xml:space="preserve">
+    <value>Glucose</value>
+  </data>
+  <data name="UrineKitones" xml:space="preserve">
+    <value>Kitones</value>
+  </data>
+  <data name="UrineMucus" xml:space="preserve">
+    <value>المخاط</value>
+  </data>
+  <data name="UrinePH" xml:space="preserve">
+    <value>PH</value>
+  </data>
+  <data name="UrineProtein" xml:space="preserve">
+    <value>بروتين </value>
+  </data>
+  <data name="UrineRBC" xml:space="preserve">
+    <value>R.B.C</value>
+  </data>
+  <data name="UrineSG" xml:space="preserve">
+    <value>S.G</value>
+  </data>
+  <data name="URINETEST" xml:space="preserve">
+    <value>فحص البول</value>
+  </data>
+  <data name="UrineUACrystals" xml:space="preserve">
+    <value>U A Crystals</value>
+  </data>
+  <data name="UrineWBC" xml:space="preserve">
+    <value>W.B.C</value>
+  </data>
+  <data name="UrintHemoglobin" xml:space="preserve">
+    <value>الهيموغلوبين</value>
+  </data>
+  <data name="Widal" xml:space="preserve">
+    <value>Widal</value>
+  </data>
+  <data name="Wright" xml:space="preserve">
+    <value>Wright</value>
+  </data>
+</root>
