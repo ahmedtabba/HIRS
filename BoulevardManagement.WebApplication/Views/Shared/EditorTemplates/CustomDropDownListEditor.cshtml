@@ -1,0 +1,13 @@
+﻿@using BoulevardManagement.WebApplication.Resources
+@model int?
+
+@(Html.Kendo().DropDownListFor(m => m)
+    .OptionLabel(DepartmentTestResource.UserSelect)
+    .DataTextField("Text")
+    .DataValueField("Value")
+    .AutoBind(true)
+    .DataSource(source =>
+    {
+        source.Read(read => read.Action("GetInMemoryItUsers", "DepartmentTest"));
+    })
+    .HtmlAttributes(new { style = "width:100%" }))

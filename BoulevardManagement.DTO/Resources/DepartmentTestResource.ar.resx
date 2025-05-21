@@ -1,0 +1,34 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Name" xml:space="preserve">
+        <value>اسم</value>
+    </data>
+    <data name="OpeningDate" xml:space="preserve">
+        <value>تاريخ الفتح</value>
+    </data>
+    <data name="User" xml:space="preserve">
+        <value>مستخدم</value>
+    </data>
+    <data name="NameRequired" xml:space="preserve">
+        <value>الاسم مطلوب</value>
+    </data>
+    <data name="ResponsibleItUserId" xml:space="preserve">
+        <value>معرف مسؤول تقنية المعلومات
+</value>
+    </data>
+    <data name="ResponsibleItUserName" xml:space="preserve">
+        <value>اسم مسؤول تقنية المعلومات
+</value>
+    </data>
+</root>

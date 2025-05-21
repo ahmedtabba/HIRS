@@ -1,0 +1,91 @@
+﻿@using BoulevardManagement.DTO
+@using BoulevardManagement.WebApplication.Resources;
+
+@{
+    ViewBag.Title = DepartmentTestResource.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var customClass = string.Empty;
+
+    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
+    {
+        customClass = "k-rtl";
+    }
+}
+
+<div class="container">
+    <div class="card card-custom" data-card="true" id="kt_card_3">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@LocationResource.Locations</h3>
+            </div>
+            <div class="card-toolbar">
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body" kt-hidden-height="471">
+
+            <div class="@customClass">
+                @(Html.Kendo().Grid<DepartmentTestDTO>()
+                    .Name("DepartmentTestGrid")
+                    .Scrollable(x => x.Enabled(true))
+                    .Filterable(x => x.Enabled(false))
+                    .Sortable(x => x.Enabled(false))
+                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.Name)
+                            .Title(DepartmentTestResource.Name)
+                            .Width(200);
+                        
+                        columns.Bound(x => x.OpeningDate)
+                            .Title("Opening Date")
+                            .Format("{0:dd/MM/yyyy}")
+                            .EditorTemplateName("CustomDateEditor")
+                            .Width(200);
+
+
+                        columns.Bound(x => x.ResponsibleItUserId)
+                            .EditorTemplateName("CustomDropDownListEditor")
+                            .Title(DepartmentTestResource.ResponsibleItUserName)
+                            .Width(200);
+
+                        columns.Command(command =>
+                            {
+                                command.Edit().UpdateText("Submit");
+                                command.Destroy();
+                            })
+                            .Title("Actions")
+                            .Width(180);
+                    })
+                    .ToolBar(toolbar => { toolbar.Create().Text(DepartmentTestResource.CreateBtn); })
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model =>
+                        {
+                            model.Id(x => x.Id);
+                            model.Field(x => x.Name);
+                            model.Field(x => x.OpeningDate);
+                            model.Field(x => x.ResponsibleItUserId);
+                            
+                        })
+                        .Create(create => create.Action("Create", "DepartmentTest"))
+                        .Read(read => read.Action("Read", "DepartmentTest"))
+                        .Update(update => update.Action("Update", "DepartmentTest"))
+                        .Destroy(delete => delete.Action("Delete", "DepartmentTest"))
+                    )
+                )
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+

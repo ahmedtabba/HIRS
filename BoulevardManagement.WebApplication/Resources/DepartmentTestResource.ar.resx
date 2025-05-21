@@ -1,0 +1,49 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Title" xml:space="preserve">
+        <value>اقسام</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>اسم</value>
+    </data>
+    <data name="OpeningDate" xml:space="preserve">
+        <value>يوم الافتتاح</value>
+    </data>
+    <data name="CreateBtn" xml:space="preserve">
+        <value>انشاء قسم جديد</value>
+    </data>
+    <data name="CreateTitle" xml:space="preserve">
+        <value>انشاء</value>
+    </data>
+    <data name="EditTitle" xml:space="preserve">
+        <value>تعديل</value>
+    </data>
+    <data name="SaveBtn" xml:space="preserve">
+        <value>حفظ</value>
+    </data>
+    <data name="UpdateBtn" xml:space="preserve">
+        <value>تحديث</value>
+    </data>
+    <data name="ResponsibleItUserId" xml:space="preserve">
+        <value>معرف المستخدم المسؤول
+</value>
+    </data>
+    <data name="ResponsibleItUserName" xml:space="preserve">
+        <value>اسم المستخدم المسؤول
+</value>
+    </data>
+    <data name="UserSelect" xml:space="preserve">
+        <value>-- اختر مستخدم --</value>
+    </data>
+</root>

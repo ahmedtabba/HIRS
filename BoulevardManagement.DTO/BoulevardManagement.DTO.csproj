@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="CaseClosureDTO.cs" />
     <Compile Include="DepartmentDTO.cs" />
+    <Compile Include="DepartmentTestDTO.cs" />
     <Compile Include="ErrorLogDTO.cs" />
     <Compile Include="LocationDTO.cs" />
     <Compile Include="Medication_MHTherapeuticPlanDTO.cs" />
@@ -125,6 +126,11 @@
       <DependentUpon>CommonResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\DepartmentTestResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DepartmentTestResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\DiagnosisStatusEnumResource.Designer.cs">
       <DependentUpon>DiagnosisStatusEnumResource.resx</DependentUpon>
@@ -415,6 +421,13 @@
     <EmbeddedResource Include="Resources\CommonResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CommonResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DepartmentTestResource.ar.resx">
+      <DependentUpon>DepartmentTestResource.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DepartmentTestResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DepartmentTestResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DiagnosisStatusEnumResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>

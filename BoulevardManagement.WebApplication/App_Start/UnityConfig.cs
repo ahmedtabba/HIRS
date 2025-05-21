@@ -71,6 +71,7 @@ namespace BoulevardManagement.WebApplication.App_Start
                     .RegisterType<AccountController>(new InjectionConstructor())
                     .RegisterType<IErrorLogBLL, ErrorLogBLL>()
                     .RegisterType<IProjectBLL, ProjectBLL>()
+                    .RegisterType<IDepartmentTestBLL, DepartmentTestBLL>()
                     .RegisterType<IOperationLogBLL, OperationLogBLL>()
                     .RegisterType<IPatientBLL, PatientBLL>()
                      .RegisterType<INotificationBLL, NotificationBLL>()
