@@ -1,6 +1,4 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BoulevardManagement.BLL.Interfaces;
 using BoulevardManagement.DTO;
@@ -16,18 +14,27 @@ namespace BoulevardManagement.BLL
 {
     public class EmployeeTestBLL : Service<EmployeeTest>, IEmployeeTestBLL
     {
+        #region Ctor
+
         private readonly IRepositoryAsync<EmployeeTest> _repository;
         private readonly IUnitOfWorkAsync _unitOfWork;
 
-        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository, IUnitOfWorkAsync unitOfWork) : base(repository)
+        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository, IUnitOfWorkAsync unitOfWork) : base(
+            repository)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
 
-        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository, IApplicationUserDataContext applicationContext) : base(repository, applicationContext)
+        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository,
+            IApplicationUserDataContext applicationContext) : base(repository, applicationContext)
         {
         }
+
+        #endregion
+
+
+        #region Public Methods
 
         public IQueryable<EmployeeTestDTO> GetAll()
         {
@@ -35,13 +42,13 @@ namespace BoulevardManagement.BLL
 
             return employees;
         }
-        
+
         public EmployeeTestDTO GetById(int id)
         {
             var employeeEntity = _repository.Find(id);
-            
+
             var employee = Mapper.Map<EmployeeTest, EmployeeTestDTO>(employeeEntity);
-            
+
             return employee;
         }
 
@@ -52,7 +59,7 @@ namespace BoulevardManagement.BLL
             Insert(employeeEntity);
 
             _unitOfWork.SaveChanges();
-            
+
             return employeeEntity.Id;
         }
 
@@ -61,7 +68,7 @@ namespace BoulevardManagement.BLL
             var employeeEntity = Find(input.Id);
             if (employeeEntity is null)
                 throw new System.Exception("Employee not found");
-            
+
             Mapper.Map(input, employeeEntity);
             employeeEntity.ObjectState = ObjectState.Modified;
             Update(employeeEntity);
@@ -79,5 +86,7 @@ namespace BoulevardManagement.BLL
 
             _unitOfWork.SaveChanges();
         }
+
+        #endregion
     }
 }
