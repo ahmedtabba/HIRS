@@ -21,14 +21,14 @@ namespace BoulevardManagement.WebApplication.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DepartmentTestResource {
+    public class EmployeeTestResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public DepartmentTestResource() {
+        public EmployeeTestResource() {
         }
         
         /// <summary>
@@ -38,7 +38,7 @@ namespace BoulevardManagement.WebApplication.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BoulevardManagement.WebApplication.Resources.DepartmentTestResource", typeof(DepartmentTestResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BoulevardManagement.WebApplication.Resources.EmployeeTestResource", typeof(EmployeeTestResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -69,7 +69,16 @@ namespace BoulevardManagement.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Department.
+        ///   Looks up a localized string similar to BirthDate.
+        /// </summary>
+        public static string BirthDate {
+            get {
+                return ResourceManager.GetString("BirthDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string CreateBtn {
             get {
@@ -78,11 +87,20 @@ namespace BoulevardManagement.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create.
+        ///   Looks up a localized string similar to Create Employee.
         /// </summary>
-        public static string CreateTitle {
+        public static string CreateEmployee {
             get {
-                return ResourceManager.GetString("CreateTitle", resourceCulture);
+                return ResourceManager.GetString("CreateEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CV.
+        /// </summary>
+        public static string CVUrl {
+            get {
+                return ResourceManager.GetString("CVUrl", resourceCulture);
             }
         }
         
@@ -96,11 +114,29 @@ namespace BoulevardManagement.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit.
+        ///   Looks up a localized string similar to Department Name.
         /// </summary>
-        public static string EditTitle {
+        public static string DepartmentName {
             get {
-                return ResourceManager.GetString("EditTitle", resourceCulture);
+                return ResourceManager.GetString("DepartmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image Failed Uploading.
+        /// </summary>
+        public static string ImageFailedUpload {
+            get {
+                return ResourceManager.GetString("ImageFailedUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image .
+        /// </summary>
+        public static string ImageUrl {
+            get {
+                return ResourceManager.GetString("ImageUrl", resourceCulture);
             }
         }
         
@@ -114,43 +150,16 @@ namespace BoulevardManagement.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OpeningDate.
+        ///   Looks up a localized string similar to Select Department.
         /// </summary>
-        public static string OpeningDate {
+        public static string SelectDepartment {
             get {
-                return ResourceManager.GetString("OpeningDate", resourceCulture);
+                return ResourceManager.GetString("SelectDepartment", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible User Id.
-        /// </summary>
-        public static string ResponsibleItUserId {
-            get {
-                return ResourceManager.GetString("ResponsibleItUserId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Responsible User Name.
-        /// </summary>
-        public static string ResponsibleItUserName {
-            get {
-                return ResourceManager.GetString("ResponsibleItUserName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save.
-        /// </summary>
-        public static string SaveBtn {
-            get {
-                return ResourceManager.GetString("SaveBtn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Departments.
+        ///   Looks up a localized string similar to Employee.
         /// </summary>
         public static string Title {
             get {
@@ -159,7 +168,7 @@ namespace BoulevardManagement.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update2.
+        ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string UpdateBtn {
             get {
@@ -168,11 +177,11 @@ namespace BoulevardManagement.WebApplication.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to -- Select User --.
+        ///   Looks up a localized string similar to Update Employee.
         /// </summary>
-        public static string UserSelect {
+        public static string UpdateEmployee {
             get {
-                return ResourceManager.GetString("UserSelect", resourceCulture);
+                return ResourceManager.GetString("UpdateEmployee", resourceCulture);
             }
         }
     }

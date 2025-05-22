@@ -46,4 +46,10 @@
     <data name="UserSelect" xml:space="preserve">
         <value>-- اختر مستخدم --</value>
     </data>
+    <data name="Actions" xml:space="preserve">
+        <value>اجراءات</value>
+    </data>
+    <data name="DeleteBtn" xml:space="preserve">
+        <value>حذف</value>
+    </data>
 </root>

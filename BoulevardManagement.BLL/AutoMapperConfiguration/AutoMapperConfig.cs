@@ -44,6 +44,13 @@ namespace BoulevardManagement.BLL.AutoMapperConfiguration
                     .ReverseMap();
                 
                 #endregion
+                
+                #region EmployeeTest
+
+                cfg.CreateMap<EmployeeTest, EmployeeTestDTO>()
+                    .ReverseMap();
+                
+                #endregion
 
                 #region Patient
                 cfg.CreateMap<Patient, PatientDTO>()

@@ -16,12 +16,15 @@ namespace BoulevardManagement.BLL
 {
     public class DepartmentTestBLL : Service<DepartmentTest>, IDepartmentTestBLL
     {
+        #region Ctor
+        
         private readonly IRepositoryAsync<DepartmentTest> _repository;
+        private readonly IEmployeeTestBLL _employeeTestBll;
         private readonly IUnitOfWorkAsync _unitOfWork;
-
-        public DepartmentTestBLL(IRepositoryAsync<DepartmentTest> repository, IUnitOfWorkAsync unitOfWork) : base(repository)
+        public DepartmentTestBLL(IRepositoryAsync<DepartmentTest> repository, IEmployeeTestBLL employeeTestBll, IUnitOfWorkAsync unitOfWork) : base(repository)
         {
             _repository = repository;
+            _employeeTestBll = employeeTestBll;
             _unitOfWork = unitOfWork;
         }
 
@@ -29,6 +32,10 @@ namespace BoulevardManagement.BLL
         {
         }
 
+        #endregion
+        
+        #region Public Methods
+        
         public IQueryable<DepartmentTestDTO> GetAll()
         {
             var departments = _repository.Query().SelectQueryable().ProjectTo<DepartmentTestDTO>();
@@ -71,13 +78,36 @@ namespace BoulevardManagement.BLL
 
         public void Delete(int id)
         {
+            _unitOfWork.BeginTransaction();
+            
             var departmentEntity = Find(id);
             if (departmentEntity is null)
                 throw new System.Exception("Department not found");
 
+            DeleteRelatedEmployee(departmentEntity.Id);
+
             _repository.Delete(id);
+            _unitOfWork.Commit();
 
             _unitOfWork.SaveChanges();
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void DeleteRelatedEmployee(int id)
+        {
+            var employees = _employeeTestBll.GetAll().Where(x => x.DepartmentId == id.ToString());
+
+            foreach (var employee in employees)
+            {
+                employee.DepartmentId = null;
+                _employeeTestBll.Update(employee);
+            }
+        }
+
+        #endregion
+      
     }
 }

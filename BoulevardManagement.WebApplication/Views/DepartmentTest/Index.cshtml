@@ -6,20 +6,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@{
-    var customClass = string.Empty;
 
-    if (System.Globalization.CultureInfo.CurrentCulture.TextInfo.IsRightToLeft)
-    {
-        customClass = "k-rtl";
-    }
-}
 
 <div class="container">
     <div class="card card-custom" data-card="true" id="kt_card_3">
         <div class="card-header">
             <div class="card-title">
-                <h3 class="card-label">@LocationResource.Locations</h3>
+                <h3 class="card-label">@DepartmentTestResource.Title</h3>
             </div>
             <div class="card-toolbar">
                 <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
@@ -29,7 +22,7 @@
         </div>
         <div class="card-body" kt-hidden-height="471">
 
-            <div class="@customClass">
+            <div>
                 @(Html.Kendo().Grid<DepartmentTestDTO>()
                     .Name("DepartmentTestGrid")
                     .Scrollable(x => x.Enabled(true))
@@ -43,9 +36,10 @@
                             .Width(200);
                         
                         columns.Bound(x => x.OpeningDate)
-                            .Title("Opening Date")
+                            .Title(DepartmentTestResource.OpeningDate)
                             .Format("{0:dd/MM/yyyy}")
                             .EditorTemplateName("CustomDateEditor")
+
                             .Width(200);
 
 
@@ -56,10 +50,10 @@
 
                         columns.Command(command =>
                             {
-                                command.Edit().UpdateText("Submit");
-                                command.Destroy();
+                                command.Edit().HtmlAttributes(new { @class = "btn btn-sm btn-outline-danger mr-2" }).UpdateText(DepartmentTestResource.SaveBtn);
+                                command.Destroy().HtmlAttributes(new { @class = "btn btn-sm btn-danger" }).Text(DepartmentTestResource.DeleteBtn);
                             })
-                            .Title("Actions")
+                            .Title(DepartmentTestResource.Actions)
                             .Width(180);
                     })
                     .ToolBar(toolbar => { toolbar.Create().Text(DepartmentTestResource.CreateBtn); })

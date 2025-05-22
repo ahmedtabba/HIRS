@@ -365,6 +365,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DepartmentTestController.cs" />
+    <Compile Include="Controllers\EmployeeTestController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ErrorLogController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -432,6 +433,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>DepartmentTestResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\EmployeeTestResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EmployeeTestResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\ICUConsultationFormResource.ar.Designer.cs">
       <DependentUpon>ICUConsultationFormResource.ar.resx</DependentUpon>
@@ -4579,6 +4585,8 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr\toastr.min.js" />
     <Content Include="Views\DepartmentTest\Index.cshtml" />
+    <Content Include="Views\EmployeeTest\AddOrUpdate.cshtml" />
+    <Content Include="Views\EmployeeTest\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CustomDateEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\CustomDropDownListEditor.cshtml" />
     <Content Include="Web.config">
@@ -5435,6 +5443,13 @@
     <EmbeddedResource Include="Resources\DepartmentTestResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DepartmentTestResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EmployeeTestResource.ar.resx">
+      <DependentUpon>EmployeeTestResource.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EmployeeTestResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmployeeTestResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ICUConsultationFormResource.ar.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

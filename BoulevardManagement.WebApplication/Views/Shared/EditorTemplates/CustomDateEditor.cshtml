@@ -1,7 +1,16 @@
-﻿@model DateTime
+﻿@model DateTime?
 
 @(Html.Kendo().DatePickerFor(m => m)
-    .Format("dd/MM/yyyy")
-    .HtmlAttributes(new { style = "width:100%"})
+    .Format("dd/MM/yyyy") // Display format
+    .ParseFormats(new List<string> { "dd/MM/yyyy" }) // Supported input formats
+    .DateInput(false)
+    .Culture("en-GB") // Ensures correct culture for parsing/display
+    .Value(Model.HasValue ? Model.Value : (DateTime?)null) // Handles nullability
 )
 
+<script src="@Url.Content("~/Scripts/kendo/2017.2.621/cultures/kendo.culture.en-GB.min.js")"></script>
+
+<script>
+    // Set the culture for Kendo UI
+    kendo.culture("en-GB");
+</script>

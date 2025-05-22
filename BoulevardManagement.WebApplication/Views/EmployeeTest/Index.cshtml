@@ -1,0 +1,136 @@
+﻿@using BoulevardManagement.DTO
+@using BoulevardManagement.WebApplication.Resources
+@model BoulevardManagement.DTO.EmployeeTestDTO
+
+@{
+    ViewBag.Title = EmployeeTestResource.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="card card-custom" data-card="true" id="kt_card_3">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">@EmployeeTestResource.Title</h3>
+            </div>
+            <div class="card-toolbar">
+                <a href="@Url.Action("Create", "EmployeeTest", new { @Area = "" })" data-toggle="tooltip" title="@CommonResource.AddNewTooltip" class="btn btn-icon btn-circle btn-sm btn-light-facebook mr-1" data-card-tool="">
+                    <i class="ki ki-plus icon-nm"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn btn-icon btn-circle btn-sm btn-light-primary mr-1" data-card-tool="toggle">
+                    <i class="ki ki-arrow-down icon-nm"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body" kt-hidden-height="471">
+
+            <div>
+                @(Html.Kendo().Grid<EmployeeTestDTO>()
+                    .Name("EmployeeTestGrid")
+                    .Filterable(x => x.Enabled(true))
+                    .Sortable(x => x.Enabled(true))
+                    .Columns(columns =>
+                    {
+                        columns.Bound(x => x.Name)
+                            .Title(EmployeeTestResource.Name)
+                            .ClientTemplate(@" <div class='employee-container'><div class='employee-photo' style='background-image: url(#= ImageUrl #);'></div><div class='employee-name'>#= Name #</div></div>")
+                            .Width(300);
+                        
+                        columns.Bound(x => x.DepartmentId)
+                            .Title(EmployeeTestResource.DepartmentName)
+                            .Width(200);  
+                      
+                        columns.Bound(x => x.BirthDate)
+                            .Title(EmployeeTestResource.BirthDate)
+                            .Format("{0:dd/MM/yyyy}")
+                            .Width(200);
+                        
+                        columns.Command(command =>
+                            {
+                                command.Custom("Edit")
+                                    .Click("onEditClick")
+                                    .HtmlAttributes(new { @class = "btn btn-sm btn-outline-danger mr-2" })
+                                    .Text(EmployeeTestResource.UpdateBtn);
+
+                                command.Custom(EmployeeTestResource.DeleteBtn)
+                                    .Click("onDeleteClick")
+                                    .HtmlAttributes(new { @class = "btn btn-sm btn-danger" })
+                                    .Text(" Delete");
+                            })
+                            .Title(EmployeeTestResource.Actions)
+                            .Width(180);
+                    })
+                    .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model =>
+                        {
+                            model.Id(x => x.Id);
+                            model.Field(x => x.ImageUrl).Editable(false);
+                            model.Field(x => x.Name).Editable(false);
+                            model.Field(x => x.DepartmentId).Editable(false);
+                            model.Field(x => x.BirthDate).Editable(false).DefaultValue(DateTime.Now);
+                        })
+                        .Create(create => create.Action("Create", "EmployeeTest"))
+                        .Read(read => read.Action("Read", "EmployeeTest"))
+                        .Update(update => update.Action("Update", "EmployeeTest"))
+                        .Destroy(delete => delete.Action("Delete", "EmployeeTest"))
+                    )
+                )
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function onEditClick(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var editUrl = '@Url.Action("Update", "EmployeeTest")/' + dataItem.Id;
+        window.location.href = editUrl;
+    }
+
+    function onDeleteClick(e) {
+        e.preventDefault();
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        if (confirm("Are you sure you want to delete this record?")) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "EmployeeTest")',
+                data: { id: dataItem.Id },
+                success: function () {
+                    $("#EmployeeTestGrid").data("kendoGrid").dataSource.read();
+                },
+                error: function () {
+                    alert("An error occurred while deleting.");
+                }
+            });
+        }
+    }
+</script>
+
+
+<style>
+    .employee-container {
+        display: flex;
+        align-items: center; 
+        gap: 10px;
+    }
+    
+    .employee-photo {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-size: 32px 35px;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 32px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0, 0, 0, .2);
+        margin-right: 5px;
+    }
+</style>
+
+

@@ -39,6 +39,7 @@ namespace BoulevardManagement.Model.Entities
         public DbSet<OperationLog> OperationLogs { get; set; }
         public DbSet<Patient> Patients { get; set; }
         public DbSet<DepartmentTest> DepartmentTests { get; set; }
+        public DbSet<EmployeeTest> EmployeeTests { get; set; }
         public DbSet<NotificationGroup> NotificationGroups { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserNotification> UserNotifications { get; set; }

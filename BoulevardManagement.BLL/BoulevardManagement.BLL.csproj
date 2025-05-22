@@ -76,9 +76,11 @@
     <Compile Include="CaseClosureBLL.cs" />
     <Compile Include="DepartmentBLL.cs" />
     <Compile Include="DepartmentTestBLL.cs" />
+    <Compile Include="EmployeeTestBLL.cs" />
     <Compile Include="Interfaces\ICaseClosureBLL.cs" />
     <Compile Include="Interfaces\IDepartmentBLL.cs" />
     <Compile Include="Interfaces\IDepartmentTestBLL.cs" />
+    <Compile Include="Interfaces\IEmployeeTestBLL.cs" />
     <Compile Include="Interfaces\ILocationBLL.cs" />
     <Compile Include="Interfaces\IMedicationBLL.cs" />
     <Compile Include="Interfaces\INotificationBLL.cs" />

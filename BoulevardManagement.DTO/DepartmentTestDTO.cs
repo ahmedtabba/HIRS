@@ -11,7 +11,6 @@ namespace BoulevardManagement.DTO
         public string Name { get; set; }
         
         [Display(Name = "OpeningDate", ResourceType = typeof(DepartmentTestResource))]
-        [DataType(DataType.Date)]
         public DateTime OpeningDate { get; set; }
 
         [Display(Name = "ResponsibleItUserId", ResourceType = typeof(DepartmentTestResource))]
