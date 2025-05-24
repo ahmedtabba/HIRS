@@ -37,7 +37,20 @@ namespace BoulevardManagement.BLL.AutoMapperConfiguration
                 cfg.CreateMap<OperationLogDTO, OperationLog>()
                 .ForMember(dest => dest.OperationType, opt => opt.MapFrom(src => (int)src.OperationType));
                 #endregion
+                
+                #region DepartmentTest
 
+                cfg.CreateMap<DepartmentTest, DepartmentTestDTO>()
+                    .ReverseMap();
+                
+                #endregion
+                
+                #region EmployeeTest
+
+                cfg.CreateMap<EmployeeTest, EmployeeTestDTO>()
+                    .ReverseMap();
+                
+                #endregion
 
                 #region Patient
                 cfg.CreateMap<Patient, PatientDTO>()

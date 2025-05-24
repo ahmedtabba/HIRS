@@ -55,6 +55,8 @@
     <Compile Include="Common\NotificationConsistent.cs" />
     <Compile Include="Entities\CaseClosure.cs" />
     <Compile Include="Entities\Department.cs" />
+    <Compile Include="Entities\DepartmentTest.cs" />
+    <Compile Include="Entities\EmployeeTest.cs" />
     <Compile Include="Entities\Location.cs" />
     <Compile Include="Entities\Medication_MHTherapeuticPlan.cs" />
     <Compile Include="Entities\Medication.cs" />

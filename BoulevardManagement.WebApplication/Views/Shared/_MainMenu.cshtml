@@ -7,6 +7,18 @@
                 <span class="menu-text">@CommonResource.Home</span>
             </a>
         </li>
+        
+        <li class="menu-item departmentTest" aria-haspopup="true">
+            <a href="@(Url.Action("Index","DepartmentTest"))" class="menu-link ">
+                <span class="menu-text">@DepartmentTestResource.Title</span>
+            </a>
+        </li>
+        
+        <li class="menu-item employeeTest" aria-haspopup="true">
+            <a href="@(Url.Action("Index","EmployeeTest"))" class="menu-link ">
+                <span class="menu-text">@EmployeeTestResource.Title</span>
+            </a>
+        </li>
 
         @if (User.IsInRole(RoleConsistent.Patient.Browse))
         {

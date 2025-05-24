@@ -100,6 +100,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoulevardManagement.Model\BoulevardManagement.Model.csproj">
+      <Project>{690e355a-54bd-4b43-bd44-4bfd6433307f}</Project>
+      <Name>BoulevardManagement.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoulevardManagement.WebApplication\BoulevardManagement.WebApplication.csproj">
       <Project>{8ded09d8-13a9-4cc4-8d14-2484b2be8234}</Project>
       <Name>BoulevardManagement.WebApplication</Name>

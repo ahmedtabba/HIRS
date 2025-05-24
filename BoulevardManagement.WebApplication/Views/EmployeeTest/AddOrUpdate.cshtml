@@ -1,0 +1,202 @@
+﻿@using BoulevardManagement.DTO
+@using BoulevardManagement.WebApplication.Resources
+@model BoulevardManagement.DTO.EmployeeTestDTO
+
+<div class="container">
+    <div class="card card-custom">
+        <div class="card-header">
+            <div class="card-title">
+                <h3 class="card-label">
+                    @if (Model.Id == 0)
+                    {
+                        @Html.Raw(EmployeeTestResource.CreateEmployee) ;
+                    }
+                    else
+                    {
+                        @Html.Raw(EmployeeTestResource.UpdateEmployee) ;
+                    }
+                </h3>
+            </div>
+
+            <div class="card-toolbar">
+                <a href="@Url.Action("Index", "EmployeeTest")" class="btn btn-light-primary font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>@CommonResource.Back
+                </a>
+                <div class="btn-group">
+                    <button type="button" id="saveBtn" class="btn btn-primary font-weight-bolder">
+                        <i class="ki ki-check icon-sm"></i>@CommonResource.Save
+                    </button>
+
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                        <ul class="nav nav-hover flex-column">
+                            @if (@Model.Id != 0)
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" id="saveAndContinueBtn">
+                                        <i class="nav-icon flaticon2-reload"></i>
+                                        <span
+                                            class="nav-text">@CommonResource.Save &amp; @CommonResource.Continue</span>
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" id="saveAndAddNewBtn">
+                                        <i class="nav-icon flaticon2-add-1"></i>
+                                        <span class="nav-text">@CommonResource.Save &amp; @CommonResource.AddNew</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        @using (Html.BeginForm("Update", "EmployeeTest", FormMethod.Post, new { @id = "EmployeeFormId" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+
+            <input type="hidden" id="FormType" name="formType" value="@SubmitFormType.SaveAndExist" />
+        
+            <div class="card-body">
+                <div class="form-group row">
+                    
+                    <!-- Photo -->
+                    <div class="col-6 d-flex justify-content-center">
+                        <div class="image-input image-input-empty image-input-outline" id="kt_user_edit_avatar"
+                             style="background-image: url(@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://img.freepik.com/premium-vector/vector-flat-illustration-grayscale-avatar-user-profile-person-icon-profile-picture-business-profile-woman-suitable-social-media-profiles-icons-screensavers-as-templatex9_719432-1351.jpg?ga=GA1.1.955479794.1747897363&semt=ais_hybrid&w=740" : Model.ImageUrl))">
+                            <div id="profile" class="image-input-wrapper"></div>
+
+                            <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                   data-action="change" data-toggle="tooltip" title=""
+                                   data-original-title="Change Avatar">
+                                <i class="fa fa-pen icon-sm text-muted"></i>
+                                <input type="file" name="photo" id="PhotoURL" accept=".png, .jpg, .jpeg" onchange="uploadPhoto(this)"/>
+                                <input type="hidden" id="ImageUrl" name="ImageUrl" value="@Model.ImageUrl"/>
+                            </label>
+
+                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                  data-action="cancel" data-toggle="tooltip"
+                                  title="Cancel Avatar">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+
+                            <span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow"
+                                  data-action="remove" data-toggle="tooltip"
+                                  title="Cancel Avatar">">
+                                <i class="ki ki-bold-close icon-xs text-muted"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Name Field -->
+                    <div class="col-lg-6">
+                        <label>@EmployeeTestResource.Name:</label>
+                        @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = EmployeeTestResource.Name, @id = "Name" } })
+                        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    
+                    <!-- Birthdate Field -->
+                    <div class="col-lg-6">
+                        <label>@EmployeeTestResource.BirthDate:</label>
+                        @(Html.Kendo().DatePickerFor(m => m.BirthDate)
+                            .Format("dd/MM/yyyy")
+                            .Culture("en-US")
+                            .ParseFormats(new List<string>() { "dd/MM/yyyy" })
+                            .DateInput(true)
+                            .Value(Model.BirthDate == DateTime.MinValue ? DateTime.Today : Model.BirthDate) 
+                            .HtmlAttributes(new { @class = "form-control custom-style", @id = "birthDate", @style = "width:100%" }))
+                        @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger", })
+                    </div>
+
+                    <!-- Department Dropdown -->
+                    <div class="col-lg-6">
+                        <label>@EmployeeTestResource.DepartmentName:</label>
+                        @(Html.Kendo().DropDownListFor(m => m.DepartmentId)
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel(EmployeeTestResource.SelectDepartment)
+                            .DataSource(source => { source.Read(read => { read.Action("GetDepartmentsList", "EmployeeTest"); }); })
+                            .HtmlAttributes(new { @class = "form-control custom-style", @id = "DepartmentId", @style = "width:100%" }))
+                        @Html.ValidationMessageFor(m => m.DepartmentId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+
+                    <!-- CV Upload Field -->
+                    <div class="col-lg-6">
+                        <label>@EmployeeTestResource.CVUrl:</label>
+                        @(Html.Kendo().Upload()
+                            .Name("photo")
+                            .Async(a => a.Save("UploadPhoto", "EmployeeTest"))
+                            .Events(e => e.Success("onCVUploadSuccess"))) 
+                        <input type="hidden" id="CVUrl" name="CVUrl" value="@Model.CVUrl"/>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function uploadPhoto(input) {
+        var formData = new FormData();
+        formData.append("photo", input.files[0]);
+        $.ajax({
+            url: '/EmployeeTest/UploadPhoto',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {                 
+                $("#kt_user_edit_avatar").css("background-image", "url(" + response.imageUrl + ")");
+                $("#ImageUrl").val(response.imageUrl);
+            },
+            error: function () {
+                alert("Failed to upload Photo.");
+            }
+        });
+    }
+
+    function onCVUploadSuccess(e) {
+        if (e.response && e.response.success && e.response.imageUrl) {
+            $("#CVUrl").val(e.response.imageUrl);
+        } else {
+            alert("Failed to upload Photo.");
+        }
+    }
+    $(function () {
+
+        $("#saveBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndExist");
+            Submit();
+        });
+        
+        $("#saveAndContinueBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndContinue");
+            Submit();
+        });
+
+        $("#saveAndAddNewBtn").click(function () {
+            $("#FormType").val("@SubmitFormType.SaveAndAddNew");
+            Submit();
+        });
+    });
+
+    function Submit() {
+        $(".k-widget").removeClass("input-validation-error");
+        $("#EmployeeFormId").submit();
+    }
+
+</script>
