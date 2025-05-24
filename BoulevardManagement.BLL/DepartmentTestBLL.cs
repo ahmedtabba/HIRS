@@ -43,7 +43,6 @@ namespace BoulevardManagement.BLL
                 .Select(x => new DepartmentTestDTO
             {
                 Id = x.Id,
-                EncrptedId = null,
                 Name = x.Name,
                 OpeningDate = x.OpeningDate,
                 ResponsibleItUserId = x.ResponsibleItUserId,
