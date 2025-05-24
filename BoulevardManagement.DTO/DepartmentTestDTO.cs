@@ -15,5 +15,8 @@ namespace BoulevardManagement.DTO
 
         [Display(Name = "ResponsibleItUserId", ResourceType = typeof(DepartmentTestResource))]
         public string ResponsibleItUserId { get; set; }
+        [Display(Name = "ResponsibleItUserName", ResourceType = typeof(DepartmentTestResource))]
+        public string ResponsibleItUserName { get; set; }
+
     }
 }

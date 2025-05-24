@@ -36,4 +36,7 @@
     <data name="DepartmentName" xml:space="preserve">
         <value>Department Name</value>
     </data>
+    <data name="DepartmentId" xml:space="preserve">
+        <value>Department Id</value>
+    </data>
 </root>

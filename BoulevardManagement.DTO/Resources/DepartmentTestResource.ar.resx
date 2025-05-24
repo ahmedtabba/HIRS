@@ -31,4 +31,7 @@
         <value>اسم مسؤول تقنية المعلومات
 </value>
     </data>
+    <data name="UserSelect" xml:space="preserve">
+        <value>-- اختار مستخدم --</value>
+    </data>
 </root>

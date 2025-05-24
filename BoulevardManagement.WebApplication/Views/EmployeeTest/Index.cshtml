@@ -39,6 +39,7 @@
                         
                         columns.Bound(x => x.DepartmentId)
                             .Title(EmployeeTestResource.DepartmentName)
+                            .ClientTemplate("#= DepartmentName #")
                             .Width(200);  
                       
                         columns.Bound(x => x.BirthDate)

@@ -16,12 +16,10 @@ namespace BoulevardManagement.WebApplication.Controllers
     public class EmployeeTestController : BaseController
     {
         private readonly IEmployeeTestBLL _employeeTestBll;
-        private readonly IDepartmentTestBLL _departmentTestBll;
 
-        public EmployeeTestController(IEmployeeTestBLL employeeTestBll, IDepartmentTestBLL departmentTestBll, IErrorLogBLL errorLogBLL) : base(errorLogBLL)
+        public EmployeeTestController(IEmployeeTestBLL employeeTestBll, IErrorLogBLL errorLogBLL) : base(errorLogBLL)
         {
             _employeeTestBll = employeeTestBll;
-            _departmentTestBll = departmentTestBll;
         }
 
         public ActionResult Index()
@@ -31,7 +29,7 @@ namespace BoulevardManagement.WebApplication.Controllers
 
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
         {
-            var departments = _employeeTestBll.GetAll().ToList();
+            var departments = _employeeTestBll.GetAll();
             
             return Json(departments.ToDataSourceResult(request));
         }
@@ -91,7 +89,7 @@ namespace BoulevardManagement.WebApplication.Controllers
 
         public JsonResult GetDepartmentsList()
         {
-            var departments = _departmentTestBll.GetAll();
+            var departments = _employeeTestBll.GetAllDepartments();
             
             var departmentsDropDownList = departments.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id.ToString() }).ToList();
             

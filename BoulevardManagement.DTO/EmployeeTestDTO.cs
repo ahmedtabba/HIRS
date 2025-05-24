@@ -19,7 +19,10 @@ namespace BoulevardManagement.DTO
         [Display(Name = "CVUrl", ResourceType = typeof(EmployeeTestResource))]
         public string CVUrl { get; set; }
         
-        [Display(Name = "DepartmentName", ResourceType = typeof(EmployeeTestResource))]
+        [Display(Name = "DepartmentId", ResourceType = typeof(EmployeeTestResource))]
         public string DepartmentId { get; set; }
+        
+        [Display(Name = "DepartmentName", ResourceType = typeof(EmployeeTestResource))]
+        public string DepartmentName { get; set; }
     }
 }

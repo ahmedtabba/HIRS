@@ -2,12 +2,12 @@
 @model int?
 
 @(Html.Kendo().DropDownListFor(m => m)
-    .OptionLabel(DepartmentTestResource.UserSelect)
+    .OptionLabel(new { Text = DepartmentTestResource.UserSelect, Value = (object)null })
     .DataTextField("Text")
     .DataValueField("Value")
     .AutoBind(true)
     .DataSource(source =>
     {
-        source.Read(read => read.Action("GetInMemoryItUsers", "DepartmentTest"));
+        source.Read(read => read.Action("GetItUsersList", "DepartmentTest"));
     })
     .HtmlAttributes(new { style = "width:100%" }))

@@ -10,6 +10,7 @@ using Repository.Pattern.Infrastructure;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
 using Service.Pattern;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BoulevardManagement.BLL
@@ -20,25 +21,34 @@ namespace BoulevardManagement.BLL
         
         private readonly IRepositoryAsync<DepartmentTest> _repository;
         private readonly IEmployeeTestBLL _employeeTestBll;
+        private readonly IApplicationUserDataContext _applicationContext;
         private readonly IUnitOfWorkAsync _unitOfWork;
-        public DepartmentTestBLL(IRepositoryAsync<DepartmentTest> repository, IEmployeeTestBLL employeeTestBll, IUnitOfWorkAsync unitOfWork) : base(repository)
+        public DepartmentTestBLL(IRepositoryAsync<DepartmentTest> repository, IEmployeeTestBLL employeeTestBll, IApplicationUserDataContext applicationContext, IUnitOfWorkAsync unitOfWork) : base(repository)
         {
             _repository = repository;
             _employeeTestBll = employeeTestBll;
+            _applicationContext = applicationContext;
             _unitOfWork = unitOfWork;
         }
-
-        public DepartmentTestBLL(IRepositoryAsync<DepartmentTest> repository, IApplicationUserDataContext applicationContext) : base(repository, applicationContext)
-        {
-        }
-
+        
         #endregion
         
         #region Public Methods
         
-        public IQueryable<DepartmentTestDTO> GetAll()
+        public IEnumerable<DepartmentTestDTO> GetAll()
         {
-            var departments = _repository.Query().SelectQueryable().ProjectTo<DepartmentTestDTO>();
+            var departments = _repository.Query()
+                .SelectQueryable()
+                .ToList()
+                .Select(x => new DepartmentTestDTO
+            {
+                Id = x.Id,
+                EncrptedId = null,
+                Name = x.Name,
+                OpeningDate = x.OpeningDate,
+                ResponsibleItUserId = x.ResponsibleItUserId,
+                ResponsibleItUserName = GetUserFullName(x.ResponsibleItUserId)
+            });
 
             return departments;
         }
@@ -52,7 +62,7 @@ namespace BoulevardManagement.BLL
             return department;
         }
 
-        public int Insert(DepartmentTestDTO input)
+        public DepartmentTestDTO Insert(DepartmentTestDTO input)
         {
             var departmentEntity = Mapper.Map<DepartmentTestDTO, DepartmentTest>(input);
             departmentEntity.ObjectState = ObjectState.Added;
@@ -60,10 +70,12 @@ namespace BoulevardManagement.BLL
 
             _unitOfWork.SaveChanges();
             
-            return departmentEntity.Id;
+            input.Id = departmentEntity.Id;
+            input.ResponsibleItUserName = GetUserFullName(input.ResponsibleItUserId);
+            return input;
         }
 
-        public void Update(DepartmentTestDTO input)
+        public DepartmentTestDTO Update(DepartmentTestDTO input)
         {
             var departmentEntity = Find(input.Id);
             if (departmentEntity is null)
@@ -74,6 +86,10 @@ namespace BoulevardManagement.BLL
             Update(departmentEntity);
 
             _unitOfWork.SaveChanges();
+            
+            input.Id = departmentEntity.Id;
+            input.ResponsibleItUserName = GetUserFullName(input.ResponsibleItUserId);
+                return input;
         }
 
         public void Delete(int id)
@@ -92,10 +108,17 @@ namespace BoulevardManagement.BLL
             _unitOfWork.SaveChanges();
         }
 
+        public List<ApplicationUserData> GetItUsers()
+        {
+            return _applicationContext.GetUsersBy(nameof(JobRole.IT));
+        }
+
         #endregion
 
         #region Private Methods
 
+        private string GetUserFullName(string userId) => !string.IsNullOrEmpty(userId) ? _applicationContext.GetUsersByUserId(userId)?.FullName : string.Empty;
+        
         private void DeleteRelatedEmployee(int id)
         {
             var employees = _employeeTestBll.GetAll().Where(x => x.DepartmentId == id.ToString());

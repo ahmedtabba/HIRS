@@ -37,6 +37,6 @@
         <value>Responsible User Name</value>
     </data>
     <data name="UserSelect" xml:space="preserve">
-        <value />
+        <value>-- Select User --</value>
     </data>
 </root>

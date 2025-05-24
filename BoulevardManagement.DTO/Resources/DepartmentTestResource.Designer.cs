@@ -114,7 +114,7 @@ namespace BoulevardManagement.DTO.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to -- Select User --.
         /// </summary>
         public static string UserSelect {
             get {

@@ -78,6 +78,15 @@ namespace BoulevardManagement.DTO.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Department Id.
+        /// </summary>
+        public static string DepartmentId {
+            get {
+                return ResourceManager.GetString("DepartmentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Department Name.
         /// </summary>
         public static string DepartmentName {

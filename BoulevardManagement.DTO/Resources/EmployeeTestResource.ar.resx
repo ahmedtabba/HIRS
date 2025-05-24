@@ -29,4 +29,7 @@
     <data name="DepartmentName" xml:space="preserve">
         <value>اسم القسم</value>
     </data>
+    <data name="DepartmentId" xml:space="preserve">
+        <value>معرف القسم</value>
+    </data>
 </root>

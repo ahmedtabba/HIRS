@@ -8,6 +8,7 @@ using Repository.Pattern.Infrastructure;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
 using Service.Pattern;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BoulevardManagement.BLL
@@ -17,28 +18,27 @@ namespace BoulevardManagement.BLL
         #region Ctor
 
         private readonly IRepositoryAsync<EmployeeTest> _repository;
+        private readonly IRepositoryAsync<DepartmentTest> _departmentRepository;
         private readonly IUnitOfWorkAsync _unitOfWork;
 
-        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository, IUnitOfWorkAsync unitOfWork) : base(
+        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository, IRepositoryAsync<DepartmentTest> departmentRepository, IUnitOfWorkAsync unitOfWork) : base(
             repository)
         {
             _repository = repository;
+            _departmentRepository = departmentRepository;
             _unitOfWork = unitOfWork;
         }
-
-        public EmployeeTestBLL(IRepositoryAsync<EmployeeTest> repository,
-            IApplicationUserDataContext applicationContext) : base(repository, applicationContext)
-        {
-        }
-
+        
         #endregion
 
 
         #region Public Methods
 
-        public IQueryable<EmployeeTestDTO> GetAll()
+        public IEnumerable<EmployeeTestDTO> GetAll()
         {
-            var employees = _repository.Query().SelectQueryable().ProjectTo<EmployeeTestDTO>();
+            var employees = _repository.Query().SelectQueryable().ProjectTo<EmployeeTestDTO>().ToList();
+            
+            employees.ForEach(x => x.DepartmentName = GetDepartmentName(x.DepartmentId));
 
             return employees;
         }
@@ -48,6 +48,8 @@ namespace BoulevardManagement.BLL
             var employeeEntity = _repository.Find(id);
 
             var employee = Mapper.Map<EmployeeTest, EmployeeTestDTO>(employeeEntity);
+            
+            employee.DepartmentName = GetDepartmentName(employee.DepartmentId);
 
             return employee;
         }
@@ -87,6 +89,17 @@ namespace BoulevardManagement.BLL
             _unitOfWork.SaveChanges();
         }
 
+        public IEnumerable<DepartmentTestDTO> GetAllDepartments()
+        {
+            return _departmentRepository.Query().SelectQueryable().ProjectTo<DepartmentTestDTO>().ToList();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private string GetDepartmentName(string departmentId) => !string.IsNullOrEmpty(departmentId) ? _departmentRepository.Find(int.Parse(departmentId)).Name : string.Empty;
+            
         #endregion
     }
 }

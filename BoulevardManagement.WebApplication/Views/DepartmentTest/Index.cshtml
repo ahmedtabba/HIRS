@@ -39,14 +39,13 @@
                             .Title(DepartmentTestResource.OpeningDate)
                             .Format("{0:dd/MM/yyyy}")
                             .EditorTemplateName("CustomDateEditor")
-
                             .Width(200);
-
-
+                        
                         columns.Bound(x => x.ResponsibleItUserId)
-                            .EditorTemplateName("CustomDropDownListEditor")
                             .Title(DepartmentTestResource.ResponsibleItUserName)
-                            .Width(200);
+                            .Width(200)
+                            .EditorTemplateName("CustomDropDownListEditor")
+                            .ClientTemplate("#= ResponsibleItUserName #"); 
 
                         columns.Command(command =>
                             {
